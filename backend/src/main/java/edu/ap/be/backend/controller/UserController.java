@@ -3,6 +3,7 @@ package edu.ap.be.backend.controller;
 import edu.ap.be.backend.models.ResourceNotFoundException;
 import edu.ap.be.backend.models.User;
 import edu.ap.be.backend.repository.UserRepository;
+import edu.ap.be.backend.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+
+    BCrypt bCrypt = new BCrypt();
 
     @GetMapping("")
     public List<User> getAllUsers() {
@@ -46,7 +49,7 @@ public class UserController {
         user.setEmail(userDetails.getEmail());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
-        user.setPassword(userDetails.getPassword());
+        user.setPassword(bCrypt.HashWithSalt(userDetails.getPassword()));
         user.setRol(userDetails.getRol());
 
         final User updatedUser = userRepository.save(user);

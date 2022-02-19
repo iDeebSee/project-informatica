@@ -20,6 +20,7 @@ public class KredietAanvraagController {
 
     @GetMapping("")
     public List<Kredietaanvraag> getAllKredietaanvragen() {
+        System.out.println(kredietRepository.findAll().toString());
         return kredietRepository.findAll();
     }
 

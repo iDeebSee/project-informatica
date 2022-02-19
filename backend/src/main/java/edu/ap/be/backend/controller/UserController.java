@@ -18,9 +18,7 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
-
-
-    BCrypt bCrypt = new BCrypt();
+    //BCrypt bCrypt = new BCrypt();
 
     @GetMapping("")
     public List<User> getAllUsers() {
@@ -49,7 +47,7 @@ public class UserController {
         user.setEmail(userDetails.getEmail());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
-        user.setPassword(bCrypt.HashWithSalt(userDetails.getPassword()));
+        user.setPassword(userDetails.getPassword());
         user.setRol(userDetails.getRol());
 
         final User updatedUser = userRepository.save(user);

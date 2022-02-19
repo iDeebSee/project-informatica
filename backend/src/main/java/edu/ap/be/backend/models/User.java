@@ -12,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private int id;
+    private long id;
     @Column(name = "rol")
     private Roles rol;
     @Column(name = "email")

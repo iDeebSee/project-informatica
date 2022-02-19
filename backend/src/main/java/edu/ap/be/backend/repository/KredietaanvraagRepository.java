@@ -6,6 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface KredietaanvraagRepository extends JpaRepository<Kredietaanvraag, Integer> {
+public interface KredietaanvraagRepository extends JpaRepository<Kredietaanvraag, Long> {
     Kredietaanvraag findKredietaanvraagByKlantID(@Param("klantID") String klantID);
 }

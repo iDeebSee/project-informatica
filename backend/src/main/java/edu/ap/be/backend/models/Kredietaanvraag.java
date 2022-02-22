@@ -2,16 +2,15 @@ package edu.ap.be.backend.models;
 
 
 import lombok.Data;
-
-
 import javax.persistence.*;
 
-@Data
-@Table(name= "Kredietaanvragen")
 @Entity
+@Table(name= "kredietaanvragen")
+@Data
 public class Kredietaanvraag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private long id;
     @Column(name = "naam")
     private String naam;

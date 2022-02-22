@@ -1,5 +1,6 @@
 package edu.ap.be.backend.models;
 
+import edu.ap.be.backend.security.BCrypt;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private int id;
+    private long id;
     @Column(name = "rol")
     private Roles rol;
     @Column(name = "email")
@@ -22,4 +23,6 @@ public class User {
     private String lastName;
     @Column(name = "firstName")
     private String firstName;
+
+
 }

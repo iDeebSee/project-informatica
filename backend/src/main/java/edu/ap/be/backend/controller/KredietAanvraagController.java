@@ -24,7 +24,7 @@ public class KredietAanvraagController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Kredietaanvraag> getKredietAanvraagByID(@PathVariable(value = "id") int kredietID) throws ResourceNotFoundException {
+    public ResponseEntity<Kredietaanvraag> getKredietAanvraagByID(@PathVariable(value = "id") long kredietID) throws ResourceNotFoundException {
         Kredietaanvraag kredietaanvraag = kredietRepository.findById(kredietID)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + kredietID));
         System.out.println(kredietRepository.findById(kredietID).toString());
@@ -37,7 +37,7 @@ public class KredietAanvraagController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Kredietaanvraag> updateKredietAanvraag(@PathVariable(value = "id") int kredietID,
+    public ResponseEntity<Kredietaanvraag> updateKredietAanvraag(@PathVariable(value = "id") long kredietID,
                                            @Validated @RequestBody Kredietaanvraag kredietDetails) throws ResourceNotFoundException {
         Kredietaanvraag kredietaanvraag = kredietRepository.findById(kredietID)
                 .orElseThrow(() -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + kredietID));
@@ -54,7 +54,7 @@ public class KredietAanvraagController {
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteKredietAanvraag(@PathVariable(value = "id") int kredietID)
+    public Map<String, Boolean> deleteKredietAanvraag(@PathVariable(value = "id") long kredietID)
             throws ResourceNotFoundException {
         Kredietaanvraag kredietaanvraag = kredietRepository.findById(kredietID)
                 .orElseThrow(() -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + kredietID));

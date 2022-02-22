@@ -3,6 +3,7 @@ package edu.ap.be.backend.controller;
 import edu.ap.be.backend.models.ResourceNotFoundException;
 import edu.ap.be.backend.models.User;
 import edu.ap.be.backend.repository.UserRepository;
+import edu.ap.be.backend.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,13 +20,15 @@ public class UserController {
     private UserRepository userRepository;
 
 
+    BCrypt bCrypt = new BCrypt();
+
     @GetMapping("")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable(value = "id") int userID) throws ResourceNotFoundException {
+    public ResponseEntity<User> getUserByID(@PathVariable(value = "id") long userID) throws ResourceNotFoundException {
             User employee = userRepository.findById(userID)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userID));
                     System.out.println(userRepository.findById(userID).toString());
@@ -38,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") int userID,
+    public ResponseEntity<User> updateUser(@PathVariable(value = "id") long userID,
                                            @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userID));
@@ -46,7 +49,7 @@ public class UserController {
         user.setEmail(userDetails.getEmail());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
-        user.setPassword(userDetails.getPassword());
+        user.setPassword(bCrypt.HashWithSalt(userDetails.getPassword()));
         user.setRol(userDetails.getRol());
 
         final User updatedUser = userRepository.save(user);
@@ -54,7 +57,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") int userID)
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") long userID)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userID));

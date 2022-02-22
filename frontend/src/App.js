@@ -1,10 +1,34 @@
 import './App.css';
-import Switch from './components/Switch'
+import * as React from 'react';
+import Home from './views/Home';
+import Kredietaanvragen from './klantViews/KredietAanvragen';
+import Navbar from './components/Navbar';
+import {
+  BrowserRouter,
+  Route,
+  Link,
+  Routes
+} from "react-router-dom";
 
-function App() {
+
+
+
+export default function App() {
+  
   return(
-    <Switch></Switch>
-  );
-}
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+    <Route  path={"/"} element={<Home/>}/>
+    
+    <Route  path={"/list"} element={<Kredietaanvragen/>}/>
 
-export default App;
+    
+
+    </Routes>
+   
+    
+    </BrowserRouter>
+);
+};
+

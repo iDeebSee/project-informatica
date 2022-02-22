@@ -1,7 +1,7 @@
 package edu.ap.be.backend.controller;
 
 import edu.ap.be.backend.models.Kredietaanvraag;
-import edu.ap.be.backend.models.ResourceNotFoundException;
+import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.repository.KredietaanvraagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

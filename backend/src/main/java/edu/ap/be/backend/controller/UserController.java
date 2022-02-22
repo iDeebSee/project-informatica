@@ -1,9 +1,8 @@
 package edu.ap.be.backend.controller;
 
-import edu.ap.be.backend.models.ResourceNotFoundException;
+import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.models.User;
 import edu.ap.be.backend.repository.UserRepository;
-import edu.ap.be.backend.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

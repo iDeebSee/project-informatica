@@ -1,6 +1,5 @@
 package edu.ap.be.backend.models;
 
-import edu.ap.be.backend.security.BCrypt;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,7 +11,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private long id;
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = edu.ap.be.backend.models.Role.class)
     @JoinColumn(name = "fk_role")
     private Role role;
@@ -25,5 +24,8 @@ public class User {
     @Column(name = "firstName")
     private String firstName;
 
+
+    public User(String email, String encode) {
+    }
 
 }

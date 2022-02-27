@@ -5,6 +5,7 @@ import edu.ap.be.backend.models.User;
 import edu.ap.be.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class UserController {
     private UserRepository userRepository;
     //BCrypt bCrypt = new BCrypt();
 
+    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
     @GetMapping("")
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -33,11 +35,13 @@ public class UserController {
             return ResponseEntity.ok().body(employee);
     }
 
+    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
     @PostMapping("")
     public User createUser(@Validated @RequestBody User user) {
         return userRepository.save(user);
     }
 
+    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR') or hasRole('KLANT')")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") long userID,
                                            @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
@@ -54,6 +58,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable(value = "id") long userID)
             throws ResourceNotFoundException {

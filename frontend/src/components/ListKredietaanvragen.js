@@ -279,6 +279,8 @@ export default function ListKredietaanvragen() {
                         variant="contained"
                         aria-label="outlined primary button group"
                       >
+                        {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
+                        <Button>detail </Button>
                         <Button>edit </Button>
                         <Button>delete </Button>
                       </ButtonGroup>

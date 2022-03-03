@@ -21,7 +21,7 @@ public class UserController {
     private UserRepository userRepository;
     //BCrypt bCrypt = new BCrypt();
 
-    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
+//    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
     @GetMapping("")
     public List<User> getAllUsers() {
         return userRepository.findAll();

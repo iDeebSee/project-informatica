@@ -1,8 +1,12 @@
 package edu.ap.be.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
@@ -13,7 +17,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = edu.ap.be.backend.models.Role.class)
-    @JoinColumn(name = "fk_role")
+    @JoinColumn(name = "role")
+    @JsonBackReference
     private Role role;
     @Column(name = "email")
     private String email;
@@ -25,7 +30,16 @@ public class User {
     private String firstName;
 
 
-    public User(String email, String encode) {
+
+
+    public User(String email, String password, String firstName, String lastName) {
+        this.email = email;
+        this.password = password;
+        this.lastName = lastName;
+        this.firstName = firstName;
     }
 
+    public User() {
+
+    }
 }

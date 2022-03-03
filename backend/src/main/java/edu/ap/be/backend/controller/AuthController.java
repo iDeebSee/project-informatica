@@ -22,8 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
@@ -55,7 +55,7 @@ public class AuthController {
                 role));
     }
 
-    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -64,56 +64,73 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
         // Create new user's account
+
         User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName());
         List<String> strRoles = new ArrayList<>();
         strRoles.add(signUpRequest.getRole());
-        Role roles = new Role();
+
+
+        System.out.println(signUpRequest.getRole());
+        System.out.println(signUpRequest.getEmail());
+        System.out.println(signUpRequest.getPassword());
+
+
+
+
         if (strRoles == null) {
-            RoleType userRole = roleRepository.findByRole(RoleType.KLANT)
+            Role userRole = roleRepository.findByRole(RoleType.KLANT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.setRole(userRole);
+            user.setRole(userRole);
+
         } else {
             strRoles.forEach(role -> {
-                switch (role) {
+                switch (role.toLowerCase(Locale.ROOT)) {
                     case "admin":
-                        RoleType adminRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
+                        Role adminRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
+                        user.setRole(adminRole);
+                        //roles.add(adminRole);
                         break;
                     case "kantoor":
-                        RoleType kantoorRole = roleRepository.findByRole(RoleType.KANTOOR)
+                        Role kantoorRole = roleRepository.findByRole(RoleType.KANTOOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(kantoorRole);
+                        user.setRole(kantoorRole);
+                        //roles.add(kantoorRole);
                         break;
                     case "comdirectie":
-                        RoleType comdirectieRole = roleRepository.findByRole(RoleType.COMDIRECTIE)
+                        Role comdirectieRole = roleRepository.findByRole(RoleType.COMDIRECTIE)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(comdirectieRole);
+                        user.setRole(comdirectieRole);
+                        //roles.add(comdirectieRole);
                         break;
                     case "compliance":
-                        RoleType complianceRole = roleRepository.findByRole(RoleType.COMPLIANCE)
+                        Role complianceRole = roleRepository.findByRole(RoleType.COMPLIANCE)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(complianceRole);
+                        user.setRole(complianceRole);
+                        //roles.add(complianceRole);
                         break;
                     case "sustainability":
-                        RoleType sustainablityRole = roleRepository.findByRole(RoleType.SUSTAINABILITY)
+                        Role sustainablityRole = roleRepository.findByRole(RoleType.SUSTAINABILITY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(sustainablityRole);
+                        user.setRole(sustainablityRole);
+                        //roles.add(sustainablityRole);
                         break;
                     case "kredietbeoordelaar":
-                        RoleType kredietbeoordelaarRole = roleRepository.findByRole(RoleType.KREDIETBEOORDELAAR)
+                        Role kredietbeoordelaarRole = roleRepository.findByRole(RoleType.KREDIETBEOORDELAAR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(kredietbeoordelaarRole);
+                        user.setRole(kredietbeoordelaarRole);
+                        //roles.add(kredietbeoordelaarRole);
                         break;
                     default:
-                        RoleType userRole = roleRepository.findByRole(RoleType.KLANT)
+                        Role userRole = roleRepository.findByRole(RoleType.KLANT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                        user.setRole(userRole);
+                       // roles.add(userRole);
                 }
             });
         }
-        user.setRole(roles);
+        //user.setRole(roles);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

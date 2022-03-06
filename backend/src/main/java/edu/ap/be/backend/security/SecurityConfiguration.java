@@ -20,6 +20,15 @@ import java.net.PasswordAuthentication;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+//    @Autowired
+//    UserDetailsServiceImpl userDetailsService;
+//    @Autowired
+//    private AuthEntryPointJwt unauthorizedHandler;
+//    @Bean
+//    public AuthTokenFilter authenticationJwtTokenFilter() {
+//        return new AuthTokenFilter();
+//    }
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 

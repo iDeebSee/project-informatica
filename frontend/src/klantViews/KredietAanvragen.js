@@ -5,17 +5,14 @@ import ListKredietaanvragen from '../components/ListKredietaanvragen';
 
 
 
+
 export default function Kredietaanvragen() {
   
   return(
         <div>
         <ListKredietaanvragen></ListKredietaanvragen>
+        
         </div>
-
-
-
-            
-  
 
 );
 };

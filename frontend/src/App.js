@@ -3,15 +3,9 @@ import * as React from 'react';
 import Home from './views/Home';
 import Kredietaanvragen from './klantViews/KredietAanvragen';
 import Detailaanvraag  from './klantViews/DetailAanvraag';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
-import {
-  BrowserRouter,
-  Route,
-  Link,
-  Routes
-} from "react-router-dom";
-
-
 
 
 export default function App() {

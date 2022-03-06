@@ -141,31 +141,35 @@ export default function ListKredietaanvragen() {
               autoComplete="off"
             >
               <Grid container spacing={2} style={{ width: "95%" }}>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={3}>
                   <TextField
                     id="naam"
                     required="true"
                     label="Naam van de kredietaanvraag"
                     variant="outlined"
+                    style={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={3}>
                   <TextField
                     id="zelfgefinancierd"
                     required="true"
                     label="Zelf gefinancierd (€)"
                     variant="outlined"
+                    style={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={3}>
                   <TextField
                     id="totaalbedrag"
                     required="true"
                     label="Totaalbedrag (€)"
                     variant="outlined"
+                    style={{ width: "100%" }}
+
                   />
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={3} style= {{ maxWidth: "100%" }}>
                   <FormControl>
                     <InputLabel id="demo-simple-select-label">
                       Categorie
@@ -199,7 +203,8 @@ export default function ListKredietaanvragen() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={6} md={12}>
+                
+                <Grid item xs={12} md={12} style={{marginTop: "5%"}}>
                   <Slider
                     aria-label="Looptijd"
                     defaultValue={6}
@@ -215,7 +220,7 @@ export default function ListKredietaanvragen() {
                     max={12}
                   /> {console.log(Slider.getAriaValueText)}
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={12}>
                   <TextField
                     multiline="true"
                     minRows={5}
@@ -223,7 +228,7 @@ export default function ListKredietaanvragen() {
                     style={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={12} md={12}>
                 <Button variant="contained">Verstuur aanvraag</Button>
                 </Grid>
               </Grid>

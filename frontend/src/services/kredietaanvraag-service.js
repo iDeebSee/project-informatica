@@ -1,7 +1,7 @@
 import http from "./https-common";
 const baseUrl = '/kredietaanvragen';
 
-class KredietAanvragenService {
+class KredietAanvraagService {
     getAll() {
         return http.get(`${baseUrl}/`);
     }

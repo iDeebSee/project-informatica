@@ -11,6 +11,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthService from "../services/auth-service";
+import { Alert } from '../components/Alert'
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -27,15 +30,65 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login() {
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required!
+      </div>
+    );
+  }
+};
+
+export default function Login(props) {
+
+  const [email, setEmail] = React.useState("")
+  const [password, setPassword] = React.useState("")
+  const [message, setMessage] = React.useState("")
+
+
+
+  let navigate = useNavigate();
+
+  const alertRef = React.useRef();
+
   const handleSubmit = (event) => {
+
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // setEmail(data.get("email"))
+    // setPassword(data.get("password"))
+    console.log(data.get("email"))
+    console.log(data.get("password"))
+
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
+
+    AuthService.login(email, password).then(
+      () => {
+        navigate("/");
+        window.location.reload();
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        if (error.response.status == 401) {
+          setMessage("De combinatie van email en wachtwoord is fout!");
+        } else if (error.response.status == 400) {
+          setMessage("Velden moeten ingevuld worden!");
+        } else {
+          setMessage(error.message);
+        }
+        console.log("error message: ", resMessage);
+      }
+    );
   };
 
   return (
@@ -51,12 +104,13 @@ export default function Login() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          
+
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
             <TextField
               margin="normal"
               required
@@ -66,6 +120,7 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={e => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -76,26 +131,31 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={e => setPassword(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+
+            <Alert ref={alertRef} type="error" message={message}></Alert>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={() => alertRef.current.handleClick()}
             >
               Sign In
             </Button>
+
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
-              
+
             </Grid>
           </Box>
         </Box>

@@ -1,11 +1,12 @@
 import axios from "axios";
 const API_URL = "http://localhost:8080/auth/";
 class AuthService {
-    login(username, password) {
+    login(email, password) {
         return axios
             .post(API_URL + "login", {
-                username,
-                password
+                email: email,
+                password: password
+
             })
             .then(response => {
                 if (response.data.accessToken) {
@@ -25,6 +26,12 @@ class AuthService {
     }
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));;
+    }
+    isLoggedIn() {
+        if(JSON.parse(localStorage.getItem('user') != null)){
+            return true;
+        }
+        return false;
     }
 }
 export default new AuthService();

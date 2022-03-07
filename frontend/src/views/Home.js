@@ -10,12 +10,6 @@ export default function Home() {
       <div>
         <HomeBody></HomeBody>
       </div>
-      
-  
-    
-  
-
-
   );
 };
 

@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { borderRight } from "@mui/system";
+import {Popup} from "./Popup";
 import {
   Modal,
   Typography,
@@ -71,7 +72,7 @@ const rows = [
   ),
 ];
 
-const marks = [
+/*const marks = [
   {
     value: 1,
     label: "1 maand",
@@ -81,7 +82,7 @@ const marks = [
     label: "1 jaar",
   },
 ];
-
+*/
 const style = {
   position: "absolute",
   top: "50%",
@@ -96,28 +97,30 @@ const style = {
   p: 4,
 };
 
-function valuetext(value) {
+/*function valuetext(value) {
   if (value == 1) return `${value} maand`;
   else if (value == 12) return `${value} Jaar`;
   else return `${value} maanden`;
 
-}
+}*/
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
 export default function ListKredietaanvragen() {
-  const [open, setOpen] = React.useState(false);
+  const childRef = React.useRef();
+
+  /*const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [reden, setReden] = React.useState("");
 
   const handleChange = (event) => {
     setReden(event.target.value);
-  };
+  };*/
 
-  const Popup = (
+  /*const Popup = (
     <div>
       <Modal
         open={open}
@@ -238,7 +241,7 @@ export default function ListKredietaanvragen() {
       </Modal>
     </div>
   );
-
+*/
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
       <Grid container spacing={2}>
@@ -248,10 +251,10 @@ export default function ListKredietaanvragen() {
             variant="contained"
             aria-label="outlined primary button group"
           >
-            <Button style={{ align: borderRight }} onClick={handleOpen}>
+            <Button style={{ align: borderRight }} onClick={() => childRef.current.handleOpen()}>
               create new
             </Button>
-            {Popup}
+            <Popup  ref={childRef} buttontekst="verstuur aanvraag"></Popup>
           </ButtonGroup>{" "}
         </Grid>
         <Grid item xs={12}>
@@ -286,7 +289,8 @@ export default function ListKredietaanvragen() {
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
                         <Button>detail </Button>
-                        <Button>edit </Button>
+                        <Popup  ref={childRef} buttontekst="edit"></Popup>
+                        <Button onClick={() => childRef.current.handleOpen()} >edit </Button>
                         <Button>delete </Button>
                       </ButtonGroup>
                     </TableCell>

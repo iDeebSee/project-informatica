@@ -254,8 +254,8 @@ export default function ListKredietaanvragen() {
             <Button style={{ align: borderRight }} onClick={() => childRef.current.handleOpen()}>
               create new
             </Button>
-            <Popup  ref={childRef} buttontekst="verstuur aanvraag"></Popup>
-          </ButtonGroup>{" "}
+            <Popup ref={childRef} ></Popup>
+          </ButtonGroup>
         </Grid>
         <Grid item xs={12}>
           <React.Fragment>
@@ -289,8 +289,9 @@ export default function ListKredietaanvragen() {
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
                         <Button>detail </Button>
-                        <Popup  ref={childRef} buttontekst="edit"></Popup>
+                        
                         <Button onClick={() => childRef.current.handleOpen()} >edit </Button>
+                        <Popup   ref={childRef} ></Popup>
                         <Button>delete </Button>
                       </ButtonGroup>
                     </TableCell>

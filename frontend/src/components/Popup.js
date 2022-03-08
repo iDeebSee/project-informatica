@@ -1,8 +1,6 @@
 import Button from '@mui/material/Button';
 import * as React from "react";
-
 import Grid from "@mui/material/Grid";
-
 import {
   Modal,
   Typography,
@@ -34,21 +32,30 @@ const style = {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
     const [reden, setReden] = React.useState("");
+
+    
+
+
     const handleChange = (event) => {
       setReden(event.target.value);
     };
-    React.useImperativeHandle(ref, () => ({
-
-         handleOpen () {setOpen(true)}
-       
     
+    React.useImperativeHandle(ref, () => ({
+         handleOpen () {
+          setOpen(true);
+        
+        }
       }));
+
       function valuetext(value) {
         if (value == 1) return `${value} maand`;
         else if (value == 12) return `${value} Jaar`;
         else return `${value} maanden`;
       
       }
+      
+     
+
       const marks = [
         {
           value: 1,
@@ -173,7 +180,9 @@ const style = {
                 />
               </Grid>
               <Grid item xs={12} md={12}>
-              <Button variant="contained">{props.buttontekst}</Button>
+              <Button variant="contained">verstuur </Button>
+
+
               </Grid>
             </Grid>
           </Box>

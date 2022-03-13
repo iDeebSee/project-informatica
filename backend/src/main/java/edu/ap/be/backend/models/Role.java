@@ -14,7 +14,6 @@ public class Role{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Enumerated(EnumType.STRING)
-    @Column
     private RoleType role;
     @OneToMany(mappedBy = "role")
     @JsonManagedReference

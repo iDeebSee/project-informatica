@@ -12,12 +12,13 @@ export const Alert = React.forwardRef((props, ref) => {
   const [open, setOpen] = React.useState(false);
   const [type, setType] = React.useState(props.type)
   //const [message, setMessage] = React.useState(props.message)
-  
+
   React.useImperativeHandle(ref, () => ({
 
-     handleClick() {
-        setOpen(true);
-      }
+    handleClick() {
+      setType(props.type)
+      setOpen(true);
+    }
 
   }));
 

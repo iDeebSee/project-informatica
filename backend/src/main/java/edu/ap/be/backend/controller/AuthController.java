@@ -79,14 +79,14 @@ public class AuthController {
 
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByRole(RoleType.KLANT)
+            Role userRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             user.setRole(userRole);
 
         } else {
             strRoles.forEach(role -> {
                 switch (role.toLowerCase(Locale.ROOT)) {
-                    case "admin":
+                    case "administrator":
                         Role adminRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(adminRole);

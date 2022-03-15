@@ -5,6 +5,8 @@ import Detailaanvraag from '../klantViews/DetailAanvraag';
 import Login from '../views/Login';
 import AuthService from '../services/auth-service'
 import PrivateRoute from './PrivateRoute'
+import Profile from '../views/Profile'
+import Navbar from '../components/Navbar'
 import {
     BrowserRouter,
     Route,
@@ -32,13 +34,15 @@ export default function Routing() {
         setUser(AuthService.getCurrentUser())
     }, []);
 
-    console.log("user in routing: ", user);
+    console.log("user in routing.js: ", user);
     return (
         <BrowserRouter>
+            <Navbar></Navbar>
             <Routes>
-                <Route path="/" element={<PrivateRoute user={isLoggedIn}> <Home /> </PrivateRoute>} />
+                <Route exact path="/" element={<PrivateRoute user={isLoggedIn}> <Home /> </PrivateRoute>} />
                 <Route path={"/list"} element={<PrivateRoute user={isLoggedIn}> <Kredietaanvragen /> </PrivateRoute>} />
                 <Route path={"/detail"} element={<PrivateRoute user={isLoggedIn}> <Detailaanvraag /> </PrivateRoute>} />
+                <Route path={"/profile"} element={<PrivateRoute user={isLoggedIn}> <Profile /> </PrivateRoute>} />
                 <Route path="*" element={<p>Hier vind je niets: 404!</p>} />
                 <Route path={"/login"} element={<Login />} />
             </Routes>

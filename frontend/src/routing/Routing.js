@@ -45,6 +45,7 @@ export default function Routing() {
                 <Route path={"/profile"} element={<PrivateRoute user={isLoggedIn}> <Profile /> </PrivateRoute>} />
                 <Route path="*" element={<p>Hier vind je niets: 404!</p>} />
                 <Route path={"/login"} element={<Login />} />
+
             </Routes>
         </BrowserRouter>
     )

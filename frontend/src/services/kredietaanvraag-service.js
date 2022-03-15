@@ -1,6 +1,6 @@
 import axios from 'axios';
 import httpsCommon from './https-common';
-
+import authHeader from './auth-header';
 // import http from "./https-common";
 const baseUrl = 'http://localhost:8080/kredietaanvragen';
 
@@ -49,8 +49,8 @@ const baseUrl = 'http://localhost:8080/kredietaanvragen';
     //     return http.put(`${baseUrl}/${id}`);
     // }
 
-    // delete(id) {
-    //     return http.delete(`${baseUrl}/${id}`);
-    // }
+    delete(id) {
+        return httpsCommon.delete(`${baseUrl}/${id}`,{ headers: authHeader() });
+    }
 }
 export default new KredietAanvraagService();

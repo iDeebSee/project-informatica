@@ -5,6 +5,7 @@ import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.repository.KredietaanvraagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,7 @@ public class KredietAanvraagController {
         final Kredietaanvraag updatedKredietAanvraag = kredietRepository.save(kredietaanvraag);
         return ResponseEntity.ok(updatedKredietAanvraag);
     }
-
+    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KLANT') ")
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteKredietAanvraag(@PathVariable(value = "id") long kredietID)
             throws ResourceNotFoundException {

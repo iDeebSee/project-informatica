@@ -52,6 +52,7 @@ export default function ListKredietaanvragen() {
   const childRef = React.useRef();
   const [krediet,setKredieten]=React.useState([]);
   
+  
 
   React.useEffect(()=>{
 
@@ -62,7 +63,13 @@ export default function ListKredietaanvragen() {
     })
   
   },[])
+
+  function deleteKA(id){
+    kredietaanvraagService.delete(id).then((response)=>{
+      console.log("delete",response.data)
   
+    })
+  }
   
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
@@ -110,7 +117,7 @@ export default function ListKredietaanvragen() {
                         
                         <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>
                         <Popup   ref={childRef} ></Popup>
-                        <Button>verwijderen </Button>
+                        <Button onClick={()=>deleteKA(row.id)}>verwijderen </Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

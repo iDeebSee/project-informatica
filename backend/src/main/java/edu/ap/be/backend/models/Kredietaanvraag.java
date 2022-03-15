@@ -24,5 +24,8 @@ public class Kredietaanvraag {
     private Status status;
     @Column(name = "klantID")
     private long klantID;
+    @Column(name = "categorie")
+    private Categorie categorie;
+
 
 }

@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button';
 import * as React from "react";
 import Grid from "@mui/material/Grid";
+import KredietAanvraagService from "../services/kredietaanvraag-service"
 import {
   Modal,
   Typography,
@@ -31,13 +32,19 @@ const style = {
     
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
-    const [reden, setReden] = React.useState("");
-
+    const [termijn, setTermijn]= React.useState(0)
+    const [zelfGefinancierd,setZelfGefinancieerd ]= React.useState(0)
+    const [totaalbedrag, setTotaalbedrag]= React.useState(0)
+    const [naam, setNaam]= React.useState("")
+    const [categorie, setCategorie]= React.useState("")
+    const [verantwoording, setVerantwoording]= React.useState("")
+    const [file,setFile]=React.useState("")
     
 
 
     const handleChange = (event) => {
-      setReden(event.target.value);
+      setCategorie(event.target.value)
+
     };
     
     React.useImperativeHandle(ref, () => ({
@@ -54,7 +61,23 @@ const style = {
       
       }
       
-     
+     function handleSubmit(e){
+      e.preventDefault(); 
+      KredietAanvraagService.create(
+          totaalbedrag,
+          termijn,
+          naam,
+          verantwoording,
+          zelfGefinancierd,
+          categorie
+          
+      ).then(response => {
+        console.log(response.data)
+        //window.location.reload();
+      })
+
+
+     }
 
       const marks = [
         {
@@ -84,6 +107,8 @@ const style = {
           Vul hier de gegevens in voor uw kredietaanvraag. Druk op versturen
           wanneer u klaar bent.
           <Box
+          onSubmit={handleSubmit}
+          
             component="form"
             sx={{
               "& > :not(style)": { m: 1, width: "25ch" },
@@ -99,6 +124,8 @@ const style = {
                   label="Naam van de kredietaanvraag"
                   variant="outlined"
                   style={{ width: "100%" }}
+                  onChange={(e) => setNaam(e.target.value)}
+                  value={naam}
                 />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -107,7 +134,9 @@ const style = {
                   required="true"
                   label="Zelf gefinancierd (€)"
                   variant="outlined"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%" }}µ
+                  onChange={(e) => setZelfGefinancieerd(e.target.value)}
+
                 />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -117,11 +146,12 @@ const style = {
                   label="Totaalbedrag (€)"
                   variant="outlined"
                   style={{ width: "100%" }}
-
+                  onChange={(e) => setTotaalbedrag(e.target.value)}
+                  value={totaalbedrag}
                 />
               </Grid>
               <Grid item xs={12} md={3} style= {{ maxWidth: "100%" }}>
-                <FormControl>
+                <FormControl  >
                   <InputLabel id="demo-simple-select-label">
                     Categorie
                   </InputLabel>
@@ -129,26 +159,26 @@ const style = {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     style={{width : 300}}
-                    value={reden}
+                    value={categorie}
                     label="Reden"
                     onChange={handleChange}
                   >
-                    <MenuItem value={"meubilair en machines"}>
+                    <MenuItem value={"GEBOUWEN"}>
                     meubilair en machines
                     </MenuItem>
-                    <MenuItem value={"rollend materieel(vb laptop)"}>
+                    <MenuItem value={"ROLLENDMATERIEEL"}>
                     rollend materieel(vb laptop)
                     </MenuItem>
-                    <MenuItem value={"klein materieel(vb gsm)"}>
+                    <MenuItem value={"KLEINMATERIEEL"}>
                     klein materieel(vb gsm)
                     </MenuItem>
-                    <MenuItem value={"kantoor"}>
+                    <MenuItem value={"KANTOOR"}>
                     kantoor
                     </MenuItem>
-                    <MenuItem value={"gebouwen"}>
+                    <MenuItem value={"INDUSTRIEELEGEBOUWEN"}>
                     gebouwen
                     </MenuItem>
-                    <MenuItem value={"industriele gebouwen"}>
+                    <MenuItem value={"MEUBELAIRENMACHINES"}>
                     industriële gebouwen
                     </MenuItem>
                   </Select>
@@ -163,6 +193,8 @@ const style = {
                   valueLabelDisplay="on"
                   step={1}
                   marks={marks}
+                  onChange={(e) => setTermijn(e.target.value)}
+                  value={termijn}
                   // nog een if statement dat checkt welke categorie
                   // voor 
                   // meubilair en machines (tot 10j), rollend materieel(vb laptop) (tot 5j), klein materieel(vb gsm) (tot 3j)
@@ -177,10 +209,12 @@ const style = {
                   minRows={5}
                   placeholder="Typ hier de verantwoording voor uw kredietaanvraag..."
                   style={{ width: "100%" }}
+                  onChange={(e) => setVerantwoording(e.target.value)}
+                  value={verantwoording}
                 />
               </Grid>
               <Grid item xs={12} md={12}>
-              <Button variant="contained">verstuur </Button>
+              <Button variant="contained" type="submit">verstuur </Button>
 
 
               </Grid>

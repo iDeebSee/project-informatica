@@ -34,7 +34,7 @@ public class KredietAanvraagController {
     }
 
     @PostMapping("")
-    public Kredietaanvraag createKredietAanvraag(@Validated @RequestBody Kredietaanvraag krediet) {
+    public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) {
         return kredietRepository.save(krediet);
     }
 
@@ -50,6 +50,7 @@ public class KredietAanvraagController {
         kredietaanvraag.setLooptijd(kredietDetails.getLooptijd());
         kredietaanvraag.setNaam(kredietDetails.getNaam());
         kredietaanvraag.setStatus(kredietaanvraag.getStatus());
+        kredietaanvraag.setCategorie(kredietaanvraag.getCategorie());
 
         final Kredietaanvraag updatedKredietAanvraag = kredietRepository.save(kredietaanvraag);
         return ResponseEntity.ok(updatedKredietAanvraag);

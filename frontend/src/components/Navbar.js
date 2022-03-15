@@ -36,6 +36,12 @@ export default function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  function logout() {
+    handleCloseUserMenu();
+    localStorage.clear();
+    window.location.href = '/';
+  }
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -128,7 +134,7 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {/* {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Link to={setting.toLowerCase()} style={{ textDecoration: 'none', color: 'black' }}>
                     <Typography textAlign="center">
@@ -136,12 +142,26 @@ export default function Navbar() {
                     </Typography>
                   </Link>
                 </MenuItem>
-              ))}
+              ))} */}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link to='/profile' style={{ textDecoration: 'none', color: 'black' }}>
+                  <Typography textAlign="center">
+                    Profile
+                  </Typography>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={() => logout()}>
+
+                <Typography textAlign="center">
+                  Logout
+                </Typography>
+
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
 
   );
 };

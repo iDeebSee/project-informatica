@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { borderRight } from "@mui/system";
 import {Popup} from "./Popup";
+import kredietaanvraagService from "../services/kredietaanvraag-service";
 import {
   Modal,
   Typography,
@@ -24,65 +25,10 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
 
-const rows = [
-  createData(
-    0,
-    "16 Mar, 2019",
-    "Elvis Presley",
-    "Tupelo, MS",
-    "VISA ⠀•••• 3719",
-    312.44
-  ),
-  createData(
-    1,
-    "16 Mar, 2019",
-    "Paul McCartney",
-    "London, UK",
-    "VISA ⠀•••• 2574",
-    866.99
-  ),
-  createData(
-    2,
-    "16 Mar, 2019",
-    "Tom Scholz",
-    "Boston, MA",
-    "MC ⠀•••• 1253",
-    100.81
-  ),
-  createData(
-    3,
-    "16 Mar, 2019",
-    "Michael Jackson",
-    "Gary, IN",
-    "AMEX ⠀•••• 2000",
-    654.39
-  ),
-  createData(
-    4,
-    "15 Mar, 2019",
-    "Bruce Springsteen",
-    "Long Branch, NJ",
-    "VISA ⠀•••• 5919",
-    212.79
-  ),
-];
+   
+   
 
-/*const marks = [
-  {
-    value: 1,
-    label: "1 maand",
-  },
-  {
-    value: 12,
-    label: "1 jaar",
-  },
-];
-*/
 const style = {
   position: "absolute",
   top: "50%",
@@ -98,14 +44,32 @@ const style = {
 };
 
 
-
 function preventDefault(event) {
   event.preventDefault();
 }
 
 export default function ListKredietaanvragen() {
   const childRef = React.useRef();
+  const [krediet,setKredieten]=React.useState([]);
+  
+  
 
+  React.useEffect(()=>{
+
+    kredietaanvraagService.getAll().then((response)=>{
+      console.log("data",response.data)
+      setKredieten(response.data)
+  
+    })
+  
+  },[])
+
+  function deleteKA(id){
+    kredietaanvraagService.delete(id).then((response)=>{
+      console.log("delete",response.data)
+  
+    })
+  }
   
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
@@ -117,7 +81,7 @@ export default function ListKredietaanvragen() {
             aria-label="outlined primary button group"
           >
             <Button style={{ align: borderRight }} onClick={() => childRef.current.handleOpen()}>
-              create new
+              maak
             </Button>
             <Popup ref={childRef} ></Popup>
           </ButtonGroup>
@@ -127,37 +91,33 @@ export default function ListKredietaanvragen() {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>id</TableCell>
+                  <TableCell>naam</TableCell>
                   <TableCell>Verantwoording</TableCell>
                   <TableCell>Zelf gefinancierd</TableCell>
-                  <TableCell>Totaal</TableCell>
+                  <TableCell>lening</TableCell>
                   <TableCell>looptijd</TableCell>
-                  <TableCell align="right">status</TableCell>
-                  <TableCell align="right">klant id</TableCell>
                   <TableCell align="right"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {krediet.map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.shipTo}€</TableCell>
-                    <TableCell>{row.shipTo}€</TableCell>
-                    <TableCell>{row.paymentMethod}</TableCell>
-                    <TableCell align="right">nog in te vullen</TableCell>
-                    <TableCell align="right">nog in te vullen</TableCell>
+                    <TableCell>{row.naam}</TableCell>
+                    <TableCell>{row.verantwoording}</TableCell>
+                    <TableCell>€ {row.eigenVermogen}</TableCell>
+                    <TableCell>€ {row.lening}</TableCell>
+                    <TableCell>{row.looptijd}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         variant="contained"
                         aria-label="outlined primary button group"
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
-                        <Button>detail </Button>
+                        <Button>details </Button>
                         
-                        <Button onClick={() => childRef.current.handleOpen()} >edit </Button>
+                        <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>
                         <Popup   ref={childRef} ></Popup>
-                        <Button>delete </Button>
+                        <Button onClick={()=>deleteKA(row.id)}>verwijderen </Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

@@ -73,7 +73,7 @@ const style = {
           
       ).then(response => {
         console.log(response.data)
-        //window.location.reload();
+        window.location.reload();
       })
 
 

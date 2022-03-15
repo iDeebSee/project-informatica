@@ -26,6 +26,8 @@ public class Kredietaanvraag {
     private long klantID;
     @Column(name = "categorie")
     private Categorie categorie;
+    @Column(name = "verantwoording")
+    private String verantwoording;
 
 
 }

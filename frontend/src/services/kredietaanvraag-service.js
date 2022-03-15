@@ -5,9 +5,9 @@ import httpsCommon from './https-common';
 const baseUrl = 'http://localhost:8080/kredietaanvragen';
 
  class KredietAanvraagService {
-    // getAll() {
-    //     return http.get(`${baseUrl}/`);
-    // }
+    getAll() {
+        return httpsCommon.get(`${baseUrl}`);
+    }
 
     // get(id) {
     //     return http.get(`${baseUrl}/${id}`);

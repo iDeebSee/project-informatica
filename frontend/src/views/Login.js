@@ -15,18 +15,18 @@ import AuthService from "../services/auth-service";
 import { Alert } from '../components/Alert'
 import { useNavigate } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright(props) {
+//   return (
+//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 const theme = createTheme();
 
@@ -107,7 +107,7 @@ export default function Login(props) {
 
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Aanmelden
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -116,7 +116,7 @@ export default function Login(props) {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Adres"
               name="email"
               autoComplete="email"
               autoFocus
@@ -127,7 +127,7 @@ export default function Login(props) {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Wachtwoord"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -135,7 +135,7 @@ export default function Login(props) {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Onthoud mij"
             />
 
             <Alert ref={alertRef} type="error" message={message}></Alert>
@@ -146,20 +146,20 @@ export default function Login(props) {
               sx={{ mt: 3, mb: 2 }}
               onClick={() => alertRef.current.handleClick()}
             >
-              Sign In
+              Aanmelden
             </Button>
 
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                  Wachtwoord vergeten?
                 </Link>
               </Grid>
 
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   );

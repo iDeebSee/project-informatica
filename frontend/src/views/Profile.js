@@ -137,7 +137,7 @@ export default function Profile() {
                     </Grid>
                     <Grid item xs={12} md={12} >
                         <Alert ref={alertRef} type={messageType} message={message}></Alert>
-                        <Button style={{ float: 'right' }} type="submit" variant="contained" onClick={() => alertRef.current.handleClick()}>Update</Button>
+                        <Button style={{ float: 'right' }} type="submit" variant="contained" onClick={() => alertRef.current.handleClick()}>Werk bij</Button>
 
                     </Grid>
                 </Grid>

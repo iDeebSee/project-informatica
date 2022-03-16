@@ -34,7 +34,7 @@ export default function Login(props) {
   const [password, setPassword] = React.useState("")
   const [message, setMessage] = React.useState("")
   const [messageType, setMessageType] = React.useState("")
-  const [error, setError] = React.useState()
+  const [error, setError] = React.useState("error")
 
 
 
@@ -88,7 +88,7 @@ export default function Login(props) {
     if (error == 401) {
       setMessageType("error");
       setMessage("De combinatie van email en wachtwoord is fout!");
-      
+
     } else if (error == 400) {
       setMessageType("error");
       setMessage("Velden moeten ingevuld worden!");
@@ -100,7 +100,7 @@ export default function Login(props) {
       setMessageType("error")
       setMessage("Iets ging mis, probeer opnieuw!")
     }
-  })
+  }, [error])
 
   return (
     <ThemeProvider theme={theme}>

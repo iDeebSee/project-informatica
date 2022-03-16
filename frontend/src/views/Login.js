@@ -15,18 +15,6 @@ import AuthService from "../services/auth-service";
 import { Alert } from '../components/Alert'
 import { useNavigate } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -34,7 +22,7 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Dit veld is verplicht!
       </div>
     );
   }
@@ -45,6 +33,8 @@ export default function Login(props) {
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [message, setMessage] = React.useState("")
+  const [messageType, setMessageType] = React.useState("")
+  const [error, setError] = React.useState()
 
 
 
@@ -67,6 +57,7 @@ export default function Login(props) {
     //   password: data.get('password'),
     // });
 
+
     AuthService.login(email, password).then(
       () => {
         navigate("/");
@@ -80,9 +71,11 @@ export default function Login(props) {
           error.message ||
           error.toString();
         if (error.response.status == 401) {
-          setMessage("De combinatie van email en wachtwoord is fout!");
+          setError(401)
+          // setMessage("De combinatie van email en wachtwoord is fout!");
         } else if (error.response.status == 400) {
-          setMessage("Velden moeten ingevuld worden!");
+          setError(400)
+          // setMessage("Velden moeten ingevuld worden!");
         } else {
           setMessage(error.message);
         }
@@ -90,6 +83,24 @@ export default function Login(props) {
       }
     );
   };
+
+  React.useEffect(() => {
+    if (error == 401) {
+      setMessageType("error");
+      setMessage("De combinatie van email en wachtwoord is fout!");
+      
+    } else if (error == 400) {
+      setMessageType("error");
+      setMessage("Velden moeten ingevuld worden!");
+    } else if (error == "" || error == null) {
+      setMessageType("success");
+      setMessage("U bent successvol aangemeld!")
+    }
+    else {
+      setMessageType("error")
+      setMessage("Iets ging mis, probeer opnieuw!")
+    }
+  })
 
   return (
     <ThemeProvider theme={theme}>
@@ -107,7 +118,7 @@ export default function Login(props) {
 
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Aanmelden
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -116,7 +127,7 @@ export default function Login(props) {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Adres"
               name="email"
               autoComplete="email"
               autoFocus
@@ -127,7 +138,7 @@ export default function Login(props) {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Wachtwoord"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -135,10 +146,10 @@ export default function Login(props) {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Onthoud mij"
             />
 
-            <Alert ref={alertRef} type="error" message={message}></Alert>
+            <Alert ref={alertRef} type={messageType} message={message}></Alert>
             <Button
               type="submit"
               fullWidth
@@ -146,20 +157,19 @@ export default function Login(props) {
               sx={{ mt: 3, mb: 2 }}
               onClick={() => alertRef.current.handleClick()}
             >
-              Sign In
+              Aanmelden
             </Button>
 
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                  Wachtwoord vergeten?
                 </Link>
               </Grid>
 
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

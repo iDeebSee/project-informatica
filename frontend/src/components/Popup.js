@@ -130,7 +130,7 @@ export const Popup = React.forwardRef((props, ref) => {
                   required="true"
                   label="Zelf gefinancierd (€)"
                   variant="outlined"
-                  style={{ width: "100%" }} µ
+                  style={{ width: "100%" }}
                   onChange={(e) => setZelfGefinancieerd(e.target.value)}
 
                 />

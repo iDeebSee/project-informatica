@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useJwt, decodeToken, isExpired } from "react-jwt";
 const API_URL = "http://localhost:8080/auth/";
 class AuthService {
     login(email, password) {
@@ -25,10 +26,18 @@ class AuthService {
         });
     }
     getCurrentUser() {
-        return JSON.parse(localStorage.getItem('user'));;
+        return JSON.parse(localStorage.getItem('user'));
     }
     isLoggedIn() {
-        if(JSON.parse(localStorage.getItem('user') != null)){
+        const currUser = JSON.parse(localStorage.getItem('user'));
+        let token = ""
+        if (currUser) {
+            token = currUser.accessToken
+        }
+    
+        const isMyTokenExpired = isExpired(token);
+    
+        if(JSON.parse(localStorage.getItem('user') != null) && !isMyTokenExpired){
             return true;
         }
         return false;

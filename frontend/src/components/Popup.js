@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
+import EventBus from "../common/eventBus"
 import {
   Modal,
   Typography,
@@ -74,6 +75,10 @@ export const Popup = React.forwardRef((props, ref) => {
     ).then(response => {
       console.log(response.data)
       window.location.reload();
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
     })
 
 

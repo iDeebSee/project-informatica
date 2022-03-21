@@ -75,8 +75,24 @@ export const Popup = React.forwardRef((props, ref) => {
       console.log(response.data)
       window.location.reload();
     })
+  }
 
+  function ratiosOK() {
+    //API data uitlezen en checken of boven een bepaalde minimumwaarde liggen
+  }
 
+  function kredietCheck() {
+    if (user.isBlacklisted() == false && user.ratiosOk() == true) {
+      
+      resultaat = "kredietaanvraag goedgekeurd"
+    }
+    else {
+      //kredietAanvraag.delete()
+      antwoord = "kredietaanvraag wordt geweigerd"
+      reden = " wegens ..." //nog reden concatineren
+      resultaat = antwoord + reden
+    }
+    return resultaat;
   }
 
   const marks = [

@@ -164,19 +164,10 @@ export const Popup = React.forwardRef((props, ref) => {
                   outputFormat="string"
                   decimalCharacter=","
                   digitGroupSeparator="."
-                  onChange={(e) => setZelfGefinancieerd(e.target.value)}
+                  onChange={(event, value)=> setZelfGefinancieerd(value)}
                   required="true"
                   style={{ width: "100%" }}
                 />
-                {/* <TextField
-                  id="zelfgefinancierd"
-                  required="true"
-                  label="Zelf gefinancierd (€)"
-                  variant="outlined"
-                  style={{ width: "100%" }}
-                  onChange={(e) => setZelfGefinancieerd(e.target.value)}
-
-                /> */}
               </Grid>
               <Grid item xs={12} md={3}>
               <CurrencyTextField
@@ -188,19 +179,10 @@ export const Popup = React.forwardRef((props, ref) => {
                   outputFormat="string"
                   decimalCharacter=","
                   digitGroupSeparator="."
-                  onChange={(e) => setTotaalbedrag(e.target.value)}
+                  onChange={(event, value)=> setTotaalbedrag(value)}
                   required="true"
                   style={{ width: "100%" }}
                 />
-                {/* <TextField
-                  id="totaalbedrag"
-                  required="true"
-                  label="Totaalbedrag (€)"
-                  variant="outlined"
-                  style={{ width: "100%" }}
-                  onChange={(e) => setTotaalbedrag(e.target.value)}
-                  value={totaalbedrag}
-                /> */}
               </Grid>
               <Grid item xs={12} md={3} style={{ maxWidth: "100%" }}>
                 <FormControl  >

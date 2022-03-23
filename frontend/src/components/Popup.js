@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import * as React from "react";
 import Grid from "@mui/material/Grid";
@@ -14,6 +15,8 @@ import {
   FormControl,
   TextareaAutosize,
 } from "@mui/material";
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -39,13 +42,17 @@ export const Popup = React.forwardRef((props, ref) => {
   const [categorie, setCategorie] = React.useState("")
   const [verantwoording, setVerantwoording] = React.useState("")
   const [file, setFile] = React.useState("")
+  const [disable, setDisable] = React.useState(true)
+
 
 
 
   const handleChange = (event) => {
     setCategorie(event.target.value)
+    setDisable(false)
 
   };
+
 
   React.useImperativeHandle(ref, () => ({
     handleOpen() {
@@ -77,23 +84,31 @@ export const Popup = React.forwardRef((props, ref) => {
     })
   }
 
-  function ratiosOK() {
-    //API data uitlezen en checken of boven een bepaalde minimumwaarde liggen
-  }
+  /*  function ratiosOK() {
+     //API data uitlezen en checken of boven een bepaalde minimumwaarde liggen
+     //get btwnummer
+     if (.solvabiliteit >= ... && .rentabiliteit >= ... && .liquiditeit >= ...){
+       resultaat = true;
+     }
+     else {
+       resultaat = false;
+     }
+     return resultaat
+   } */
 
-  function kredietCheck() {
-    if (user.isBlacklisted() == false && user.ratiosOk() == true) {
-      
-      resultaat = "kredietaanvraag goedgekeurd"
-    }
-    else {
-      //kredietAanvraag.delete()
-      antwoord = "kredietaanvraag wordt geweigerd"
-      reden = " wegens ..." //nog reden concatineren
-      resultaat = antwoord + reden
-    }
-    return resultaat;
-  }
+  /*  function kredietCheck() {
+     //if (user.isBlacklisted() == false && user.ratiosOk() == true) {
+       
+       resultaat = "kredietaanvraag goedgekeurd"
+     //}
+     //else {
+       //kredietAanvraag.delete()
+       antwoord = "kredietaanvraag wordt geweigerd"
+       reden = " wegens ..." //nog reden concatineren
+       resultaat = antwoord + reden
+     //}
+     return resultaat;
+   } */
 
   const marks = [
     {
@@ -101,7 +116,6 @@ export const Popup = React.forwardRef((props, ref) => {
       label: "Jaar",
     }
   ];
-
 
   return (
 
@@ -141,7 +155,20 @@ export const Popup = React.forwardRef((props, ref) => {
                 />
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextField
+                <CurrencyTextField
+                  label="Zelf gefinancierd (€)"
+                  variant="outlined"
+                  value={zelfGefinancierd}
+                  currencySymbol="€"
+                  minimumValue="0"
+                  outputFormat="string"
+                  decimalCharacter=","
+                  digitGroupSeparator="."
+                  onChange={(e) => setZelfGefinancieerd(e.target.value)}
+                  required="true"
+                  style={{ width: "100%" }}
+                />
+                {/* <TextField
                   id="zelfgefinancierd"
                   required="true"
                   label="Zelf gefinancierd (€)"
@@ -149,10 +176,23 @@ export const Popup = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setZelfGefinancieerd(e.target.value)}
 
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextField
+              <CurrencyTextField
+                  label="Totaalbedrag (€)"
+                  variant="outlined"
+                  value={totaalbedrag}
+                  currencySymbol="€"
+                  minimumValue="0"
+                  outputFormat="string"
+                  decimalCharacter=","
+                  digitGroupSeparator="."
+                  onChange={(e) => setTotaalbedrag(e.target.value)}
+                  required="true"
+                  style={{ width: "100%" }}
+                />
+                {/* <TextField
                   id="totaalbedrag"
                   required="true"
                   label="Totaalbedrag (€)"
@@ -160,7 +200,7 @@ export const Popup = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setTotaalbedrag(e.target.value)}
                   value={totaalbedrag}
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} md={3} style={{ maxWidth: "100%" }}>
                 <FormControl  >
@@ -202,6 +242,7 @@ export const Popup = React.forwardRef((props, ref) => {
                   aria-label="Looptijd"
                   getAriaValueText={valuetext}
                   valueLabelDisplay="on"
+                  disabled={disable}
                   step={1}
                   marks={marks}
                   onChange={(e) => setTermijn(e.target.value)}
@@ -209,17 +250,17 @@ export const Popup = React.forwardRef((props, ref) => {
                   min={(() => {
                     switch (categorie) {
                       case "GEBOUWEN":
-                        return 5;
+                        return 1;
                       case "ROLLENDMATERIEEL":
-                        return 2;
+                        return 1;
                       case "KLEINMATERIEEL":
-                        return 1;//?
+                        return 1;
                       case "KANTOOR":
-                        return 1;//?
+                        return 1;
                       case "INDUSTRIEELEGEBOUWEN":
-                        return 1;//?
+                        return 1;
                       case "MEUBILAIRENMACHINES":
-                        return 1;//?
+                        return 1;
                     }
                   })()}
                   max={(() => {
@@ -253,6 +294,7 @@ export const Popup = React.forwardRef((props, ref) => {
               </Grid>
               <Grid item xs={12} md={12}>
                 <Button variant="contained" type="submit">verstuur </Button>
+
 
 
               </Grid>

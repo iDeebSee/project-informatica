@@ -12,6 +12,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import { borderRight } from "@mui/system";
 import {Popup} from "./Popup";
 import kredietaanvraagService from "../services/kredietaanvraag-service";
+import EventBus from "../common/eventBus"
 import {
   Modal,
   Typography,
@@ -60,7 +61,12 @@ export default function ListKredietaanvragen() {
       console.log("data",response.data)
       setKredieten(response.data)
   
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
     })
+    
   
   },[])
 
@@ -68,6 +74,10 @@ export default function ListKredietaanvragen() {
     kredietaanvraagService.delete(id).then((response)=>{
       console.log("delete",response.data)
   
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
     })
   }
   

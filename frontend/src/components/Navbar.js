@@ -11,7 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import AuthService from "../services/auth-service"
 import { Link, Routes, BrowserRouter } from 'react-router-dom'
+
 
 const pages = [''];
 const settings = ['Profile', 'Logout'];
@@ -19,6 +21,7 @@ const settings = ['Profile', 'Logout'];
 
 export default function Navbar() {
 
+  const isLoggedIn = AuthService.isLoggedIn()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -38,8 +41,9 @@ export default function Navbar() {
   };
 
   function logout() {
+
     handleCloseUserMenu();
-    localStorage.clear();
+    AuthService.logout();
     window.location.href = '/';
   }
   return (
@@ -57,7 +61,7 @@ export default function Navbar() {
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -66,7 +70,7 @@ export default function Navbar() {
               color="inherit"
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> 
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -90,16 +94,20 @@ export default function Navbar() {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
           </Box>
+
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            ALPHA
+            <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+              ALPHA
+            </Link>
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -112,12 +120,14 @@ export default function Navbar() {
             ))}
           </Box>
 
+
           <Box sx={{ flexGrow: 0 }}>
+            {isLoggedIn===true ? 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip>
+            </Tooltip> : <></>}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -143,6 +153,7 @@ export default function Navbar() {
                   </Link>
                 </MenuItem>
               ))} */}
+
               <MenuItem onClick={handleCloseUserMenu}>
                 <Link to='/profile' style={{ textDecoration: 'none', color: 'black' }}>
                   <Typography textAlign="center">
@@ -150,6 +161,7 @@ export default function Navbar() {
                   </Typography>
                 </Link>
               </MenuItem>
+
               <MenuItem onClick={() => logout()}>
 
                 <Typography textAlign="center">
@@ -157,8 +169,11 @@ export default function Navbar() {
                 </Typography>
 
               </MenuItem>
+
             </Menu>
           </Box>
+
+
         </Toolbar>
       </Container>
     </AppBar >

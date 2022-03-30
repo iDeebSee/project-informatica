@@ -1,28 +1,58 @@
 package edu.ap.be.backend.models;
 
-import java.util.Locale.Category;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
-public enum Categorie {
+import javax.persistence.*;
+import java.util.List;
 
-    GEBOUWEN("gebouwen"),
-    ROLLENDMATERIEEL("rollend materieel(vb laptop)"),
-    KLEINMATERIEEL("klein materieel(vb gsm)"),
-    KANTOOR("kantoor"),
-    INDUSTRIEELEGEBOUWEN("industriele gebouwen"),
-    MEUBELAIRENMACHINES("meubilair en machines");
+@Entity
+@Table(name = "categorie")
+public class Categorie{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    private CategorieType categorie;
+    @OneToMany(mappedBy = "categorie")
+    @JsonManagedReference
+    private List<Kredietaanvraag> kredieten;
 
-
-    
-    private String text;
-
-    Categorie(String s) {
-        this.text = s;
+    public Categorie(CategorieType categorie) {
+        this.categorie = categorie;
     }
-    public String getText(){
-        return text;
+
+    public Categorie(){
+
     }
 
-    public Category fromValue(String name) {
-        return Category.valueOf(name.toUpperCase());
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public CategorieType getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(CategorieType categorie) {
+        this.categorie = categorie;
+    }
+
+    public List<Kredietaanvraag> getkredieten() {
+        return kredieten;
+    }
+
+    public void setKredieten(List<Kredietaanvraag> kredieten) {
+        this.kredieten = kredieten;
+    }
+
+    public void add(CategorieType categorie){
+        this.categorie = categorie;
+    }
+
 }

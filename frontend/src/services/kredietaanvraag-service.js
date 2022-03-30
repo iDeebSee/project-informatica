@@ -14,7 +14,7 @@ class KredietAanvraagService {
     // }
 
 
-    create(lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
+    create(lening, termijn, naam, verantwoording, eigenvermogen, categorie, klantid, status) {
 
         let formdata = new FormData();
         formdata.append('lening', lening);
@@ -23,7 +23,9 @@ class KredietAanvraagService {
         formdata.append('naam', naam);
         formdata.append('verantwoording', verantwoording);
         formdata.append('eigenVermogen', eigenvermogen);
-        formdata.append('categorie', categorie)
+        formdata.append('categorie', categorie);
+        formdata.append('klantid', klantid);
+        formdata.append('status', status);
         // if(bestand==undefined)
         // {
         //     bestand.array.forEach(bestand => {

@@ -21,11 +21,15 @@ public class Kredietaanvraag {
     @Column(name = "looptijd")
     private int looptijd;
     @Column(name = "status")
-    private Status status;
-    @Column(name = "klantID")
+    private StatusType status;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = edu.ap.be.backend.models.User.class)
+    @JoinColumn(name = "klantID")
+    //@JsonBackReference
+    
+    //@Column(name = "klantID")
     private long klantID;
     @Column(name = "categorie")
-    private Categorie categorie;
+    private CategorieType categorie;
     @Column(name = "verantwoording")
     private String verantwoording;
 

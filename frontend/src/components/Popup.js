@@ -4,6 +4,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
 import EventBus from "../common/eventBus"
+import AuthService from "../services/auth-service"
 import {
   Modal,
   Typography,
@@ -69,6 +70,11 @@ export const Popup = React.forwardRef((props, ref) => {
 
   }
 
+  const userId = JSON.parse(AuthService.getCurrentUser().id);
+  const status = "GOEDGEKEURD";
+
+  
+
   function handleSubmit(e) {
     e.preventDefault();
     KredietAanvraagService.create(
@@ -77,11 +83,12 @@ export const Popup = React.forwardRef((props, ref) => {
       naam,
       verantwoording,
       zelfGefinancierd,
-      categorie
-
+      categorie,
+      userId,
+      status
     ).then(response => {
       console.log(response.data)
-      window.location.reload();
+      //window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
@@ -281,9 +288,6 @@ export const Popup = React.forwardRef((props, ref) => {
               </Grid>
               <Grid item xs={12} md={12}>
                 <Button variant="contained" type="submit">verstuur </Button>
-
-
-
               </Grid>
             </Grid>
           </Box>

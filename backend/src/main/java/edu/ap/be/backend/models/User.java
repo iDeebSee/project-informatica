@@ -28,8 +28,9 @@ public class User {
     private String lastName;
     @Column(name = "firstName")
     private String firstName;
-
-
+    @OneToMany(mappedBy = "klantID")
+    //@JsonManagedReference
+    private List<Kredietaanvraag> kredieten;
 
 
     public User(String email, String password, String firstName, String lastName) {
@@ -42,5 +43,13 @@ public class User {
 
     public User() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

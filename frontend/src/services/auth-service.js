@@ -32,9 +32,9 @@ class AuthService {
 
         return JSON.parse(localStorage.getItem('user'));
     }
-    getLoggedUser() {
-        return axios.get(API_URL + "loggedin", { headers: authHeader() })
-    }
+    // getLoggedUser() {
+    //     return axios.get(API_URL + "loggedin", { headers: authHeader() })
+    // }
     isLoggedIn() {
         const currUser = JSON.parse(localStorage.getItem('user'));
         let token = ""

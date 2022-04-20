@@ -10,12 +10,6 @@ import authService from '../services/auth-service';
 
 export default function HomeBody() {
 
-  React.useEffect(() => {
-
-    authService.getLoggedUser().then((user) => {
-      console.log("logged user: ", user.data);
-    })
-  }, [])
 
   return (
 

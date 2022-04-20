@@ -9,9 +9,9 @@ class KredietAanvraagService {
         return httpsCommon.get(`${baseUrl}`);
     }
 
-    // get(id) {
-    //     return http.get(`${baseUrl}/${id}`);
-    // }
+    get(id) {
+        return httpsCommon.get(`${baseUrl}/${id}`);
+    }
 
 
     create(lening, termijn, naam, verantwoording, eigenvermogen, categorie) {

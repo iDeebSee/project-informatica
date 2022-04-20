@@ -14,14 +14,20 @@ import edu.ap.be.backend.security.service.UserDetailsImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,6 +61,30 @@ public class AuthController {
                 role));
     }
 
+    @GetMapping("/loggedin")
+    public String getLoggedUser(Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+            return SecurityContextHolder.getContext().getAuthentication().toString();
+        }
+        // return SecurityContextHolder.getContext().getAuthentication();
+        return "anonymous user";
+    }
+
+    // public Authentication method(@CurrentSecurityContext SecurityContext context)
+    // {
+    // return context.getAuthentication();
+    // }
+
+    // @GetMapping("/loggedin")
+    // public Optional<User> viewUserAccountForm(
+    // @AuthenticationPrincipal UserDetailsImp userDetails) {
+    // String userEmail = userDetails.getEmail();
+    // Optional<User> user = userRepository.findUserByEmail(userEmail);
+    // System.out.println(user.toString());
+    // return user;
+    // }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequest signUpRequest) {
@@ -70,13 +100,9 @@ public class AuthController {
         List<String> strRoles = new ArrayList<>();
         strRoles.add(signUpRequest.getRole());
 
-
         System.out.println(signUpRequest.getRole());
         System.out.println(signUpRequest.getEmail());
         System.out.println(signUpRequest.getPassword());
-
-
-
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
@@ -90,47 +116,47 @@ public class AuthController {
                         Role adminRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(adminRole);
-                        //roles.add(adminRole);
+                        // roles.add(adminRole);
                         break;
                     case "kantoor":
                         Role kantoorRole = roleRepository.findByRole(RoleType.KANTOOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(kantoorRole);
-                        //roles.add(kantoorRole);
+                        // roles.add(kantoorRole);
                         break;
                     case "comdirectie":
                         Role comdirectieRole = roleRepository.findByRole(RoleType.COMDIRECTIE)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(comdirectieRole);
-                        //roles.add(comdirectieRole);
+                        // roles.add(comdirectieRole);
                         break;
                     case "compliance":
                         Role complianceRole = roleRepository.findByRole(RoleType.COMPLIANCE)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(complianceRole);
-                        //roles.add(complianceRole);
+                        // roles.add(complianceRole);
                         break;
                     case "sustainability":
                         Role sustainablityRole = roleRepository.findByRole(RoleType.SUSTAINABILITY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(sustainablityRole);
-                        //roles.add(sustainablityRole);
+                        // roles.add(sustainablityRole);
                         break;
                     case "kredietbeoordelaar":
                         Role kredietbeoordelaarRole = roleRepository.findByRole(RoleType.KREDIETBEOORDELAAR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(kredietbeoordelaarRole);
-                        //roles.add(kredietbeoordelaarRole);
+                        // roles.add(kredietbeoordelaarRole);
                         break;
                     default:
                         Role userRole = roleRepository.findByRole(RoleType.KLANT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         user.setRole(userRole);
-                       // roles.add(userRole);
+                        // roles.add(userRole);
                 }
             });
         }
-        //user.setRole(roles);
+        // user.setRole(roles);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

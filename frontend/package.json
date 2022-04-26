@@ -18,6 +18,7 @@
     "jspdf": "^2.5.1",
     "material-icons": "^1.10.6",
     "react": "^17.0.2",
+    "react-canvas-draw": "^1.2.1",
     "react-dom": "^17.0.2",
     "react-jwt": "^1.1.4",
     "react-router-dom": "^6.2.1",

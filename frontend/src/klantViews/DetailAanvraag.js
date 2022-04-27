@@ -46,8 +46,17 @@ export default function Detailaanvraag() {
     }
 
 
+    function showDocument() {
+        // console.log(image)
+        // window.open(`data:image/png;base64${image}`, "target: _blank")
+        // var img = new Image();
+        // img.src = "data:image/jpg;base64," + image.d;
 
+        var w = window.open("");
+        // w.document.write(image.outerHTML);
+        w.document.write('<iframe src="' + image + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
 
+    }
 
 
     React.useEffect(() => {
@@ -55,22 +64,20 @@ export default function Detailaanvraag() {
         kredietaanvraagService.get(id).then((response) => {
             console.log("data", response.data)
             setKredieten(response.data)
-            setUserID(response.data.klantid)
-
-        }).then(error => {
-            if (error.response && error.response.status === 401) {
-                EventBus.dispatch("logout");
-            }
+            setUserID(response.data.klantID)
+            UserService.getUser(response.data.klantID).then((response) => {
+                setUser(response.data)
+            })
         })
+            .then(error => {
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
+            })
 
     }, [])
 
-    React.useEffect(() => {
-        UserService.getUser(userID).then((response) => {
-            setUser(response.data)
-            console.log(response.data)
-        })
-    })
+
 
     const input = document.getElementById('divToPrint');
     html2canvas(input).then((canvas) => {
@@ -98,13 +105,13 @@ export default function Detailaanvraag() {
                             <Divider />
                             <List>
                                 <ListItem >
-                                    <ListItemText primary={`E-mail: ${krediet.email}`} />
+                                    <ListItemText primary={`E-mail: ${user.email}`} />
                                 </ListItem>
                                 <ListItem >
                                     <ListItemText primary={`Voornaam: ${user.firstName}`} />
                                 </ListItem>
                                 <ListItem >
-                                    <ListItemText primary={`Naam: ${krediet.lastName}`} />
+                                    <ListItemText primary={`Naam: ${user.lastName}`} />
                                 </ListItem>
 
                             </List>
@@ -115,7 +122,7 @@ export default function Detailaanvraag() {
                             <List>
                                 <ListItem disablePadding>
 
-                                    <ListItemText primary="fnancieel" />
+                                    <ListItemText primary="Financieel" />
                                 </ListItem>
                             </List>
                             <Divider />
@@ -155,11 +162,10 @@ export default function Detailaanvraag() {
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ position: 'relative' }}>
                         <Button variant="contained">contract uploaden</Button>
                         <Button variant="contained">contract tekenen</Button>
-                        <Button variant="contained">contract bekijken</Button>
+                        <Button onClick={showDocument} variant="contained">contract bekijken</Button>
                         <Button onClick={printDocument}>Druk af</Button>
                     </ButtonGroup>
                 </Grid>
-
             </Grid>
 
 

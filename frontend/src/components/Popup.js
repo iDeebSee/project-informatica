@@ -4,6 +4,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
 import EventBus from "../common/eventBus"
+import AuthService from "../services/auth-service"
 import {
   Modal,
   Typography,
@@ -43,7 +44,12 @@ export const Popup = React.forwardRef((props, ref) => {
   const [categorie, setCategorie] = React.useState("")
   const [verantwoording, setVerantwoording] = React.useState("")
   const [file, setFile] = React.useState("")
+
+  const [status, setStatus] = React.useState("IN BEHANDELING")
+  const klantID = AuthService.getCurrentUser().id;
+
   const [disable, setDisable] = React.useState(true)
+
 
 
 
@@ -70,8 +76,11 @@ export const Popup = React.forwardRef((props, ref) => {
   }
 
   function handleSubmit(e) {
+    console.log("in de handleSubmit: ", klantID);
     e.preventDefault();
     KredietAanvraagService.create(
+      klantID,
+      status,
       totaalbedrag,
       termijn,
       naam,

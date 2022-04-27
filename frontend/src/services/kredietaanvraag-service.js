@@ -9,14 +9,16 @@ class KredietAanvraagService {
         return httpsCommon.get(`${baseUrl}`);
     }
 
-    // get(id) {
-    //     return http.get(`${baseUrl}/${id}`);
-    // }
+    get(id) {
+        return httpsCommon.get(`${baseUrl}/${id}`);
+    }
 
 
-    create(lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
+    create(klantID, status, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
 
         let formdata = new FormData();
+        formdata.append('klantID', klantID);
+        formdata.append('status', status);
         formdata.append('lening', lening);
         formdata.append('looptijd', termijn);
         //formdata.append('file',bestand);

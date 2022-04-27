@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useJwt, decodeToken, isExpired } from "react-jwt";
+import authHeader from './auth-header';
 const API_URL = "http://localhost:8080/auth/";
+
 class AuthService {
+    
     login(email, password) {
         return axios
             .post(API_URL + "login", {
@@ -29,18 +32,22 @@ class AuthService {
         });
     }
     getCurrentUser() {
+
         return JSON.parse(localStorage.getItem('user'));
     }
+    // getLoggedUser() {
+    //     return axios.get(API_URL + "loggedin", { headers: authHeader() })
+    // }
     isLoggedIn() {
         const currUser = JSON.parse(localStorage.getItem('user'));
         let token = ""
         if (currUser) {
             token = currUser.accessToken
         }
-    
+
         const isMyTokenExpired = isExpired(token);
-    
-        if(JSON.parse(localStorage.getItem('user') != null) && !isMyTokenExpired){
+
+        if (JSON.parse(localStorage.getItem('user') != null) && !isMyTokenExpired) {
             return true;
         }
         return false;

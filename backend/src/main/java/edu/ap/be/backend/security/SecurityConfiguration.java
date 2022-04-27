@@ -7,16 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 import io.jsonwebtoken.*;
+import static org.springframework.security.config.Customizer.withDefaults;
+import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -48,9 +54,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    // DigestAuthenticationEntryPoint entryPoint() {
+    // DigestAuthenticationEntryPoint result = new DigestAuthenticationEntryPoint();
+    // result.setRealmName("My App Realm");
+    // result.setKey("3028472b-da34-4501-bfd8-a355c42bdf92");
+    // return result;
+    // }
+
+    // DigestAuthenticationFilter digestAuthenticationFilter() {
+    // DigestAuthenticationFilter result = new DigestAuthenticationFilter();
+    // result.setUserDetailsService(userDetailsService);
+    // result.setAuthenticationEntryPoint(entryPoint());
+    // return result;
+    // }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .permitAll());
+
         http.cors().and().csrf().disable()
+                // .anonymous().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
@@ -62,7 +87,36 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/kredietaanvragen*").permitAll()
                 .antMatchers("/kredietaanvragen/*").permitAll()
                 .anyRequest().authenticated();
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        // .and().csrf().disable().formLogin().loginPage("/login").permitAll()
+        // .usernameParameter("email").passwordParameter("password");
+        // http.addFilterBefore(authenticationJwtTokenFilter(),
+        // UsernamePasswordAuthenticationFilter.class);
+        // http.sessionManagement(session ->
+        // session.maximumSessions(1).maxSessionsPreventsLogin(true));
+        // http.logout(logout -> logout
+        // .logoutUrl("/logout")
+        // .logoutSuccessUrl("/login")
+        // .invalidateHttpSession(true)
+        // .deleteCookies("JSESSIONID"));
+
+        // http.cors().and()
+        // .csrf().disable()
+        // .authorizeRequests()
+        // .antMatchers("/admin/**").hasRole("ADMIN")
+        // .antMatchers("/anonymous*").anonymous()
+        // .antMatchers("/login*").permitAll()
+        // // .antMatchers("/auth/*").permitAll()
+        // .anyRequest().authenticated()
+        // .and()
+        // .formLogin()
+        // .loginPage("/login")
+        // .loginProcessingUrl("/login")
+        // .defaultSuccessUrl("/", true)
+        // .failureUrl("/login")
+        // .and()
+        // .logout()
+        // .logoutUrl("/perform_logout")
+        // .deleteCookies("JSESSIONID");
     }
 
     @Autowired

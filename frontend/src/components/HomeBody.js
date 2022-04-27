@@ -23,9 +23,12 @@ export default function HomeBody() {
       <Paper  style={{top: 10,height:150, position: 'relative',left: 20,width: 300}} variant="outlined" square> KredietAanvragen</Paper> 
 
       </Link>
-   
-     
-      <Paper style={{top: 20,height:150, position: 'relative',left: 20,width: 300}} variant="outlined" square />
+      </Item>
+      <Item>
+      <Link to="/UserList">
+      <Paper  style={{top: 10,height:150, position: 'relative',left: 20,width: 300}} variant="outlined" square> users</Paper> 
+
+      </Link>
 
    </Item>
   </Grid>

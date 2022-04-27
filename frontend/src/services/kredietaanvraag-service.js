@@ -48,8 +48,32 @@ class KredietAanvraagService {
     }
 
 
-    // update(id) {
-    //     return http.put(`${baseUrl}/${id}`);
+    // update(lening, termijn, naam, verantwoording, eigenvermogen, categorie,id) {
+    //     let formdata = new FormData();
+    //     formdata.append('lening', lening);
+    //     formdata.append('looptijd', termijn);
+    //     //formdata.append('file',bestand);
+    //     formdata.append('naam', naam);
+    //     formdata.append('verantwoording', verantwoording);
+    //     formdata.append('eigenVermogen', eigenvermogen);
+    //     formdata.append('categorie', categorie)
+    //     // if(bestand==undefined)
+    //     // {
+    //     //     bestand.array.forEach(bestand => {
+    //     //         formdata.append('files',bestand);
+
+    //     //     });
+    //     // }
+
+    //     const config =
+    //     {
+    //         headers:
+    //             { "Content-Type": "multipart/form-data" }
+
+    //     }
+       
+        
+    //     return httpsCommon.put(`${baseUrl}/${id}`);
     // }
 
     delete(id) {

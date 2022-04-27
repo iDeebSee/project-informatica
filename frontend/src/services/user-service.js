@@ -18,6 +18,20 @@ class UserService {
                 password
             });
     }
+    create(email, naam, voornaam, role) {
+
+
+        
+        return axios.post(`${API_URL}`,{email,naam,voornaam,role}
+        );
+
+
+
+    }
+    delete(id) {
+        return axios.delete(`${API_URL}/${id}`, { headers: authHeader() });
+    }
+
 
 }
 export default new UserService();

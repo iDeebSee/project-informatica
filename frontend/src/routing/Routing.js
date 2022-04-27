@@ -7,6 +7,7 @@ import AuthService from '../services/auth-service'
 import PrivateRoute from './PrivateRoute'
 import Profile from '../views/Profile'
 import Navbar from '../components/Navbar'
+import UserList from '../components/UserList'
 import {
     BrowserRouter,
     Route,
@@ -65,6 +66,8 @@ export default function Routing() {
                 <Route path={"/list"} element={<PrivateRoute user={isLoggedIn}> <Kredietaanvragen /> </PrivateRoute>} />
                 <Route path={"/detail/:id"} element={<PrivateRoute user={isLoggedIn}> <Detailaanvraag /> </PrivateRoute>} />
                 <Route path={"/profile"} element={<PrivateRoute user={isLoggedIn}> <Profile /> </PrivateRoute>} />
+                <Route path={"/userlist"} element={<PrivateRoute user={isLoggedIn}> <UserList /> </PrivateRoute>} />
+
                 <Route path="*" element={<p>Hier vind je niets: 404!</p>} />
                 {isLoggedIn === true ? <Route path={"/login"} element={<Home />} /> : <Route path={"/login"} element={<Login />} />}
                 {/* <Route path={"/login"} element={<Login />} /> */}

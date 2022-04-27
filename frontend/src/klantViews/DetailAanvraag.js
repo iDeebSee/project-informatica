@@ -17,6 +17,9 @@ import kredietaanvraagService from "../services/kredietaanvraag-service";
 import EventBus from "../common/eventBus"
 import { useParams } from 'react-router-dom';
 import UserService from "../services/user-service"
+import { SignModal } from "../components/SignModal"
+import CanvasDraw from "react-canvas-draw";
+import AuthService from '../services/auth-service';
 
 
 
@@ -24,14 +27,30 @@ import UserService from "../services/user-service"
 export default function Detailaanvraag() {
 
     const [image, setImage] = React.useState()
+    const [sign, setSign] = React.useState("")
+    const [signImage, setSignImage] = React.useState("")
     const [krediet, setKredieten] = React.useState([])
     const [user, setUser] = React.useState([])
-    const [userID, setUserID] = React.useState([])
-
+    const date = new Date().toLocaleDateString()
 
     const { id } = useParams();
+    const signRef = React.useRef();
+    let userID = AuthService.getCurrentUser().id;
 
 
+    React.useEffect(() => {
+
+        // html2canvas(("savedDrawing" + "_uID:" + userID).toString()).then((canvas) => {
+        //     const imgData = canvas.toDataURL('image/png');
+        //     setSign(imgData)
+        // })
+        setSign(("savedDrawing" + "_uID:" + userID).toString())
+        setSignImage(localStorage.getItem(("signImage" + userID+window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)).toString()))
+        
+    }, [])
+
+
+    
 
     function printDocument() {
         const input = document.getElementById('divToPrint');
@@ -39,7 +58,8 @@ export default function Detailaanvraag() {
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF();
-                pdf.addImage(imgData, 'PNG', 0, 0);
+                // pdf.addPage(null, 'l')
+                pdf.addImage(imgData, 'PNG', 55, -130, 0, 0, null, null, -90);
                 // pdf.output('dataurlnewwindow');
                 pdf.save("download.pdf");
             });
@@ -64,7 +84,6 @@ export default function Detailaanvraag() {
         kredietaanvraagService.get(id).then((response) => {
             console.log("data", response.data)
             setKredieten(response.data)
-            setUserID(response.data.klantID)
             UserService.getUser(response.data.klantID).then((response) => {
                 setUser(response.data)
             })
@@ -90,7 +109,7 @@ export default function Detailaanvraag() {
         <div >
             <Grid container spacing={0} style={{ top: 20, height: 500, position: 'relative', left: 0 }}>
                 <Grid item id="divToPrint" style={{
-                    display: "inline-flex", width: '180mm',
+                    display: "inline-flex", width: '297mm', //was 180mm
                     //minHeight: '297mm',
                     padding: 10, fontSize: "10pt"
                 }} xs={12} md={6}>
@@ -151,6 +170,31 @@ export default function Detailaanvraag() {
                             </List>
                         </Box>
                     </Grid>
+                    <Grid item xs={4} >
+                        <Box sx={{ maxWidth: 200, bgcolor: 'background.paper' }}>
+                            <List>
+                                <ListItem disablePadding>
+                                    <ListItemText primary="Handtekening" />
+                                </ListItem>
+                            </List>
+                            <Divider />
+                            <List>
+                                <ListItem >
+                                    <img src={signImage} style={{ width: "200px", height: "150px", border: "1px solid grey" }} />
+                                    {/* <CanvasDraw
+                        
+                                        disabled
+                                        hideGrid
+                                        saveData={localStorage.getItem(sign)}
+                                    /> */}
+                                </ListItem>
+                                <ListItem >
+                                    {signImage!=null ? 
+                                    <ListItemText primary={date} /> : <></> }
+                                </ListItem>
+                            </List>
+                        </Box>
+                    </Grid>
 
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -158,10 +202,11 @@ export default function Detailaanvraag() {
                     <img src={image} style={{ width: "700px", border: "1px solid grey" }} />
 
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} style={{ margin: '30px auto 5px auto' }}>
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ position: 'relative' }}>
                         <Button variant="contained">contract uploaden</Button>
-                        <Button variant="contained">contract tekenen</Button>
+                        <Button variant="contained" onClick={() => signRef.current.handleOpen()}>contract tekenen</Button>
+                        <SignModal ref={signRef}></SignModal>
                         <Button onClick={showDocument} variant="contained">contract bekijken</Button>
                         <Button onClick={printDocument}>Druk af</Button>
                     </ButtonGroup>

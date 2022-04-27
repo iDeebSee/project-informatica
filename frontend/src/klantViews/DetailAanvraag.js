@@ -1,5 +1,4 @@
 import * as React from 'react';
-import FeedbackDocumentPDF from '../components/FeedbackDocumentPDF';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -16,13 +15,23 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
 import kredietaanvraagService from "../services/kredietaanvraag-service";
 import EventBus from "../common/eventBus"
+import { useParams } from 'react-router-dom';
+import UserService from "../services/user-service"
+
 
 
 
 export default function Detailaanvraag() {
 
     const [image, setImage] = React.useState()
-    const [krediet, setKredieten] = React.useState()
+    const [krediet, setKredieten] = React.useState([])
+    const [user, setUser] = React.useState([])
+    const [userID, setUserID] = React.useState([])
+
+
+    const { id } = useParams();
+
+
 
     function printDocument() {
         const input = document.getElementById('divToPrint');
@@ -37,23 +46,38 @@ export default function Detailaanvraag() {
     }
 
 
+
+
+
+
     React.useEffect(() => {
 
-        kredietaanvraagService.getAll().then((response) => {
+        kredietaanvraagService.get(id).then((response) => {
             console.log("data", response.data)
             setKredieten(response.data)
+            setUserID(response.data.klantid)
 
         }).then(error => {
             if (error.response && error.response.status === 401) {
                 EventBus.dispatch("logout");
             }
         })
-        const input = document.getElementById('divToPrint');
-        html2canvas(input).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            setImage(imgData)
-        })
+
     }, [])
+
+    React.useEffect(() => {
+        UserService.getUser(userID).then((response) => {
+            setUser(response.data)
+            console.log(response.data)
+        })
+    })
+
+    const input = document.getElementById('divToPrint');
+    html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        setImage(imgData)
+    })
+    //console.log(krediet)
 
     return (
         <div >
@@ -74,11 +98,15 @@ export default function Detailaanvraag() {
                             <Divider />
                             <List>
                                 <ListItem >
-                                    <ListItemText primary="naam" />
+                                    <ListItemText primary={`E-mail: ${krediet.email}`} />
                                 </ListItem>
                                 <ListItem >
-                                    <ListItemText primary="telNr..." />
+                                    <ListItemText primary={`Voornaam: ${user.firstName}`} />
                                 </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Naam: ${krediet.lastName}`} />
+                                </ListItem>
+
                             </List>
                         </Box>
                     </Grid>
@@ -93,29 +121,30 @@ export default function Detailaanvraag() {
                             <Divider />
                             <List>
                                 <ListItem >
-                                    <ListItemText primary="zelf gefinancieerd" />
+                                    <ListItemText primary={`Naam: ${krediet.naam}`} />
                                 </ListItem>
                                 <ListItem >
-                                    <ListItemText primary="status" />
+                                    <ListItemText primary={`Zelf gefinancierd: €${krediet.eigenVermogen}`} />
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Totaal bedrag: €${krediet.lening}`} />
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Status: ${krediet.status ? krediet.status : "null"}`} />
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Categorie: ${krediet.categorie}`} />
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Looptijd: ${krediet.looptijd}`} />
+                                </ListItem>
+                                <ListItem >
+                                    <ListItemText primary={`Verantwoording: ${krediet.verantwoording}`} />
                                 </ListItem>
                             </List>
                         </Box>
                     </Grid>
-                    <Grid item xs={4}>
-                        <Box sx={{ maxWidth: 200, bgcolor: 'background.paper' }}>
-                            <List>
-                                <ListItem disablePadding>
-                                    <ListItemText primary="feedback document" />
-                                </ListItem>
-                            </List>
-                            <Divider />
-                            <List>
-                                <ListItem >
-                                    <ListItemText primary="hier komt feedbackdocument" />
-                                </ListItem>
-                            </List>
-                        </Box>
-                    </Grid>
+
                 </Grid>
                 <Grid item xs={12} md={6}>
 

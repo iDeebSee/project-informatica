@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { borderRight } from "@mui/system";
-import {Popup} from "./Popup";
+import { Popup } from "./Popup";
 import kredietaanvraagService from "../services/kredietaanvraag-service";
 import EventBus from "../common/eventBus"
 import {
@@ -27,8 +27,8 @@ import {
 } from "@mui/material";
 
 
-   
-   
+
+
 
 const style = {
   position: "absolute",
@@ -51,28 +51,28 @@ function preventDefault(event) {
 
 export default function ListKredietaanvragen() {
   const childRef = React.useRef();
-  const [krediet,setKredieten]=React.useState([]);
-  
-  
+  const [krediet, setKredieten] = React.useState([]);
 
-  React.useEffect(()=>{
 
-    kredietaanvraagService.getAll().then((response)=>{
-      console.log("data",response.data)
+
+  React.useEffect(() => {
+
+    kredietaanvraagService.getAll().then((response) => {
+      console.log("data", response.data)
       setKredieten(response.data)
-  
+
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
       }
     })
-    
-  
-  },[])
 
-  function deleteKA(id){
-    kredietaanvraagService.delete(id).then((response)=>{
-      console.log("delete",response.data)
+
+  }, [])
+
+  function deleteKA(id) {
+    kredietaanvraagService.delete(id).then((response) => {
+      console.log("delete", response.data)
       window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
@@ -80,7 +80,7 @@ export default function ListKredietaanvragen() {
       }
     })
   }
-  
+
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
       <Grid container spacing={2}>
@@ -123,11 +123,11 @@ export default function ListKredietaanvragen() {
                         aria-label="outlined primary button group"
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
-                        <Button>details </Button>
-                        
+                        <Button onClick={() => window.open("/detail/" + row.id, "_self")}>details </Button>
+
                         <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>
-                        <Popup   ref={childRef} ></Popup>
-                        <Button onClick={()=>deleteKA(row.id)}>verwijderen </Button>
+                        <Popup ref={childRef} ></Popup>
+                        <Button onClick={() => deleteKA(row.id)}>verwijderen </Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

@@ -65,7 +65,16 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                 setRole(response.data.rol)
                 console.log("hehe",response.data)
             }
+           
         });
+        roleService.getRoleByUser(id).then
+        (response => {
+          if (response.data) {
+              setRole(response.data.role)
+              console.log("hehe",response.data)
+          }
+          roleService.getRoleByUser(id).then()
+      });
      
     
 

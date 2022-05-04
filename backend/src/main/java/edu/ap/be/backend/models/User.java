@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,8 +35,11 @@ public class User {
     private String lastName;
     @Column(name = "firstName")
     private String firstName;
-    @Column(name = "status")
-    private Boolean status;
+
+    @Column(name="enabled")
+    @NonNull
+    private Boolean enabled = true;
+
 
 
 

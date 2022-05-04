@@ -145,7 +145,7 @@ export default function UserList() {
                     <TableCell>{row.firstName}</TableCell>
                     <TableCell> {row.email}</TableCell>
                     
-                    {/* <TableCell> {row.role} </TableCell> */}
+                    <TableCell> {row.status ? "Actief" : "Non-Actief"} </TableCell>
                    
                     
 
@@ -157,7 +157,7 @@ export default function UserList() {
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
                         
                         <Button onClick={() => childrefEdit.current.handleOpen(row.id)} >bewerken </Button>
-                        <PopupUserEditen   ref={childrefEdit} ></PopupUserEditen>
+                        <PopupUserEditen ref={childrefEdit} ></PopupUserEditen>
                         <Button onClick={()=>deleteKA(row.id)}>verwijderen </Button>
                       </ButtonGroup>
                     </TableCell>

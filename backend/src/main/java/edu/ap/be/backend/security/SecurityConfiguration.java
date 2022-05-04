@@ -86,6 +86,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth**").permitAll()
                 .antMatchers("/kredietaanvragen*").permitAll()
                 .antMatchers("/kredietaanvragen/*").permitAll()
+                .antMatchers("/roles/*").permitAll()
+                .antMatchers("/roles*").permitAll()
+
                 .anyRequest().authenticated();
         // .and().csrf().disable().formLogin().loginPage("/login").permitAll()
         // .usernameParameter("email").passwordParameter("password");

@@ -33,7 +33,9 @@ export default function HomeBody() {
       </Grid>
       <Grid item xs={3}>
         <Item>
-          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
+        <Link to="/sectorenlist">
+          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square > sectoren</Paper>
+          </Link>
 
           <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
 

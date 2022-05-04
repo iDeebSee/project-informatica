@@ -1,6 +1,10 @@
 package edu.ap.be.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,6 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 public class Role{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

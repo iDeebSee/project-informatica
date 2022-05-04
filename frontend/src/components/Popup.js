@@ -45,7 +45,7 @@ export const Popup = React.forwardRef((props, ref) => {
   const [verantwoording, setVerantwoording] = React.useState("")
   const [file, setFile] = React.useState("")
 
-  const [status, setStatus] = React.useState("IN BEHANDELING")
+  const [status, setStatus] = React.useState("INBEHANDELING")
   const klantID = AuthService.getCurrentUser().id;
 
   const [disable, setDisable] = React.useState(true)

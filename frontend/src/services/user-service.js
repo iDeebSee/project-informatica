@@ -18,6 +18,18 @@ class UserService {
                 password
             });
     }
+    updateComplete(id, firstName, lastName, email, password, enabled, role) {
+
+        return axios.put(API_URL + "/" + `${id}`,
+            {
+                firstName,
+                lastName,
+                email,
+                password,
+                enabled,
+                role
+            });
+    }
     create(email, naam, voornaam, role) {
 
 

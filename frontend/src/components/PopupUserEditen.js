@@ -51,6 +51,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   const [voornaam, setVoornaam] = React.useState("");
   const [enable, setEnable] = React.useState();
   const [userid, setUserId] = React.useState();
+  const [status, setStatus] = React.useState();
 
   React.useImperativeHandle(ref, () => ({
     handleOpen(id) {
@@ -64,7 +65,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                 setEmail(response.data.email)
                 setNaam(response.data.lastName)
                 setVoornaam(response.data.firstName)
-                setRole(response.data.rol)
+                setStatus(response.data.status)
                 console.log("hehe",response.data)
             }
            
@@ -117,6 +118,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
       setRoles(res.data)
       console.log(res.data)
     })
+    
 
   }, [])
 
@@ -130,8 +132,10 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   function handleSubmit(e) {
     e.preventDefault();
 
+
     UserService.updateComplete(userid, voornaam, naam, email, wachtwoord, enable, role).then(response => {
       console.log(response.data)
+
       window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
@@ -240,6 +244,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={3}>
+
                 <FormGroup>
                   <FormControlLabel control={<Checkbox checked={enable} />} label="actief" />
                 </FormGroup>

@@ -8,14 +8,15 @@ class UserService {
     getUser(id) {
         return axios.get(API_URL + "/" + `${id}`, { headers: authHeader() });
     }
-    update(id, firstName, lastName, email, password) {
+    update(id, firstName, lastName, email, password, status) {
 
         return axios.put(API_URL + "/" + `${id}`,
             {
                 firstName,
                 lastName,
                 email,
-                password
+                password,
+                status
             });
     }
     updateComplete(id, firstName, lastName, email, password, enabled, role) {

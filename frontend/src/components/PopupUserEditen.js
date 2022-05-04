@@ -39,7 +39,7 @@ const style = {
 };
 
 export const PopupUserEditen = React.forwardRef((props, ref) => {
-  
+
   const currUser = AuthService.getCurrentUser()
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
@@ -49,12 +49,14 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   const [role, setRole] = React.useState("");
   const [wachtwoord, setWachtwoord] = React.useState("");
   const [voornaam, setVoornaam] = React.useState("");
+  const [enable, setEnable] = React.useState();
   const [userid, setUserId] = React.useState();
 
   React.useImperativeHandle(ref, () => ({
     handleOpen(id) {
       setOpen(true);
       setUserId(id);
+
      
         // Update the document title using the browser API
         UserService.getUser(id).then(response => {
@@ -76,12 +78,29 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
           roleService.getRoleByUser(id).then()
       });
      
-    
+
 
     }
   }));
 
-  
+
+  React.useEffect(() => {
+    console.log("----- userid in useeffect: ", userid)
+    if (userid != null || userid !== undefined) {
+      UserService.getUser(userid).then(response => {
+        if (response.data) {
+          setEmail(response.data.email)
+          setNaam(response.data.lastName)
+          setVoornaam(response.data.firstName)
+          setRole(response.data.rol)
+          setEnable(response.data.enabled)
+          console.log("hehe", response.data)
+        }
+      });
+    }
+
+  })
+
 
 
   const handleChange = (event) => {
@@ -90,16 +109,16 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   };
 
 
- 
 
-  React.useEffect(()=>{
 
-    roleService.getAll().then(res=>{
-        setRoles(res.data)
-        console.log(res.data)
+  React.useEffect(() => {
+
+    roleService.getAll().then(res => {
+      setRoles(res.data)
+      console.log(res.data)
     })
 
-  },[])
+  }, [])
 
   function valuetext(value) {
     if (value == 1) return `${value} maand`;
@@ -111,15 +130,15 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    UserService.update(userid, voornaam, naam, email, wachtwoord).then(response => {
-        console.log(response.data)
+    UserService.updateComplete(userid, voornaam, naam, email, wachtwoord, enable, role).then(response => {
+      console.log(response.data)
       window.location.reload();
-      }).then(error => {
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
-      })
-    
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
+    })
+
   }
 
   const marks = [
@@ -164,7 +183,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setVoornaam(e.target.value)}
                   value={voornaam}
-                 
+
                 />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -188,12 +207,12 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                 
+
                 />
               </Grid>
               <Grid item xs={12} md={3}>
-                 
-              <Button variant="contained" type="submit">reset wachtwoord </Button>
+
+                <Button variant="contained" type="submit">reset wachtwoord </Button>
               </Grid>
               <Grid item xs={12} md={3} style={{ maxWidth: "100%" }}>
                 <FormControl  >
@@ -208,26 +227,26 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
                     label="Rol"
                     onChange={handleChange}
                   >
-                      { roles.map((rol)=>(
-                          <MenuItem value={rol.role}>
-                          {rol.role}
-                        </MenuItem>
+                    {roles.map((rol) => (
+                      <MenuItem value={rol.role}>
+                        {rol.role}
+                      </MenuItem>
 
-                      ))}
-                    
-                    
-                    
+                    ))}
+
+
+
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={3}>
-                   <FormGroup>
-                   <FormControlLabel control={<Checkbox defaultChecked />} label="actief" />
-                   </FormGroup>                 
-               </Grid>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox checked={enable} />} label="actief" />
+                </FormGroup>
+              </Grid>
 
-                
-              
+
+
               <Grid item xs={12} md={12}>
                 <Button variant="contained" type="submit">verstuur </Button>
 
@@ -239,5 +258,6 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
       </Box>
     </Modal>
 
-  )});
+  )
+});
 

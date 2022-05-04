@@ -3,6 +3,7 @@ package edu.ap.be.backend.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class User {
     private String lastName;
     @Column(name = "firstName")
     private String firstName;
+    @Column(name="enabled")
+    @NonNull
+    private Boolean enabled = true;
 
 
 

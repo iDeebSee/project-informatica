@@ -28,6 +28,7 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import userService from "../services/user-service";
+import roleService from "../services/role-service";
 
 
    
@@ -57,13 +58,14 @@ export default function UserList() {
   const childrefEdit = React.useRef();
 
   const [users,setUsers]=React.useState([]);
+  const [roles,setRoles]=React.useState([]);
 
   
 
   
 
   React.useEffect(()=>{
-
+    
     UserService.getAll().then((response)=>{
         console.log("data",response.data)
           setUsers(response.data)
@@ -73,8 +75,25 @@ export default function UserList() {
       }
     })
     
+    
   
   },[])
+
+  // React.useEffect(()=>{
+  //   if(users != null && users.length > 0 ){
+  //     users.forEach(user => {
+  //       console.log("ussers id",user.id)
+  //       roleService.getRoleByUser(user.id).then((response)=>{
+  //         console.log("roles from user",response.data)
+  //           setRoles(response.data)
+  //          }).then(error => {
+  //       if (error.response && error.response.status === 401) {
+  //         EventBus.dispatch("logout");
+  //       }
+  //     })
+  //     });
+  //   }
+  //   },[]);
 
   function deleteKA(id){
     userService.delete(id).then((response)=>{
@@ -87,6 +106,8 @@ export default function UserList() {
       })
    
   }
+
+ 
   
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
@@ -111,7 +132,7 @@ export default function UserList() {
                   <TableCell>naam</TableCell>
                   <TableCell>voornaam </TableCell>
                   <TableCell>e-mail</TableCell>
-                  <TableCell>rol</TableCell>
+                  <TableCell>status</TableCell>
 
 
                   <TableCell align="right"></TableCell>
@@ -123,7 +144,10 @@ export default function UserList() {
                     <TableCell>{row.lastName}</TableCell>
                     <TableCell>{row.firstName}</TableCell>
                     <TableCell> {row.email}</TableCell>
-                    <TableCell> {row.role}</TableCell>
+                    
+                    {/* <TableCell> {row.role} </TableCell> */}
+                   
+                    
 
                     <TableCell align="right">
                       <ButtonGroup
@@ -139,6 +163,7 @@ export default function UserList() {
                     </TableCell>
                   </TableRow>
                 ))}
+                
               </TableBody>
             </Table>
           </React.Fragment>

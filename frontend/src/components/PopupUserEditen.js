@@ -57,18 +57,27 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
       setOpen(true);
       setUserId(id);
 
-      // Update the document title using the browser API
-      // UserService.getUser(id).then(response => {
-      //   if (response.data) {
-      //     setEmail(response.data.email)
-      //     setNaam(response.data.lastName)
-      //     setVoornaam(response.data.firstName)
-      //     setRole(response.data.rol)
-      //     setEnable(response.data.enabled)
-      //     console.log("hehe", response.data)
-      //   }
-      // });
-
+     
+        // Update the document title using the browser API
+        UserService.getUser(id).then(response => {
+            if (response.data) {
+                setEmail(response.data.email)
+                setNaam(response.data.lastName)
+                setVoornaam(response.data.firstName)
+                setRole(response.data.rol)
+                console.log("hehe",response.data)
+            }
+           
+        });
+        roleService.getRoleByUser(id).then
+        (response => {
+          if (response.data) {
+              setRole(response.data.role)
+              console.log("hehe",response.data)
+          }
+          roleService.getRoleByUser(id).then()
+      });
+     
 
 
     }

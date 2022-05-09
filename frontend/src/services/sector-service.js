@@ -1,24 +1,35 @@
 import axios from 'axios';
 import httpsCommon from './https-common';
-
 import authHeader from './auth-header';
-const API_URL = 'http://localhost:8080/sector';
+const baseUrl = 'http://localhost:8080/sector';
 
-class Sectorservice {
+class SectorService {
     getAll() {
-        return httpsCommon.get(API_URL);
-    }
-    getRoleByUser(id) {
-        return axios.get(API_URL + "/" + `${id}`, { headers: authHeader() });
-    }
-    update(id, rol) {
-
-        return axios.put(API_URL + "/" + `${id}`,
-            {
-                rol                
-
-           });
+        return httpsCommon.get(`${baseUrl}`);
     }
 
+    get(id) {
+        return axios.get(`${baseUrl}/${id}`);
+    }
+
+
+    create(naam,nasiCode,isBlack) {
+
+        
+
+        
+        const config =
+        {
+            headers:
+                { "Content-Type": "application/json" }
+
+        }
+        return axios.post(`${baseUrl}`, {naam,nasiCode,isBlack}, config
+        );
 }
-export default new Sectorservice();
+
+delete(id) {
+    return axios.delete(`${baseUrl}/${id}`, { headers: authHeader() });
+}
+}
+export default new SectorService();

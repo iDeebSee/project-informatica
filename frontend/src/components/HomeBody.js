@@ -10,7 +10,7 @@ import authService from '../services/auth-service';
 
 export default function HomeBody() {
 
-
+  let currUser = authService.getCurrentUser()
   return (
 
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -24,19 +24,20 @@ export default function HomeBody() {
 
 
           <Link to="/UserList">
-      <Paper  style={{top: 10,height:150, position: 'relative',left: 20,width: 300}} variant="outlined" square> users</Paper> 
+            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square> users</Paper>
 
-      </Link>
+          </Link>
 
 
         </Item>
       </Grid>
       <Grid item xs={3}>
         <Item>
-        <Link to="/sectorenlist">
-          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square > sectoren</Paper>
-          </Link>
-
+          {currUser.role.toString() === "COMDIRECTIE" ?
+            <Link to="/sectorenlist">
+              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square > sectoren</Paper>
+            </Link>
+            : <></>}
           <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
 
         </Item>
@@ -44,7 +45,8 @@ export default function HomeBody() {
       </Grid>
 
       <Grid item xs={3}>
-        <Item><Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
+        <Item>
+          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
 
           <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
 
@@ -52,7 +54,9 @@ export default function HomeBody() {
       </Grid>
 
       <Grid item xs={3}>
-        <Item><Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
+        <Item>
+
+          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
           <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
 
         </Item>

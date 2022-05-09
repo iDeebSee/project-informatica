@@ -56,6 +56,10 @@ public class UserController {
     @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
     @PostMapping("")
     public User createUser(@Validated @RequestBody User user) {
+        if (user.getEnabled() == null) {
+            user.setEnabled(true);
+        }
+
         return userRepository.save(user);
     }
 

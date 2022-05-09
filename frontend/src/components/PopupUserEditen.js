@@ -49,36 +49,43 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
   const [role, setRole] = React.useState("");
   const [wachtwoord, setWachtwoord] = React.useState("");
   const [voornaam, setVoornaam] = React.useState("");
-  const [enable, setEnable] = React.useState();
+  const [enable, setEnable] = React.useState(true);
   const [userid, setUserId] = React.useState();
-  const [status, setStatus] = React.useState();
+  // const [status, setStatus] = React.useState();
+  // const [checked, setChecked] = React.useState(false);
 
   React.useImperativeHandle(ref, () => ({
-    handleOpen(id) {
+    handleOpen(user) {
       setOpen(true);
-      setUserId(id);
+      setUserId(user.id);
 
-     
-        // Update the document title using the browser API
-        UserService.getUser(id).then(response => {
-            if (response.data) {
-                setEmail(response.data.email)
-                setNaam(response.data.lastName)
-                setVoornaam(response.data.firstName)
-                setStatus(response.data.status)
-                console.log("hehe",response.data)
-            }
-           
-        });
-        roleService.getRoleByUser(id).then
+
+      // Update the document title using the browser API
+      //UserService.getUser(id).then(response => {
+      // if (response.data) {
+      // setEmail(response.data.email)
+      // setNaam(response.data.lastName)
+      // setVoornaam(response.data.firstName)
+      // setEnable(response.data.enabled)
+      // console.log("hehe", response.data)
+
+      setEmail(user.email)
+      setNaam(user.lastName)
+      setVoornaam(user.firstName)
+      setEnable(user.enabled)
+      console.log("de user: ", user)
+      //}
+
+      // });
+      roleService.getRoleByUser(user.id).then
         (response => {
           if (response.data) {
-              setRole(response.data.role)
-              console.log("hehe",response.data)
+            setRole(response.data.role)
+            console.log("role", response.data)
           }
-          roleService.getRoleByUser(id).then()
-      });
-     
+          roleService.getRoleByUser(user.id).then()
+        });
+
 
 
     }
@@ -90,19 +97,24 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
     if (userid != null || userid !== undefined) {
       UserService.getUser(userid).then(response => {
         if (response.data) {
-          setEmail(response.data.email)
-          setNaam(response.data.lastName)
-          setVoornaam(response.data.firstName)
-          setRole(response.data.rol)
+
           setEnable(response.data.enabled)
           console.log("hehe", response.data)
         }
       });
     }
 
-  })
+  }, [userid])
 
 
+  function enableReverse(status) {
+    console.log("status", status)
+    setEnable(!status)
+  }
+
+  React.useEffect(() => {
+    console.log("enable status: ", enable)
+  }, [enable])
 
   const handleChange = (event) => {
     setRole(event.target.value)
@@ -116,9 +128,9 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
 
     roleService.getAll().then(res => {
       setRoles(res.data)
-      console.log(res.data)
+      console.log("alle roles:", res.data)
     })
-    
+
 
   }, [])
 
@@ -134,9 +146,10 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
 
 
     UserService.updateComplete(userid, voornaam, naam, email, wachtwoord, enable, role).then(response => {
+      console.log("role: ", role);
       console.log(response.data)
 
-      window.location.reload();
+      //window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
@@ -246,7 +259,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
               <Grid item xs={12} md={3}>
 
                 <FormGroup>
-                  <FormControlLabel control={<Checkbox checked={enable} />} label="actief" />
+                  <FormControlLabel control={<Checkbox defaultChecked={enable} onChange={e => setEnable(e.target.checked)} />} label="actief" />
                 </FormGroup>
               </Grid>
 

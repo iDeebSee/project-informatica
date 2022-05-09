@@ -9,34 +9,49 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import org.springframework.data.annotation.Transient;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class, 
-  property = "id")
-public class Role{
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(insertable = false, updatable = false)
     private Long id;
+
+    // meer aandachtt hieraan later
+    @Transient
     @Enumerated(EnumType.STRING)
+    @Column(insertable = false, updatable = false)
+
     private RoleType role;
-    @OneToMany(mappedBy = "role")
+
     @JsonManagedReference
+    // @JoinColumn("users", insertable=false, updatable=false)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
+    @Column(insertable = false, updatable = false)
     private List<User> users;
 
-    //private List<Roles> roles = new ArrayList<>();
-    /*public Role(String name){
-        this.rol = Roles.valueOf(name.toUpperCase(Locale.ROOT));
-    }*/
+    // private List<Roles> roles = new ArrayList<>();
+    /*
+     * public Role(String name){
+     * this.rol = Roles.valueOf(name.toUpperCase(Locale.ROOT));
+     * }
+     */
 
     public Role(RoleType role) {
         this.role = role;
     }
 
-    public Role(){
+    public Role() {
 
+    }
+
+    public Role(String role) {
+        this.role = RoleType.valueOf(role.toUpperCase());
     }
 
     public Long getId() {
@@ -63,7 +78,7 @@ public class Role{
         this.users = users;
     }
 
-    public void add(RoleType role){
+    public void add(RoleType role) {
         this.role = role;
     }
 

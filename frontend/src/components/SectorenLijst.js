@@ -25,6 +25,7 @@ import {
   FormControl,
   TextareaAutosize,
 } from "@mui/material";
+import sectorService from "../services/sector-service";
 
 
 
@@ -56,14 +57,28 @@ export default function ListSectoren() {
 
 
   React.useEffect(() => {
+    sectorService.getAll().then((response) => {
+        console.log("data", response.data)
+        setSectoren(response.data)
 
    
+})}, []);
 
+// React.useEffect(() => {
+//     sectorService.getAll().then((response) => {
 
-  }, [])
+//     })
+// }, [])
 
-  function deleteKA(id) {
-  
+  function deleteSector(id) {
+    sectorService.delete(id).then((response) => {
+        console.log("delete", response.data)
+        window.location.reload();
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
     
   }
 
@@ -81,10 +96,37 @@ export default function ListSectoren() {
             </Button>
             <CreateSector ref={childCreateRef} ></CreateSector>
           </ButtonGroup>
-        
           </Grid>
- 
+          <Grid item xs={12}>
+          <React.Fragment>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>naam</TableCell>
+                  <TableCell>nasiCode</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sectoren.map((row) => (
+                  
+                  <TableRow key={row.id} style={row.isBlack ? {textColor: "red", backgroundColor:"gray"} : {backgroundColor: "white", color:"white"}}>
+                    <TableCell>{row.naam}</TableCell>
+                    <TableCell>{row.nasiCode}</TableCell>
+                      <ButtonGroup
+                        variant="contained"
+                        aria-label="outlined primary button group"
+                      >
+                        <Button onClick={() => deleteSector(row.id)}>verwijderen </Button>
+                      </ButtonGroup>
+                    
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </React.Fragment>
+        </Grid>
       </Grid>
     </Container>
+     
   );
 }

@@ -149,7 +149,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
       console.log("role: ", role);
       console.log(response.data)
 
-      //window.location.reload();
+      window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");

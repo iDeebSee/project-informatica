@@ -15,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -65,10 +67,18 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userID));
 
         user.setEmail(userDetails.getEmail());
-        System.out.println(userDetails.getEmail());
+        // System.out.println(userDetails.getEmail());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
-        user.setRole(userDetails.getRole());
+
+        System.out.println("userdetails role: " + userDetails.getRole());
+
+        for (Role rol : roleRepository.findAll()) {
+            if (userDetails.getRole().getRole().equals(rol.getRole())) {
+                user.setRole(rol);
+            }
+        }
+        System.out.println("-------------  ENABLED STATUS: " + userDetails.getEnabled());
         user.setEnabled(userDetails.getEnabled());
         if (userDetails.getPassword() != "" || userDetails.getPassword() != null) {
             user.setPassword(encoder.encode((userDetails.getPassword())));
@@ -145,19 +155,21 @@ public class UserController {
     }
 
     // @PutMapping("/status/{id}")
-    // public ResponseEntity<User> updateUserActiveStatus(@PathVariable(value = "id") long userID,
-    //         @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
-    //     User user = userRepository.findById(userID)
-    //             .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userID));
+    // public ResponseEntity<User> updateUserActiveStatus(@PathVariable(value =
+    // "id") long userID,
+    // @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
+    // User user = userRepository.findById(userID)
+    // .orElseThrow(() -> new ResourceNotFoundException("User not found for this id
+    // :: " + userID));
 
-    //     if (user.getEnabled()) {
-    //         user.setEnabled(false);
-    //     } else {
-    //         user.setEnabled(true);
+    // if (user.getEnabled()) {
+    // user.setEnabled(false);
+    // } else {
+    // user.setEnabled(true);
 
-    //     }
-    //     final User updatedUser = userRepository.save(user);
-    //     return ResponseEntity.ok(updatedUser);
+    // }
+    // final User updatedUser = userRepository.save(user);
+    // return ResponseEntity.ok(updatedUser);
 
     // }
 }

@@ -31,8 +31,8 @@ import userService from "../services/user-service";
 import roleService from "../services/role-service";
 
 
-   
-   
+
+
 
 const style = {
   position: "absolute",
@@ -57,27 +57,27 @@ export default function UserList() {
   const uchildRef = React.useRef();
   const childrefEdit = React.useRef();
 
-  const [users,setUsers]=React.useState([]);
-  const [roles,setRoles]=React.useState([]);
+  const [users, setUsers] = React.useState([]);
+  const [roles, setRoles] = React.useState([]);
 
-  
 
-  
 
-  React.useEffect(()=>{
-    
-    UserService.getAll().then((response)=>{
-        console.log("data",response.data)
-          setUsers(response.data)
-         }).then(error => {
+
+
+  React.useEffect(() => {
+
+    UserService.getAll().then((response) => {
+      console.log("data", response.data)
+      setUsers(response.data)
+    }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
       }
     })
-    
-    
-  
-  },[])
+
+
+
+  }, [])
 
   // React.useEffect(()=>{
   //   if(users != null && users.length > 0 ){
@@ -95,20 +95,20 @@ export default function UserList() {
   //   }
   //   },[]);
 
-  function deleteKA(id){
-    userService.delete(id).then((response)=>{
-        console.log("delete",response.data)
-        window.location.reload();
-      }).then(error => {
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
-      })
-   
+  function deleteKA(id) {
+    userService.delete(id).then((response) => {
+      console.log("delete", response.data)
+      window.location.reload();
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
+    })
+
   }
 
- 
-  
+
+
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
       <Grid container spacing={2}>
@@ -144,10 +144,10 @@ export default function UserList() {
                     <TableCell>{row.lastName}</TableCell>
                     <TableCell>{row.firstName}</TableCell>
                     <TableCell> {row.email}</TableCell>
-                    
-                    <TableCell> {row.status ? "Actief" : "Non-Actief"} </TableCell>
-                   
-                    
+
+                    <TableCell> {row.enabled ? "Actief" : "Non-Actief"} </TableCell>
+
+
 
                     <TableCell align="right">
                       <ButtonGroup
@@ -155,15 +155,15 @@ export default function UserList() {
                         aria-label="outlined primary button group"
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
-                        
-                        <Button onClick={() => childrefEdit.current.handleOpen(row.id)} >bewerken </Button>
+
+                        <Button onClick={() => childrefEdit.current.handleOpen(row)} >bewerken </Button>
                         <PopupUserEditen ref={childrefEdit} ></PopupUserEditen>
-                        <Button onClick={()=>deleteKA(row.id)}>verwijderen </Button>
+                        <Button onClick={() => deleteKA(row.id)}>verwijderen </Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>
                 ))}
-                
+
               </TableBody>
             </Table>
           </React.Fragment>

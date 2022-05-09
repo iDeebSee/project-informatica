@@ -15,7 +15,6 @@ import edu.ap.be.backend.models.Role;
 
 import java.util.List;
 
-
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/roles")
@@ -25,7 +24,7 @@ public class RoleController {
     public RoleRepository roleRepository;
     @Autowired
     public UserRepository userRepository;
-    
+
     @GetMapping("")
     public List<Role> getAllRoles() {
         System.out.println(roleRepository.findAll().toString());
@@ -36,9 +35,9 @@ public class RoleController {
     public ResponseEntity<Role> getRoleByID(@PathVariable(value = "id") long userID)
             throws ResourceNotFoundException {
         Role role = userRepository.findById(userID).get().getRole();
-                
-        System.out.println(role.toString());
+
+        // System.out.println(role.toString());
         return ResponseEntity.ok().body(role);
     }
-    
+
 }

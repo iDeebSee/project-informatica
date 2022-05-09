@@ -17,10 +17,12 @@ class UserService {
                 email,
                 password,
                 status
-            });
+            },
+            { headers: { 'Content-Type': 'application/json' } });
     }
     updateComplete(id, firstName, lastName, email, password, enabled, role) {
 
+        console.log("user service role: ", role)
         return axios.put(API_URL + "/" + `${id}`,
             {
                 firstName,
@@ -34,8 +36,8 @@ class UserService {
     create(email, naam, voornaam, role) {
 
 
-        
-        return axios.post(`${API_URL}`,{email,naam,voornaam,role}
+
+        return axios.post(`${API_URL}`, { email, naam, voornaam, role }
         );
 
 

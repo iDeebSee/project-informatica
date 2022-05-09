@@ -11,6 +11,11 @@ import authService from '../services/auth-service';
 export default function HomeBody() {
 
   let currUser = authService.getCurrentUser()
+  React.useEffect(() => {
+    authService.getLoggedUser().then((response) => {
+      console.log("logged in user from backend: ", response.data)
+    });
+  })
   return (
 
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>

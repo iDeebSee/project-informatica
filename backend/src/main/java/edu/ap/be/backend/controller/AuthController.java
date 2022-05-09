@@ -61,15 +61,21 @@ public class AuthController {
                 role));
     }
 
-    @GetMapping("/loggedin")
-    public String getLoggedUser(Authentication authentication) {
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
 
-            return SecurityContextHolder.getContext().getAuthentication().toString();
-        }
-        // return SecurityContextHolder.getContext().getAuthentication();
-        return "anonymous user";
+  
+
+
+    @GetMapping("/loggedin")
+    public Authentication getLoggedUser(Authentication authentication) {
+        // authentication = SecurityContextHolder.getContext().getAuthentication();
+        // if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+        //     return SecurityContextHolder.getContext().getAuthentication().toString();
+        // }
+        // // return SecurityContextHolder.getContext().getAuthentication();
+        // return "anonymous user";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth;
     }
 
     // public Authentication method(@CurrentSecurityContext SecurityContext context)

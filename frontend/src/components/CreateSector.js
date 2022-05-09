@@ -4,7 +4,13 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
 import EventBus from "../common/eventBus"
+import sectorService from '../services/sector-service';
 import AuthService from "../services/auth-service"
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import {
   Modal,
   Typography,
@@ -24,9 +30,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "90%",
-  height: "80%",
-  overflow: "scroll",
+  width: "50%",
+  height: "30%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -39,14 +44,17 @@ export const CreateSector = React.forwardRef((props, ref) => {
   const handleClose = () => setOpen(false);
   
   const [naam, setNaam] = React.useState("")
+ // const [isWhite, setIsWhite] = React.useState("")
+  const [nasiCode, setNasiCode] = React.useState("")
+  const [checked, setChecked] = React.useState(false);
+  
+ 
+
   
 
 
 
-  const handleChange = (event) => {
   
-
-  };
 
 
   React.useImperativeHandle(ref, () => ({
@@ -55,46 +63,24 @@ export const CreateSector = React.forwardRef((props, ref) => {
 
     }
   }));
-
-  function valuetext(value) {
-    if (value == 1) return `${value} maand`;
-    else if (value == 12) return `${value} Jaar`;
-    else return `${value} maanden`;
-
-  }
-
+   
+ 
   function handleSubmit(e) {
     e.preventDefault();
-    //sectorservice.create...
-    
+
+    sectorService.create(naam,nasiCode,checked).then(response => {
+      console.log("wat je stuurt", naam, nasiCode, checked);
+        console.log(response.data)
+        window.location.reload(); 
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
     
   }
 
-  /*  function ratiosOK() {
-     //API data uitlezen en checken of boven een bepaalde minimumwaarde liggen
-     //get btwnummer
-     if (.solvabiliteit >= ... && .rentabiliteit >= ... && .liquiditeit >= ...){
-       resultaat = true;
-     }
-     else {
-       resultaat = false;
-     }
-     return resultaat
-   } */
-
-  /*  function kredietCheck() {
-     //if (user.isBlacklisted() == false && user.ratiosOk() == true) {
-       
-       resultaat = "kredietaanvraag goedgekeurd"
-     //}
-     //else {
-       //kredietAanvraag.delete()
-       antwoord = "kredietaanvraag wordt geweigerd"
-       reden = " wegens ..." //nog reden concatineren
-       resultaat = antwoord + reden
-     //}
-     return resultaat;
-   } */
+  
 
   const marks = [
     {
@@ -128,20 +114,38 @@ export const CreateSector = React.forwardRef((props, ref) => {
             autoComplete="off"
           >
             <Grid container spacing={2} style={{ width: "95%" }}>
-              
               <Grid item xs={4} md={4}>
                 <TextField
                   placeholder="naam"
                   onChange={(e) => setNaam(e.target.value)}
                   value={naam}
                 />
-              </Grid>
-              <Grid item xs={12} md={12}>
+                </Grid>
+                  
+              <Grid item xs={4} md={4}>
+                <TextField
+                  placeholder="nasiCode"
+                  onChange={(e) => setNasiCode(e.target.value)}
+                  defaultValue={nasiCode}
+                />
+             </Grid>
+             <Grid item xs={4} md={4}>
+             <FormGroup>
+             <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="female"
+                    name="radio-buttons-group"
+                >
+                    <FormControlLabel control={<Checkbox defaultChecked={checked} onChange={e => setChecked(e.target.checked)}/>} label="zwarte lijst" />
+                </RadioGroup>
+
+                   </FormGroup> 
+             </Grid>
+
+              <Grid item xs={4} md={4}>
                 <Button variant="contained" type="submit">verstuur </Button>
-
-
-
               </Grid>
+
             </Grid>
           </Box>
         </Typography>

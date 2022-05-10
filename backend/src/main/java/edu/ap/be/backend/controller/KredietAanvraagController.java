@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,21 @@ public class KredietAanvraagController {
         return ResponseEntity.ok().body(kredietaanvraag);
     }
 
+    @GetMapping("/user/{id}")
+    public List<Kredietaanvraag> getKredietAanvraagByuserID(@PathVariable(value = "id") long userID)
+            throws ResourceNotFoundException {
+
+                List<Kredietaanvraag> kredieten = new ArrayList<>();
+                List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
+                for (Kredietaanvraag kred : allKredietList) {
+                    if (kred.getUserID() == userID) {
+                        kredieten.add(kred);
+                    } 
+                }
+
+                return kredieten;        
+    }
+
     @PostMapping("")
     public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) {
         return kredietRepository.save(krediet);
@@ -48,7 +64,7 @@ public class KredietAanvraagController {
                         () -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + kredietID));
 
         kredietaanvraag.setEigenVermogen(kredietDetails.getEigenVermogen());
-        kredietaanvraag.setKlantID(kredietDetails.getKlantID());
+        kredietaanvraag.setUserID(kredietDetails.getUserID());
         kredietaanvraag.setLening(kredietDetails.getLening());
         kredietaanvraag.setLooptijd(kredietDetails.getLooptijd());
         kredietaanvraag.setNaam(kredietDetails.getNaam());

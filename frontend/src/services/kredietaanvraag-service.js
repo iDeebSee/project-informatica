@@ -13,11 +13,15 @@ class KredietAanvraagService {
         return httpsCommon.get(`${baseUrl}/${id}`);
     }
 
+    getByUserID(id) {
+        return httpsCommon.get(`${baseUrl}/user/${id}`);
+    }
 
-    create(klantID, status, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
+
+    create(userID, status, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
 
         let formdata = new FormData();
-        formdata.append('klantID', klantID);
+        formdata.append('userID', userID);
         formdata.append('status', status);
         formdata.append('lening', lening);
         formdata.append('looptijd', termijn);
@@ -71,8 +75,8 @@ class KredietAanvraagService {
     //             { "Content-Type": "multipart/form-data" }
 
     //     }
-       
-        
+
+
     //     return httpsCommon.put(`${baseUrl}/${id}`);
     // }
 

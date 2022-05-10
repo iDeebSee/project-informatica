@@ -63,8 +63,8 @@ export const Popup = React.forwardRef((props, ref) => {
 
   React.useImperativeHandle(ref, () => ({
     handleOpen() {
-      setOpen(true);
 
+      setOpen(true);
     }
   }));
 

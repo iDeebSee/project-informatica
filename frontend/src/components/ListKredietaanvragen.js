@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { borderRight } from "@mui/system";
 import { Popup } from "./Popup";
+import AuthService from "../services/auth-service";
 import kredietaanvraagService from "../services/kredietaanvraag-service";
 import EventBus from "../common/eventBus"
 import {
@@ -55,20 +56,70 @@ export default function ListKredietaanvragen() {
 
 
 
+  let user = AuthService.getCurrentUser();
+
+
+
+
   React.useEffect(() => {
+    if (user.role !== "ADMINISTRATOR" || user.role !== "KANTOORMMEDEWERKER" || user.role !== "KREDIETBEOORDELAAR") {
+      kredietaanvraagService.getByUserID(user.id).then((response) => {
+        console.log("data", response.data)
+        setKredieten(response.data)
 
-    kredietaanvraagService.getAll().then((response) => {
-      console.log("data", response.data)
-      setKredieten(response.data)
-
-    }).then(error => {
-      if (error.response && error.response.status === 401) {
-        EventBus.dispatch("logout");
-      }
-    })
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
+    }
 
 
   }, [])
+
+  React.useEffect(() => {
+    if (user.role === "ADMINISTRATOR" || user.role === "KANTOORMMEDEWERKER" || user.role === "KREDIETBEOORDELAAR") {
+      kredietaanvraagService.getAll().then((response) => {
+        console.log("data", response.data)
+        setKredieten(response.data)
+
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
+    }
+  }, [])
+
+  // if (user.role === "ADMINISTRATOR" || user.role === "KANTOORMMEDEWERKER" || user.role === "KREDIETBEOORDELAAR") {
+  //   kredietaanvraagService.getAll().then((response) => {
+  //     console.log("data", response.data)
+  //     setKredieten(response.data)
+
+  //   }).then(error => {
+  //     if (error.response && error.response.status === 401) {
+  //       EventBus.dispatch("logout");
+  //     }
+  //   })
+  // }
+
+  // React.useEffect(() => {
+
+  //   kredietaanvraagService.getByUserID(user.id).then((response) => {
+  //     console.log("data", response.data)
+  //     setKredietenByUserID(response.data)
+
+  //   }).then(error => {
+  //     if (error.response && error.response.status === 401) {
+  //       EventBus.dispatch("logout");
+  //     }
+  //   })
+
+
+  // }, [])
+
+
+
 
   function deleteKA(id) {
     kredietaanvraagService.delete(id).then((response) => {
@@ -110,6 +161,7 @@ export default function ListKredietaanvragen() {
                 </TableRow>
               </TableHead>
               <TableBody>
+
                 {krediet.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.naam}</TableCell>

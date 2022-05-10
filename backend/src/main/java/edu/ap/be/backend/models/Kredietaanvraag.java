@@ -1,11 +1,10 @@
 package edu.ap.be.backend.models;
 
-
 import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name= "kredietaanvragen")
+@Table(name = "kredietaanvragen")
 @Data
 public class Kredietaanvraag {
     @Id
@@ -14,20 +13,19 @@ public class Kredietaanvraag {
     private long id;
     @Column(name = "naam")
     private String naam;
-    @Column(name = "eigenVermogen")
+    @Column(name = "eigenVermogen",  nullable = false)
     private double eigenVermogen;
-    @Column(name = "lening")
+    @Column(name = "lening",  nullable = false)
     private double lening;
-    @Column(name = "looptijd")
+    @Column(name = "looptijd",  nullable = false)
     private int looptijd;
     @Column(name = "status")
     private Status status;
-    @Column(name = "klantID")
-    private long klantID;
-    @Column(name = "categorie")
+    @Column(name = "userID",  nullable = false)
+    private long userID;
+    @Column(name = "categorie",  nullable = false)
     private Categorie categorie;
     @Column(name = "verantwoording")
     private String verantwoording;
-
 
 }

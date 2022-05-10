@@ -46,7 +46,7 @@ export const Popup = React.forwardRef((props, ref) => {
   const [file, setFile] = React.useState("")
 
   const [status, setStatus] = React.useState("INBEHANDELING")
-  const klantID = AuthService.getCurrentUser().id;
+  const userID = AuthService.getCurrentUser().id;
 
   const [disable, setDisable] = React.useState(true)
 
@@ -76,10 +76,10 @@ export const Popup = React.forwardRef((props, ref) => {
   }
 
   function handleSubmit(e) {
-    console.log("in de handleSubmit: ", klantID);
+    console.log("in de handleSubmit: ", userID);
     e.preventDefault();
     KredietAanvraagService.create(
-      klantID,
+      userID,
       status,
       totaalbedrag,
       termijn,
@@ -178,13 +178,13 @@ export const Popup = React.forwardRef((props, ref) => {
                   outputFormat="string"
                   decimalCharacter=","
                   digitGroupSeparator="."
-                  onChange={(event, value)=> setZelfGefinancieerd(value)}
+                  onChange={(event, value) => setZelfGefinancieerd(value)}
                   required="true"
                   style={{ width: "100%" }}
                 />
               </Grid>
               <Grid item xs={12} md={3}>
-              <CurrencyTextField
+                <CurrencyTextField
                   label="Totaalbedrag (€)"
                   variant="outlined"
                   value={totaalbedrag}
@@ -193,7 +193,7 @@ export const Popup = React.forwardRef((props, ref) => {
                   outputFormat="string"
                   decimalCharacter=","
                   digitGroupSeparator="."
-                  onChange={(event, value)=> setTotaalbedrag(value)}
+                  onChange={(event, value) => setTotaalbedrag(value)}
                   required="true"
                   style={{ width: "100%" }}
                 />

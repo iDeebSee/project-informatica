@@ -14,6 +14,13 @@ import { Popup } from "./Popup";
 import AuthService from "../services/auth-service";
 import kredietaanvraagService from "../services/kredietaanvraag-service";
 import EventBus from "../common/eventBus"
+import { SearchBar } from "./SearchBar";
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import IconButton from '@mui/material/IconButton';
+import Icon from '@mui/material/Icon';
+import SearchIcon from '@mui/icons-material/Search';
+import KredietAanvraagService from '../services/kredietaanvraag-service'
 import {
   Modal,
   Typography,
@@ -52,17 +59,27 @@ function preventDefault(event) {
 
 export default function ListKredietaanvragen() {
   const childRef = React.useRef();
+  const searchRef = React.useRef();
   const [krediet, setKredieten] = React.useState([]);
+
 
 
 
   let user = AuthService.getCurrentUser();
 
 
+  function handleChange(event) {
+    if(event != "" || event != null){
+      KredietAanvraagService.getByName(event).then((response) => {
+      setKredieten(response.data)
+       // console.log("response", response.data)
+    })
+    }
+  }
 
 
   React.useEffect(() => {
-    if (user.role !== "ADMINISTRATOR" || user.role !== "KANTOORMMEDEWERKER" || user.role !== "KREDIETBEOORDELAAR") {
+    if (user.role !== "ADMINISTRATOR" || user.role !== "KANTOOR" || user.role !== "KREDIETBEOORDELAAR") {
       kredietaanvraagService.getByUserID(user.id).then((response) => {
         console.log("data", response.data)
         setKredieten(response.data)
@@ -78,7 +95,9 @@ export default function ListKredietaanvragen() {
   }, [])
 
   React.useEffect(() => {
-    if (user.role === "ADMINISTRATOR" || user.role === "KANTOORMMEDEWERKER" || user.role === "KREDIETBEOORDELAAR") {
+
+    if (user.role === "ADMINISTRATOR" || user.role === "KANTOOR" || user.role === "KREDIETBEOORDELAAR") {
+     
       kredietaanvraagService.getAll().then((response) => {
         console.log("data", response.data)
         setKredieten(response.data)
@@ -89,32 +108,14 @@ export default function ListKredietaanvragen() {
         }
       })
     }
+
   }, [])
 
-  // if (user.role === "ADMINISTRATOR" || user.role === "KANTOORMMEDEWERKER" || user.role === "KREDIETBEOORDELAAR") {
-  //   kredietaanvraagService.getAll().then((response) => {
-  //     console.log("data", response.data)
-  //     setKredieten(response.data)
-
-  //   }).then(error => {
-  //     if (error.response && error.response.status === 401) {
-  //       EventBus.dispatch("logout");
-  //     }
-  //   })
-  // }
 
   // React.useEffect(() => {
 
-  //   kredietaanvraagService.getByUserID(user.id).then((response) => {
-  //     console.log("data", response.data)
-  //     setKredietenByUserID(response.data)
-
-  //   }).then(error => {
-  //     if (error.response && error.response.status === 401) {
-  //       EventBus.dispatch("logout");
-  //     }
-  //   })
-
+  //   console.log("child kredieten", searchRef.current.getKredieten())
+  //   //setKredieten(searchRef.current.childKredieten)
 
   // }, [])
 
@@ -136,6 +137,23 @@ export default function ListKredietaanvragen() {
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
+          {user.role === "KANTOOR" || user.role === "ADMINISTRATOR" ? <Paper
+            component="form"
+            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+        >
+
+            <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Zoek kredieten"
+                inputProps={{ 'aria-label': 'Zoek kredieten' }}
+                onChange={e => handleChange(e.target.value)}
+            />
+            <Icon type="" sx={{ p: '10px' }} aria-label="search">
+                <SearchIcon />
+            </Icon>
+
+
+        </Paper> : <></>}
           <ButtonGroup
             style={{ float: "right", marginRight: 15 }}
             variant="contained"

@@ -79,21 +79,6 @@ export default function UserList() {
 
   }, [])
 
-  // React.useEffect(()=>{
-  //   if(users != null && users.length > 0 ){
-  //     users.forEach(user => {
-  //       console.log("ussers id",user.id)
-  //       roleService.getRoleByUser(user.id).then((response)=>{
-  //         console.log("roles from user",response.data)
-  //           setRoles(response.data)
-  //          }).then(error => {
-  //       if (error.response && error.response.status === 401) {
-  //         EventBus.dispatch("logout");
-  //       }
-  //     })
-  //     });
-  //   }
-  //   },[]);
 
   function deleteKA(id) {
     userService.delete(id).then((response) => {

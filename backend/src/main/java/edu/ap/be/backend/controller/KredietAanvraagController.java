@@ -27,6 +27,12 @@ public class KredietAanvraagController {
         return kredietRepository.findAll();
     }
 
+    @GetMapping("/naam/")
+    public List<Kredietaanvraag> getAllKredietaanvragenByEmptyName() {
+        System.out.println(kredietRepository.findAll().toString());
+        return kredietRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Kredietaanvraag> getKredietAanvraagByID(@PathVariable(value = "id") long kredietID)
             throws ResourceNotFoundException {
@@ -36,19 +42,36 @@ public class KredietAanvraagController {
         return ResponseEntity.ok().body(kredietaanvraag);
     }
 
+    @GetMapping("/naam/{name}")
+    public List<Kredietaanvraag> getKredietAanvraagByNaam(@PathVariable(value = "name") String name) {
+
+        List<Kredietaanvraag> kredieten = new ArrayList<>();
+        List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
+        System.out.println("---------------- ALJLDSKJDSDSF DSF ---------------" + name.getClass().getName());
+
+        for (Kredietaanvraag kred : allKredietList) {
+            if (kred.getNaam().toLowerCase().contains(name.toString().toLowerCase())) {
+                System.out.println(kred.toString());
+                kredieten.add(kred);
+            } 
+        }
+
+        return kredieten;
+    }
+
     @GetMapping("/user/{id}")
     public List<Kredietaanvraag> getKredietAanvraagByuserID(@PathVariable(value = "id") long userID)
             throws ResourceNotFoundException {
 
-                List<Kredietaanvraag> kredieten = new ArrayList<>();
-                List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
-                for (Kredietaanvraag kred : allKredietList) {
-                    if (kred.getUserID() == userID) {
-                        kredieten.add(kred);
-                    } 
-                }
+        List<Kredietaanvraag> kredieten = new ArrayList<>();
+        List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
+        for (Kredietaanvraag kred : allKredietList) {
+            if (kred.getUserID() == userID) {
+                kredieten.add(kred);
+            }
+        }
 
-                return kredieten;        
+        return kredieten;
     }
 
     @PostMapping("")

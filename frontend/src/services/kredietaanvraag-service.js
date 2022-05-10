@@ -17,6 +17,10 @@ class KredietAanvraagService {
         return httpsCommon.get(`${baseUrl}/user/${id}`);
     }
 
+    getByName(name) {
+        return httpsCommon.get(`${baseUrl}/naam/${name}`);
+    }
+
 
     create(userID, status, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
 

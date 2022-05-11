@@ -125,7 +125,7 @@ export default function ListKredietaanvragen() {
   function deleteKA(id) {
     kredietaanvraagService.delete(id).then((response) => {
       console.log("delete", response.data)
-      window.location.reload();
+      //window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
@@ -170,7 +170,7 @@ export default function ListKredietaanvragen() {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>naam</TableCell>
+                  <TableCell>Naam</TableCell>
                   <TableCell>Verantwoording</TableCell>
                   <TableCell>Zelf gefinancierd</TableCell>
                   <TableCell>lening</TableCell>

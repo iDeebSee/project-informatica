@@ -5,11 +5,12 @@ import java.util.Locale.Category;
 public enum Categorie {
 
     GEBOUWEN("gebouwen"),
-    ROLLENDMATERIEEL("rollend materieel(vb laptop)"),
+    ROLLENDMATERIEEL("rollend materieel"),
     KLEINMATERIEEL("klein materieel(vb gsm)"),
     KANTOOR("kantoor"),
     INDUSTRIEELEGEBOUWEN("industriele gebouwen"),
-    MEUBELAIRENMACHINES("meubilair en machines");
+    MEUBILAIRENMACHINES("meubilair en machines");
+    
 
 
     

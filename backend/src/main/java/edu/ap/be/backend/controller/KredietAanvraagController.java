@@ -1,8 +1,11 @@
 package edu.ap.be.backend.controller;
 
 import edu.ap.be.backend.models.Kredietaanvraag;
+import edu.ap.be.backend.models.User;
 import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.repository.KredietaanvraagRepository;
+import edu.ap.be.backend.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +23,9 @@ import java.util.Map;
 public class KredietAanvraagController {
     @Autowired
     private KredietaanvraagRepository kredietRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("")
     public List<Kredietaanvraag> getAllKredietaanvragen() {
@@ -76,7 +82,18 @@ public class KredietAanvraagController {
 
     @PostMapping("")
     public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) {
-        return kredietRepository.save(krediet);
+        List<User> userList = new ArrayList<>();
+        userList = userRepository.findAll();
+
+        for (User user : userList) {
+            if (user.getId() == krediet.getUserID()) {
+                System.out.println("------- user.getID: " + user.getId());
+                System.out.println("------- krzde-iet.getUserID: " + krediet.getUserID());
+                return kredietRepository.save(krediet);
+            } 
+        }
+        System.out.println("************************************************************************************");
+        return null;//kredietRepository.save(krediet);
     }
 
     @PutMapping("/{id}")

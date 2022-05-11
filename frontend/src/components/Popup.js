@@ -46,7 +46,8 @@ export const Popup = React.forwardRef((props, ref) => {
   const [file, setFile] = React.useState("")
 
   const [status, setStatus] = React.useState("INBEHANDELING")
-  const userID = AuthService.getCurrentUser().id;
+  const [userID, setUser] = React.useState()
+  const loggedUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = React.useState(true)
 
@@ -75,6 +76,13 @@ export const Popup = React.forwardRef((props, ref) => {
 
   }
 
+  React.useEffect(() =>{
+      if(loggedUser.role != "KANTOOR"){
+        console.log("dit is de id" + loggedUser.id)
+        setUser(loggedUser.id)
+      }
+  }, [])
+
   function handleSubmit(e) {
     console.log("in de handleSubmit: ", userID);
     e.preventDefault();
@@ -89,8 +97,14 @@ export const Popup = React.forwardRef((props, ref) => {
       categorie
 
     ).then(response => {
+      if(response.status == 200){
+        window.location.reload();
+      }
+      else{
+        alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
+      }
       console.log(response.data)
-      window.location.reload();
+      
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
@@ -157,6 +171,20 @@ export const Popup = React.forwardRef((props, ref) => {
             autoComplete="off"
           >
             <Grid container spacing={2} style={{ width: "95%" }}>
+              {loggedUser.role == "KANTOOR"?
+                  <Grid item xs={12} md={3}>
+                  <TextField
+                    id="klantnaam"
+                    required="true"
+                    label="ID van de klant"
+                    type="number"
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                    onChange={(e) => setUser(e.target.value)}
+                    value={userID}
+                  />
+                </Grid>
+                  : <></>}
               <Grid item xs={12} md={3}>
                 <TextField
                   id="naam"
@@ -223,7 +251,7 @@ export const Popup = React.forwardRef((props, ref) => {
                     <MenuItem value={"KANTOOR"}>
                       kantoor
                     </MenuItem>
-                    <MenuItem value={"INDUSTRIEELEGEBOUWEN"}>
+                    <MenuItem value={"INDUSTRIELEGEBOUWEN"}>
                       industriële gebouwen
                     </MenuItem>
                     <MenuItem value={"MEUBILAIRENMACHINES"}>

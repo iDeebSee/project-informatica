@@ -6,7 +6,9 @@ import Grid from '@mui/material/Grid';
 import Item from '@mui/material/Grid';
 import { BrowserRouter, Link } from 'react-router-dom';
 import authService from '../services/auth-service';
-
+import KredietaanvraagImage from '../img/kredietaanvraag.jpg'
+import UsersImage from '../img/gebruikers.jpg'
+import SectorImage from '../img/sectoren.png'
 
 export default function HomeBody() {
 
@@ -23,13 +25,13 @@ export default function HomeBody() {
       <Grid item xs={3}>
         <Item>
           <Link to="/list">
-            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square> KredietAanvragen</Paper>
+            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${KredietaanvraagImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> KredietAanvragen</Paper>
 
           </Link>
 
 
           <Link to="/UserList">
-            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square> users</Paper>
+            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${UsersImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> users</Paper>
 
           </Link>
 
@@ -40,7 +42,7 @@ export default function HomeBody() {
         <Item>
           {currUser.role.toString() === "COMDIRECTIE" ?
             <Link to="/sectorenlist">
-              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square > sectoren</Paper>
+              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${SectorImage})`, backgroundPosition: "center", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square > sectoren</Paper>
             </Link>
             : <></>}
           <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />

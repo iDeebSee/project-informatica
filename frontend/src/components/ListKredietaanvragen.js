@@ -33,6 +33,7 @@ import {
   FormControl,
   TextareaAutosize,
 } from "@mui/material";
+import userService from "../services/user-service";
 
 
 
@@ -65,7 +66,31 @@ export default function ListKredietaanvragen() {
 
 
 
+// function downloadFiles(file){
+//   console.log("zebi"+file)
+
+//   const fileDownloadUrl = URL.createObjectURL(file); // Step 4
+//   console.log("zebi"+fileDownloadUrl)
+//   this.setState ({fileDownloadUrl: fileDownloadUrl}, // Step 5
+//     () => {
+//       this.dofileDownload.click();                   // Step 6
+//       URL.revokeObjectURL(fileDownloadUrl);          // Step 7
+//       this.setState({fileDownloadUrl: ""})
+      
+//   })
+  
+// }
+
+  
+
+
   let user = AuthService.getCurrentUser();
+
+  React.useEffect(() => {
+    userService.getAll().then((response) => {
+      console.log("all them users: ", response.data)
+    })
+  }, [])
 
 
   function handleChange(event) {
@@ -125,7 +150,7 @@ export default function ListKredietaanvragen() {
   function deleteKA(id) {
     kredietaanvraagService.delete(id).then((response) => {
       console.log("delete", response.data)
-      //window.location.reload();
+      window.location.reload();
     }).then(error => {
       if (error.response && error.response.status === 401) {
         EventBus.dispatch("logout");
@@ -175,6 +200,9 @@ export default function ListKredietaanvragen() {
                   <TableCell>Zelf gefinancierd</TableCell>
                   <TableCell>lening</TableCell>
                   <TableCell>looptijd</TableCell>
+                  <TableCell>status</TableCell>
+
+
                   <TableCell align="right"></TableCell>
                 </TableRow>
               </TableHead>
@@ -187,6 +215,8 @@ export default function ListKredietaanvragen() {
                     <TableCell>€ {row.eigenVermogen}</TableCell>
                     <TableCell>€ {row.lening}</TableCell>
                     <TableCell>{row.looptijd}</TableCell>
+                    <TableCell>{row.status == "INBEHANDELING" ? "in behandeling" : row.status}</TableCell>
+
                     <TableCell align="right">
                       <ButtonGroup
                         variant="contained"

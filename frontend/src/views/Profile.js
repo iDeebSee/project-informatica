@@ -47,6 +47,7 @@ export default function Profile() {
     const [role, setRole] = useState()
     const [message, setMessage] = useState("")
     const [messageType, setMessageType] = useState("")
+    const [vat, setVat] = useState("")
     const myDecodedToken = decodeToken("Bearer" + token);
     const isMyTokenExpired = isExpired(token);
 
@@ -67,6 +68,7 @@ export default function Profile() {
                 setFirstName(response.data.firstName)
                 setRole(currUser.role)
                 setHiddenPass(response.data.password)
+                setVat(response.data.vat)
             }
         });
 
@@ -89,7 +91,7 @@ export default function Profile() {
         e.preventDefault();
         if (password.length >= 6) {
 
-            UserService.update(id, firstName, lastName, email, password).then(response => {
+            UserService.update(id, firstName, lastName, email, password, role, vat).then(response => {
                 console.log("password: ", password)
                 console.log("role in update: ", role)
                 console.log("update with password", response.data)
@@ -98,7 +100,7 @@ export default function Profile() {
                 setMessage(error.message);
             })
         } else if (password === null || password === undefined) {
-            UserService.update(id, firstName, lastName, email, password).then(response => {
+            UserService.update(id, firstName, lastName, email, password, role, vat).then(response => {
                 console.log("password: ", password)
                 console.log("role in update: ", role)
                 console.log("update with password", response.data)
@@ -128,6 +130,11 @@ export default function Profile() {
                     <Grid item xs={12} md={6}>
                         <Item>
                             <TextField onChange={(e) => setEmail(e.target.value)} id="standard-basic" variant="standard" InputLabelProps={{ shrink: true }} label="E-mail" value={email} />
+                        </Item>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Item>
+                            <TextField disabled id="standard-basic" variant="standard" InputLabelProps={{ shrink: true }} label="VAT" value={vat} />
                         </Item>
                     </Grid>
                     <Grid item xs={12} md={6}>

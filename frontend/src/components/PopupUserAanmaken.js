@@ -43,6 +43,8 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
   const [role, setRole] = React.useState("");
   const [wachtwoord, setWachtwoord] = React.useState("");
   const [voornaam, setVoornaam] = React.useState("");
+  const [vat, setVat] = React.useState("");
+
 
 
  
@@ -83,7 +85,7 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
     e.preventDefault();
     console.log(email,wachtwoord,voornaam,naam,role)
 
-    authService.register(email,wachtwoord,voornaam,naam,role).then(response => {
+    authService.register(email,wachtwoord,voornaam,naam,role,vat).then(response => {
         console.log(response.data)
          window.location.reload();
       }).then(error => {
@@ -139,6 +141,22 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
                  
                 />
               </Grid>
+
+              
+                  <Grid item xs={12} md={3}>
+                  <TextField
+                    id="vat"
+                    required="true"
+                    label="vat "
+                    
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                    onChange={(e) => setVat(e.target.value)}
+                    value={vat}
+                  />
+                </Grid>
+            
+              
               <Grid item xs={12} md={3}>
                 <TextField
                   id="achternaam"

@@ -66,13 +66,13 @@ public class KredietAanvraagController {
     }
 
     @GetMapping("/user/{id}")
-    public List<Kredietaanvraag> getKredietAanvraagByuserID(@PathVariable(value = "id") long userID)
+    public List<Kredietaanvraag> getKredietAanvraagByuserID(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
 
         List<Kredietaanvraag> kredieten = new ArrayList<>();
         List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
         for (Kredietaanvraag kred : allKredietList) {
-            if (kred.getUserID() == userID) {
+            if (kred.getUserID() == id) {
                 kredieten.add(kred);
             }
         }

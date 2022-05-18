@@ -5,6 +5,11 @@ import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
 import EventBus from "../common/eventBus"
 import AuthService from "../services/auth-service"
+import sectorService from '../services/sector-service';
+import KBOService from '../services/KBO-service';
+import AddIcon from "@material-ui/icons/Add";
+
+
 import {
   Modal,
   Typography,
@@ -18,6 +23,8 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
+import authService from '../services/auth-service';
+import userService from '../services/user-service';
 
 const style = {
   position: "absolute",
@@ -43,16 +50,44 @@ export const Popup = React.forwardRef((props, ref) => {
   const [naam, setNaam] = React.useState("")
   const [categorie, setCategorie] = React.useState("")
   const [verantwoording, setVerantwoording] = React.useState("")
-  const [file, setFile] = React.useState("")
+  const [file, setFile] = React.useState()
 
   const [status, setStatus] = React.useState("INBEHANDELING")
-  const [userID, setUser] = React.useState()
+  const [userID, setUserID] = React.useState()
   const loggedUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = React.useState(true)
+  const [sectoren, setSectoren] = React.useState([])
+  const [onderneming, setOnderneming] = React.useState([])
+  const [user, setUser] = React.useState()
+  
 
 
+React.useEffect(()=>{
+  userService.getUser(loggedUser.id).then((response)=>{
+    setUser(response.data)
+    KBOService.getByVat(response.data.vat).then((response)=>{
+      setOnderneming(response.data)
+      console.log("klakla",response.data)
+    })
+    console.log("zebi",response.data)
+  })
+},[])
 
+  React.useEffect(() => {
+    sectorService.getAll().then((response) => {
+      setSectoren(response.data)
+      console.log("all them sectoren: ", response.data)
+      
+    })
+   
+    
+
+  }, [])
+
+  
+
+  
 
 
   const handleChange = (event) => {
@@ -79,64 +114,131 @@ export const Popup = React.forwardRef((props, ref) => {
   React.useEffect(() =>{
       if(loggedUser.role != "KANTOOR"){
         console.log("dit is de id" + loggedUser.id)
-        setUser(loggedUser.id)
+        setUserID(loggedUser.id)
       }
   }, [])
 
-  function handleSubmit(e) {
-    console.log("in de handleSubmit: ", userID);
-    e.preventDefault();
-    KredietAanvraagService.create(
-      userID,
-      status,
-      totaalbedrag,
-      termijn,
-      naam,
-      verantwoording,
-      zelfGefinancierd,
-      categorie
+  function solvabiliteit(zelfGefinancierd,totaalbedrag)
+  {
+    const solv= ((zelfGefinancierd/totaalbedrag)*100)
+    
+    return solv
+  }
+  function liquiditeit(equity,assets,stock,vreemdVermogen)
+  {
+    const liq= ((equity+assets+stock)/vreemdVermogen)
 
-    ).then(response => {
-      if(response.status == 200){
-        window.location.reload();
-      }
-      else{
-        alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
-      }
-      console.log(response.data)
-      
-    }).then(error => {
-      if (error.response && error.response.status === 401) {
-        EventBus.dispatch("logout");
-      }
-    })
+    return liq;
+  }
+  function rendabiliteit(resultaatNaTax,gemgeinvesteerdeigenVermogen)
+  {
+    const ren= (((resultaatNaTax)/gemgeinvesteerdeigenVermogen)*100)
+
+    return ren;
   }
 
-  /*  function ratiosOK() {
-     //API data uitlezen en checken of boven een bepaalde minimumwaarde liggen
-     //get btwnummer
-     if (.solvabiliteit >= ... && .rentabiliteit >= ... && .liquiditeit >= ...){
-       resultaat = true;
-     }
-     else {
-       resultaat = false;
-     }
-     return resultaat
-   } */
 
-  /*  function kredietCheck() {
-     //if (user.isBlacklisted() == false && user.ratiosOk() == true) {
-       
-       resultaat = "kredietaanvraag goedgekeurd"
-     //}
-     //else {
-       //kredietAanvraag.delete()
-       antwoord = "kredietaanvraag wordt geweigerd"
-       reden = " wegens ..." //nog reden concatineren
-       resultaat = antwoord + reden
-     //}
-     return resultaat;
-   } */
+
+  function handleSubmit(e) {
+    
+    e.preventDefault();
+    sectoren.forEach(e =>{
+      if(e.nasicode==onderneming.nacbelCode)
+      {
+        if(e.isBlack==true)
+        {
+          KredietAanvraagService.create(
+            userID,
+            1,
+            totaalbedrag,
+            termijn,
+            file,
+            naam,
+            verantwoording,
+            zelfGefinancierd,
+            categorie
+      
+          ).then(response => {
+            if(response.status == 200){
+              window.location.reload();
+            }
+            else{
+              alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
+            }
+            console.log(response.data)
+            
+          }).then(error => {
+            if (error.response && error.response.status === 401) {
+              EventBus.dispatch("logout");
+            }
+          })
+        }
+        else
+        {
+          if(solvabiliteit(zelfGefinancierd,totaalbedrag)>=25 && 
+          liquiditeit(onderneming.equity,onderneming.assets,onderneming.stock,onderneming.shortTermDebt)>=1
+           && rendabiliteit(onderneming.resultAfterTax,zelfGefinancierd)>=5 )
+           {
+            KredietAanvraagService.create(
+              userID,
+              0,
+              totaalbedrag,
+              termijn,
+              file,
+              naam,
+              verantwoording,
+              zelfGefinancierd,
+              categorie
+        
+            ).then(response => {
+              if(response.status == 200){
+                window.location.reload();
+              }
+              else{
+                alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
+              }
+              console.log(response.data)
+              
+            }).then(error => {
+              if (error.response && error.response.status === 401) {
+                EventBus.dispatch("logout");
+              }
+            })
+           }
+           else
+           {
+            KredietAanvraagService.create(
+              userID,
+              2,
+              totaalbedrag,
+              termijn,
+              file,
+              naam,
+              verantwoording,
+              zelfGefinancierd,
+              categorie
+        
+            ).then(response => {
+              if(response.status == 200){
+                window.location.reload();
+              }
+              else{
+                alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
+              }
+              console.log(response.data)
+              
+            }).then(error => {
+              if (error.response && error.response.status === 401) {
+                EventBus.dispatch("logout");
+              }
+            })
+           }
+        }
+      }
+    })
+   
+  }
+  
 
   const marks = [
     {
@@ -174,13 +276,13 @@ export const Popup = React.forwardRef((props, ref) => {
               {loggedUser.role == "KANTOOR"?
                   <Grid item xs={12} md={3}>
                   <TextField
-                    id="klantnaam"
+                    id="userID"
                     required="true"
-                    label="ID van de klant"
-                    type="number"
+                    label="userID "
+                    
                     variant="outlined"
                     style={{ width: "100%" }}
-                    onChange={(e) => setUser(e.target.value)}
+                    onChange={(e) => setUserID(e.target.value)}
                     value={userID}
                   />
                 </Grid>
@@ -260,7 +362,24 @@ export const Popup = React.forwardRef((props, ref) => {
                   </Select>
                 </FormControl>
               </Grid>
+              <Grid item xs={12} md={3}>
+              <div className="container">
+                <div className="row">
+                    <form>
+                       
+                        <div className="form-group">
+                            <input type="file" 
+                            // value={file}
+                            multiple
+                            onChange={(e) => setFile(e.target.files)}
 
+                              />
+                        </div>
+                    
+                    </form>
+                </div>
+            </div>
+              </Grid>
               <Grid item xs={12} md={12} style={{ marginTop: "5%" }}>
                 <Slider
                   aria-label="Looptijd"

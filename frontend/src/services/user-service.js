@@ -8,7 +8,7 @@ class UserService {
     getUser(id) {
         return axios.get(API_URL + "/" + `${id}`, { headers: authHeader() });
     }
-    update(id, firstName, lastName, email, password, status) {
+    update(id, firstName, lastName, email, password, role, vat) {
 
         return axios.put(API_URL + "/" + `${id}`,
             {
@@ -16,11 +16,12 @@ class UserService {
                 lastName,
                 email,
                 password,
-                status
+                role,
+                vat
             },
             { headers: { 'Content-Type': 'application/json' } });
     }
-    updateComplete(id, firstName, lastName, email, password, enabled, role) {
+    updateComplete(id, firstName, lastName, email, password, enabled, role, vat) {
 
         console.log("user service role: ", role)
         return axios.put(API_URL + "/" + `${id}`,
@@ -30,7 +31,8 @@ class UserService {
                 email,
                 password,
                 enabled,
-                role
+                role,
+                vat
             });
     }
     create(email, naam, voornaam, role) {

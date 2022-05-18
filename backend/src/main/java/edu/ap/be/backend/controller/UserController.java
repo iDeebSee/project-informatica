@@ -74,6 +74,10 @@ public class UserController {
         // System.out.println(userDetails.getEmail());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
+        
+        user.setVat(userDetails.getVat());
+        
+        
 
         System.out.println("userdetails role: " + userDetails.getRole());
 

@@ -23,6 +23,8 @@ public class SignupRequest {
     @Size(max = 20)
     private String lastName;
 
+    private String vat;
+
 
     public String getEmail() {
         return email;
@@ -63,4 +65,14 @@ public class SignupRequest {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getVat() {
+        return vat;
+    }
+
+    public void setVat(String vat) {
+        this.vat = vat;
+    }
+
+    
 }

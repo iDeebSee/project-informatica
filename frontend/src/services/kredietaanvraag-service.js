@@ -22,25 +22,25 @@ class KredietAanvraagService {
     }
 
 
-    create(userID, status, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
+    create(userID, status, lening, termijn,file, naam, verantwoording, eigenvermogen, categorie) {
 
         let formdata = new FormData();
         formdata.append('userID', userID);
         formdata.append('status', status);
         formdata.append('lening', lening);
         formdata.append('looptijd', termijn);
-        //formdata.append('file',bestand);
+        formdata.append('file',file);
         formdata.append('naam', naam);
         formdata.append('verantwoording', verantwoording);
         formdata.append('eigenVermogen', eigenvermogen);
         formdata.append('categorie', categorie)
-        // if(bestand==undefined)
-        // {
-        //     bestand.array.forEach(bestand => {
-        //         formdata.append('files',bestand);
+        if(file==undefined)
+        {
+            file.array.forEach(bestand => {
+                formdata.append('files',file);
 
-        //     });
-        // }
+            });
+        }
 
         const config =
         {

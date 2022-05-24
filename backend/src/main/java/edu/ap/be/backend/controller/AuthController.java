@@ -94,15 +94,21 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail()) || userRepository.existsByVat(signUpRequest.getVat())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse("Error: Email and or Vat is already in use!"));
         }
         // Create new user's account
 
         User user = new User(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName());
+                
+        user.setEnabled(true);
+
+        
+        
+        user.setVat(signUpRequest.getVat());
         List<String> strRoles = new ArrayList<>();
         strRoles.add(signUpRequest.getRole());
 
@@ -163,6 +169,7 @@ public class AuthController {
             });
         }
         // user.setRole(roles);
+        
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

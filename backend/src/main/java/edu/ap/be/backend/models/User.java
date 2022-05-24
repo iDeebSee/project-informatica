@@ -37,6 +37,8 @@ public class User {
     private String lastName;
     @Column(name = "firstName")
     private String firstName;
+    @Column(name = "VAT")
+    private String vat;
 
     @Column(name = "enabled")
     @NonNull
@@ -50,13 +52,14 @@ public class User {
 
     }
 
-    public User(String email, String password, String firstName, String lastName, Boolean enabled, Role role) {
+    public User(String email, String password, String firstName, String lastName, Boolean enabled, Role role, String vat) {
         this.email = email;
         this.password = password;
         this.lastName = lastName;
         this.firstName = firstName;
         this.enabled = enabled;
         this.role = role;
+        this.vat = vat;
     }
 
     public User() {

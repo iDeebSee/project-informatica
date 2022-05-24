@@ -31,10 +31,11 @@ export default function HomeBody() {
             : <></>}
 
 
-          <Link to="/UserList">
-            <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${UsersImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> users</Paper>
+          {currUser.role.toString() === "ADMINISTRATOR" ?
+            <Link to="/UserList">
+              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${UsersImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> users</Paper>
 
-          </Link>
+            </Link> : <></>}
 
 
         </Item>

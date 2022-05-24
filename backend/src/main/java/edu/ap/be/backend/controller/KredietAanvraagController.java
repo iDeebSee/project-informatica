@@ -161,7 +161,7 @@ public class KredietAanvraagController {
                                  krediet.setFeedback("Deze sector staat op de zwarte lijst en is niet toegestaan.");
                                  return kredietRepository.save(krediet);
                              }
-                             else if(s.getIsBlack()==false && ( s.getNaam().toLowerCase()=="casino"|| s.getNaam().toLowerCase()=="wapenindustrie"))
+                             else if(s.getIsBlack()==false && ( s.getNaam().toLowerCase().equals("casino")|| s.getNaam().toLowerCase().equals("wapenindustrie")))
                              {
                                 krediet.setStatus(Status.INBEHANDELING);
                                 System.out.println("1ste");

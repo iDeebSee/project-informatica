@@ -6,6 +6,8 @@ import java.io.File;
 
 import javax.persistence.*;
 
+import org.hibernate.type.TrueFalseType;
+
 @Entity
 @Table(name = "kredietaanvragen")
 @Data
@@ -22,7 +24,7 @@ public class Kredietaanvraag {
     private double lening;
     @Column(name = "looptijd",  nullable = false)
     private int looptijd;
-    @Column(name = "file")
+    @Column(name = "file",nullable = true)
     private File file;
     @Column(name = "status")
     private Status status;
@@ -32,5 +34,7 @@ public class Kredietaanvraag {
     private Categorie categorie;
     @Column(name = "verantwoording")
     private String verantwoording;
+    @Column(name = "feedback")
+    private String feedback;
 
 }

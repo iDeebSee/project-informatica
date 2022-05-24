@@ -3,7 +3,9 @@ package edu.ap.be.backend.models;
 public enum Status {
     GOEDGEKEURD("Goedgekeurd"),
     GEWEIGERD ("Geweigerd"),
-    INBEHANDELING ("In behandeling");
+    INBEHANDELING ("In behandeling"),
+    VERDACHT ("Verdacht");
+
 
     private String text;
 

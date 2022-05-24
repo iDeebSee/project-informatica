@@ -119,9 +119,10 @@ export default function ListKredietaanvragen() {
 
   }, [])
 
+
   React.useEffect(() => {
 
-    if (user.role === "ADMINISTRATOR" || user.role === "KANTOOR" || user.role === "KREDIETBEOORDELAAR") {
+    if (user.role === "ADMINISTRATOR" || user.role === "KANTOOR") {
      
       kredietaanvraagService.getAll().then((response) => {
         console.log("data", response.data)
@@ -135,6 +136,39 @@ export default function ListKredietaanvragen() {
     }
 
   }, [])
+
+  React.useEffect(() => {
+    if ( user.role == "KREDIETBEOORDELAAR") {
+      kredietaanvraagService.getByStatus("INBEHANDELING").then((response) => {
+        console.log("status", response.data)
+        setKredieten(response.data)
+
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
+    }
+
+
+  }, [])
+
+  React.useEffect(() => {
+    if ( user.role == "COMPLIANCE") {
+      kredietaanvraagService.getByStatus("VERDACHT").then((response) => {
+        console.log("status", response.data)
+        setKredieten(response.data)
+
+      }).then(error => {
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      })
+    }
+
+
+  }, [])
+ 
 
 
   // React.useEffect(() => {

@@ -52,39 +52,18 @@ export const Popup = React.forwardRef((props, ref) => {
   const [verantwoording, setVerantwoording] = React.useState("")
   const [file, setFile] = React.useState()
 
-  const [status, setStatus] = React.useState("INBEHANDELING")
   const [userID, setUserID] = React.useState()
   const loggedUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = React.useState(true)
-  const [sectoren, setSectoren] = React.useState([])
-  const [onderneming, setOnderneming] = React.useState([])
-  const [user, setUser] = React.useState()
+  
+
   
 
 
-React.useEffect(()=>{
-  userService.getUser(loggedUser.id).then((response)=>{
-    setUser(response.data)
-    KBOService.getByVat(response.data.vat).then((response)=>{
-      setOnderneming(response.data)
-      console.log("klakla",response.data)
-    })
-    console.log("zebi",response.data)
-  })
-},[])
 
-  React.useEffect(() => {
-    sectorService.getAll().then((response) => {
-      setSectoren(response.data)
-      console.log("all them sectoren: ", response.data)
-      
-    })
-   
-    
 
-  }, [])
-
+  
   
 
   
@@ -118,126 +97,32 @@ React.useEffect(()=>{
       }
   }, [])
 
-  function solvabiliteit(zelfGefinancierd,totaalbedrag)
-  {
-    const solv= ((zelfGefinancierd/totaalbedrag)*100)
-    
-    return solv
-  }
-  function liquiditeit(equity,assets,stock,vreemdVermogen)
-  {
-    const liq= ((equity+assets+stock)/vreemdVermogen)
-
-    return liq;
-  }
-  function rendabiliteit(resultaatNaTax,gemgeinvesteerdeigenVermogen)
-  {
-    const ren= (((resultaatNaTax)/gemgeinvesteerdeigenVermogen)*100)
-
-    return ren;
-  }
-
-
+  
 
   function handleSubmit(e) {
     
     e.preventDefault();
-    sectoren.forEach(e =>{
-      if(e.nasicode==onderneming.nacbelCode)
-      {
-        if(e.isBlack==true)
-        {
-          KredietAanvraagService.create(
-            userID,
-            1,
-            totaalbedrag,
-            termijn,
-            file,
-            naam,
-            verantwoording,
-            zelfGefinancierd,
-            categorie
-      
-          ).then(response => {
-            if(response.status == 200){
-              window.location.reload();
-            }
-            else{
-              alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
-            }
-            console.log(response.data)
-            
-          }).then(error => {
-            if (error.response && error.response.status === 401) {
-              EventBus.dispatch("logout");
-            }
-          })
+      KredietAanvraagService.create(
+        userID,
+        totaalbedrag,
+        termijn,
+        file,
+        naam,
+        verantwoording,
+        zelfGefinancierd,
+        categorie
+  
+      ).then(response => {
+        if(response.status == 200){
+          window.location.reload();
         }
-        else
-        {
-          if(solvabiliteit(zelfGefinancierd,totaalbedrag)>=25 && 
-          liquiditeit(onderneming.equity,onderneming.assets,onderneming.stock,onderneming.shortTermDebt)>=1
-           && rendabiliteit(onderneming.resultAfterTax,zelfGefinancierd)>=5 )
-           {
-            KredietAanvraagService.create(
-              userID,
-              0,
-              totaalbedrag,
-              termijn,
-              file,
-              naam,
-              verantwoording,
-              zelfGefinancierd,
-              categorie
+       
         
-            ).then(response => {
-              if(response.status == 200){
-                window.location.reload();
-              }
-              else{
-                alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
-              }
-              console.log(response.data)
-              
-            }).then(error => {
-              if (error.response && error.response.status === 401) {
-                EventBus.dispatch("logout");
-              }
-            })
-           }
-           else
-           {
-            KredietAanvraagService.create(
-              userID,
-              2,
-              totaalbedrag,
-              termijn,
-              file,
-              naam,
-              verantwoording,
-              zelfGefinancierd,
-              categorie
-        
-            ).then(response => {
-              if(response.status == 200){
-                window.location.reload();
-              }
-              else{
-                alert("Vul alle velden correct in! Mogelijk is de klantId niet correct...")
-              }
-              console.log(response.data)
-              
-            }).then(error => {
-              if (error.response && error.response.status === 401) {
-                EventBus.dispatch("logout");
-              }
-            })
-           }
-        }
-      }
-    })
-   
-  }
+      })
+    }
+    
+    
+    
   
 
   const marks = [

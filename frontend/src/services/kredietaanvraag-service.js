@@ -20,13 +20,15 @@ class KredietAanvraagService {
     getByName(name) {
         return httpsCommon.get(`${baseUrl}/naam/${name}`);
     }
+    getByStatus(status) {
+        return httpsCommon.get(`${baseUrl}/status/${status}`);
+    }
 
 
-    create(userID, status, lening, termijn,file, naam, verantwoording, eigenvermogen, categorie) {
+    create(userID, lening, termijn,file, naam, verantwoording, eigenvermogen, categorie) {
 
         let formdata = new FormData();
         formdata.append('userID', userID);
-        formdata.append('status', status);
         formdata.append('lening', lening);
         formdata.append('looptijd', termijn);
         formdata.append('file',file);
@@ -34,9 +36,10 @@ class KredietAanvraagService {
         formdata.append('verantwoording', verantwoording);
         formdata.append('eigenVermogen', eigenvermogen);
         formdata.append('categorie', categorie)
-        if(file==undefined)
+        
+        if(file!=undefined)
         {
-            file.array.forEach(bestand => {
+            file.array.forEach(file => {
                 formdata.append('files',file);
 
             });

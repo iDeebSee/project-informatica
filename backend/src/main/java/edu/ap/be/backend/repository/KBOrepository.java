@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface KBOrepository extends JpaRepository<KBO, Long> {
-    Optional<KBO>  findKBOByvat(@Param("vat") String vat);
+    Optional<KBO> findKBOByvat(@Param("vat") String vat);
 }

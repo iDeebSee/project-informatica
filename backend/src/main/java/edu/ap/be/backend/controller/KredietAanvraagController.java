@@ -243,4 +243,28 @@ public class KredietAanvraagController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
+    
+
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Kredietaanvraag> updateKredietAanvraagStatus(@PathVariable(value = "id") long kredietID,
+            @Validated @RequestBody Kredietaanvraag kredietDetails) throws ResourceNotFoundException {
+        Kredietaanvraag kredietaanvraag = kredietRepository.findById(kredietID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + kredietID));
+
+                        System.out.println(kredietDetails);
+                        if (kredietDetails.getStatus().equals(Status.GEWEIGERD)) {
+                            kredietaanvraag.setStatus(Status.GEWEIGERD);
+                        }else if (kredietDetails.getStatus().equals(Status.GOEDGEKEURD)){
+                            kredietaanvraag.setStatus(Status.GOEDGEKEURD);
+                        }
+        
+       
+
+        final Kredietaanvraag updatedKredietAanvraag = kredietRepository.save(kredietaanvraag);
+        return ResponseEntity.ok(updatedKredietAanvraag);
+    }
+
 }

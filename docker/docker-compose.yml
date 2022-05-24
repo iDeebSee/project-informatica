@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    image: 'docker-spring-boot-postgres:latest'
+    container_name: project-informatica
+    depends_on:
+      - db
+  database:
+    image: "postgres" # use latest official postgres version
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/project
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+# named volumes can be managed easier using docker-compose      
+volumes:
+  database-data:

@@ -25,22 +25,21 @@ class KredietAanvraagService {
     }
 
 
-    create(userID, lening, termijn,file, naam, verantwoording, eigenvermogen, categorie) {
+    create(userID, lening, termijn, file, naam, verantwoording, eigenvermogen, categorie) {
 
         let formdata = new FormData();
         formdata.append('userID', userID);
         formdata.append('lening', lening);
         formdata.append('looptijd', termijn);
-        formdata.append('file',file);
+        formdata.append('file', file);
         formdata.append('naam', naam);
         formdata.append('verantwoording', verantwoording);
         formdata.append('eigenVermogen', eigenvermogen);
         formdata.append('categorie', categorie)
-        
-        if(file!=undefined)
-        {
+
+        if (file != undefined) {
             file.array.forEach(file => {
-                formdata.append('files',file);
+                formdata.append('files', file);
 
             });
         }
@@ -89,6 +88,31 @@ class KredietAanvraagService {
 
     delete(id) {
         return httpsCommon.delete(`${baseUrl}/${id}`, { headers: authHeader() });
+    }
+
+    update(id, lening, termijn, naam, verantwoording, eigenvermogen, categorie) {
+        return axios.put(`${baseUrl}/${id}`,
+            {
+                id,
+                lening,
+                termijn,
+                naam,
+                verantwoording,
+                eigenvermogen,
+                categorie
+            },
+            { headers: authHeader() }
+        )
+    }
+
+    updateStatus(id, status) {
+        return axios.put(`${baseUrl}/status/${id}`,
+            {
+                id,
+                status
+            },
+            { headers: authHeader() }
+        )
     }
 }
 export default new KredietAanvraagService();

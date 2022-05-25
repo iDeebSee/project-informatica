@@ -154,15 +154,9 @@ export default function ListKredietaanvragen() {
   }, [])
 
   React.useEffect(() => {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    if ( user.role == "COMPLIANCE") {
-=======
-    if (user.role === "COMPLIANCE") {
->>>>>>> Stashed changes
-=======
+
     if (user.role == "COMPLIANCE") {
->>>>>>> 4662a636cfc2add96c13f0cd9a936559120d9e11
+
       kredietaanvraagService.getByStatus("VERDACHT").then((response) => {
         console.log("status", response.data)
         setKredieten(response.data)

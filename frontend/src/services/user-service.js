@@ -21,6 +21,19 @@ class UserService {
             },
             { headers: { 'Content-Type': 'application/json' } });
     }
+    updateNoPass(id, firstName, lastName, email, enable, role, vat) {
+
+        return axios.put(API_URL + "/" + `${id}`,
+            {
+                firstName,
+                lastName,
+                email,
+                enable,
+                role,
+                vat
+            },
+            { headers: { 'Content-Type': 'application/json' } });
+    }
     updateComplete(id, firstName, lastName, email, password, enabled, role, vat) {
 
         console.log("user service role: ", role)

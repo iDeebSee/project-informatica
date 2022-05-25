@@ -66,22 +66,22 @@ export default function ListKredietaanvragen() {
 
 
 
-// function downloadFiles(file){
-//   console.log("zebi"+file)
+  // function downloadFiles(file){
+  //   console.log("zebi"+file)
 
-//   const fileDownloadUrl = URL.createObjectURL(file); // Step 4
-//   console.log("zebi"+fileDownloadUrl)
-//   this.setState ({fileDownloadUrl: fileDownloadUrl}, // Step 5
-//     () => {
-//       this.dofileDownload.click();                   // Step 6
-//       URL.revokeObjectURL(fileDownloadUrl);          // Step 7
-//       this.setState({fileDownloadUrl: ""})
-      
-//   })
-  
-// }
+  //   const fileDownloadUrl = URL.createObjectURL(file); // Step 4
+  //   console.log("zebi"+fileDownloadUrl)
+  //   this.setState ({fileDownloadUrl: fileDownloadUrl}, // Step 5
+  //     () => {
+  //       this.dofileDownload.click();                   // Step 6
+  //       URL.revokeObjectURL(fileDownloadUrl);          // Step 7
+  //       this.setState({fileDownloadUrl: ""})
 
-  
+  //   })
+
+  // }
+
+
 
 
   let user = AuthService.getCurrentUser();
@@ -94,11 +94,11 @@ export default function ListKredietaanvragen() {
 
 
   function handleChange(event) {
-    if(event != "" || event != null){
+    if (event != "" || event != null) {
       KredietAanvraagService.getByName(event).then((response) => {
-      setKredieten(response.data)
-       // console.log("response", response.data)
-    })
+        setKredieten(response.data)
+        // console.log("response", response.data)
+      })
     }
   }
 
@@ -123,7 +123,7 @@ export default function ListKredietaanvragen() {
   React.useEffect(() => {
 
     if (user.role === "ADMINISTRATOR" || user.role === "KANTOOR") {
-     
+
       kredietaanvraagService.getAll().then((response) => {
         console.log("data", response.data)
         setKredieten(response.data)
@@ -138,7 +138,7 @@ export default function ListKredietaanvragen() {
   }, [])
 
   React.useEffect(() => {
-    if ( user.role == "KREDIETBEOORDELAAR") {
+    if (user.role == "KREDIETBEOORDELAAR") {
       kredietaanvraagService.getByStatus("INBEHANDELING").then((response) => {
         console.log("status", response.data)
         setKredieten(response.data)
@@ -154,7 +154,7 @@ export default function ListKredietaanvragen() {
   }, [])
 
   React.useEffect(() => {
-    if ( user.role == "COMPLIANCE") {
+    if (user.role == "COMPLIANCE") {
       kredietaanvraagService.getByStatus("VERDACHT").then((response) => {
         console.log("status", response.data)
         setKredieten(response.data)
@@ -168,7 +168,7 @@ export default function ListKredietaanvragen() {
 
 
   }, [])
- 
+
 
 
   // React.useEffect(() => {
@@ -192,6 +192,20 @@ export default function ListKredietaanvragen() {
     })
   }
 
+  function afkeuren(id) {
+    kredietaanvraagService.updateStatus(id, "GEWEIGERD").then((response) => {
+      console.log(response);
+      window.location.reload();
+    })
+  }
+
+  function goedkeuren(id) {
+    kredietaanvraagService.updateStatus(id, "GOEDGEKEURD").then((response) => {
+      console.log(response);
+      window.location.reload();
+    })
+  }
+
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>
       <Grid container spacing={2}>
@@ -199,30 +213,32 @@ export default function ListKredietaanvragen() {
           {user.role === "KANTOOR" || user.role === "ADMINISTRATOR" ? <Paper
             component="form"
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-        >
+          >
 
             <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Zoek kredieten"
-                inputProps={{ 'aria-label': 'Zoek kredieten' }}
-                onChange={e => handleChange(e.target.value)}
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Zoek kredieten"
+              inputProps={{ 'aria-label': 'Zoek kredieten' }}
+              onChange={e => handleChange(e.target.value)}
             />
             <Icon type="" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
+              <SearchIcon />
             </Icon>
 
 
-        </Paper> : <></>}
-          <ButtonGroup
-            style={{ float: "right", marginRight: 15 }}
-            variant="contained"
-            aria-label="outlined primary button group"
-          >
-            <Button style={{ align: borderRight }} onClick={() => childRef.current.handleOpen()}>
-              maak
-            </Button>
-            <Popup ref={childRef} ></Popup>
-          </ButtonGroup>
+          </Paper> : <></>}
+          {user.role === "KANTOOR" || user.role === "KLANT" ?
+            <ButtonGroup
+              style={{ float: "right", marginRight: 15 }}
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Button style={{ align: borderRight }} onClick={() => childRef.current.handleOpen()}>
+                maak
+              </Button>
+              <Popup ref={childRef} ></Popup>
+            </ButtonGroup> : <></>
+          }
         </Grid>
         <Grid item xs={12}>
           <React.Fragment>
@@ -257,11 +273,19 @@ export default function ListKredietaanvragen() {
                         aria-label="outlined primary button group"
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
-                        <Button onClick={() => window.open("/detail/" + row.id, "_self")}>details </Button>
-
-                        <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>
+                        {user.role.toString() === "KLANT" || user.role.toString() === "KANTOOR" || user.role.toString() === "KREDIETBEOORDELAAR" ?
+                          <Button onClick={() => window.open("/detail/" + row.id, "_self")}>details </Button> : <></>
+                        }
+                        {user.role.toString() === "KANTOOR" && row.status == "INBEHANDELING" ?
+                          <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>
+                          : <></>}
                         <Popup ref={childRef} ></Popup>
-                        <Button onClick={() => deleteKA(row.id)}>verwijderen </Button>
+                        {(user.role.toString() === "KANTOOR" || user.role.toString() === "KLANT") && row.status == "INBEHANDELING" ?
+                          <Button onClick={() => deleteKA(row.id)}>verwijderen </Button> : <></>}
+                        {user.role.toString() === "KREDIETBEOORDELAAR" && row.status == "INBEHANDELING" ?
+                          <Button color="error" onClick={() => afkeuren(row.id)}>Afkeuren </Button> : <></>}
+                        {user.role.toString() === "KREDIETBEOORDELAAR" && row.status == "INBEHANDELING" ?
+                          <Button color="success" onClick={() => goedkeuren(row.id)}>Goedkeuren </Button> : <></>}
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

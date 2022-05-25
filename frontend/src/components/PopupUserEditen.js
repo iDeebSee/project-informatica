@@ -145,7 +145,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
     e.preventDefault();
 
 
-    UserService.updateComplete(userid, voornaam, naam, email, wachtwoord, enable, role).then(response => {
+    UserService.updateComplete(userid, voornaam, naam, email, "", enable, role, "").then(response => {
       console.log("role: ", role);
       console.log(response.data)
 

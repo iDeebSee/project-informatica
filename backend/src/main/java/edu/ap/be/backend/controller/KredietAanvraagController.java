@@ -161,7 +161,7 @@ public class KredietAanvraagController {
                                  krediet.setFeedback("Deze sector staat op de zwarte lijst en is niet toegestaan.");
                                  return kredietRepository.save(krediet);
                              }
-                             else if(s.getIsBlack()==false && ( s.getNaam().toLowerCase()=="casino"|| s.getNaam().toLowerCase()=="wapenindustrie"))
+                             else if(s.getIsBlack()==false && ( s.getNaam().toLowerCase().equals("casino")|| s.getNaam().toLowerCase().equals("wapenindustrie")))
                              {
                                 krediet.setStatus(Status.INBEHANDELING);
                                 System.out.println("1ste");
@@ -243,4 +243,28 @@ public class KredietAanvraagController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
+    
+
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Kredietaanvraag> updateKredietAanvraagStatus(@PathVariable(value = "id") long kredietID,
+            @Validated @RequestBody Kredietaanvraag kredietDetails) throws ResourceNotFoundException {
+        Kredietaanvraag kredietaanvraag = kredietRepository.findById(kredietID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + kredietID));
+
+                        System.out.println(kredietDetails);
+                        if (kredietDetails.getStatus().equals(Status.GEWEIGERD)) {
+                            kredietaanvraag.setStatus(Status.GEWEIGERD);
+                        }else if (kredietDetails.getStatus().equals(Status.GOEDGEKEURD)){
+                            kredietaanvraag.setStatus(Status.GOEDGEKEURD);
+                        }
+        
+       
+
+        final Kredietaanvraag updatedKredietAanvraag = kredietRepository.save(kredietaanvraag);
+        return ResponseEntity.ok(updatedKredietAanvraag);
+    }
+
 }

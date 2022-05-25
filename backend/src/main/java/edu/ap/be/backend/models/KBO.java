@@ -25,7 +25,7 @@ public class KBO {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column (name="name")
+    @Column(name = "name")
     private String name;
     @Column(name = "vat")
     private String vat;
@@ -36,15 +36,15 @@ public class KBO {
 
     @Column(name = "assets")
     private int assets;
-    @Column(name = "results")
-    private int results;
+    @Column(name = "result")
+    private int result;
     @Column(name = "tax")
     private int tax;
 
     @Column(name = "resultAfterTax")
     private int resultAfterTax;
-    @Column(name = "financialKost")
-    private int financialKost;
+    @Column(name = "financialCost")
+    private int financialCost;
     @Column(name = "currentAssets")
     private int currentAssets;
 
@@ -54,18 +54,14 @@ public class KBO {
     private String fixedAssets;
     @Column(name = "shortTermDebt")
     private int shortTermDebt;
-    
-    @Column(name = "longtermDebt")
-    private int longtermDebt;
-    @Column(name = "depriciation")
-    private int depriciation;
-    @Column(name = "writedown")
-    private int writedown;
-    
 
-    
+    @Column(name = "longTermDebt")
+    private int longTermDebt;
+    @Column(name = "depreciation")
+    private int depreciation;
+    @Column(name = "writeDown")
+    private int writeDown;
 
-    
     public KBO() {
 
     }

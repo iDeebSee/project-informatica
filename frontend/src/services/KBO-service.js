@@ -9,19 +9,22 @@ class KBOservice {
         return axios.get(`${baseUrl}`);
     }
 
-    
-    
     getByVat(vat) {
-       
-       
+
+
         return axios.get(`${baseUrl}/${vat}`);
 
     }
+    searchByNameOrVat(value) {
+        const auth = {
+            headers: {
+               
+                "Authorization": authHeader(),
+            }
+        }
+        return axios.get(`${baseUrl}/search/${value}`, auth);
+    }
 
-   
- 
-
-   
 
 }
 export default new KBOservice();

@@ -34,8 +34,6 @@ public class KBOcontroller {
     @Autowired
     private KBOrepository KBOrepository;
 
-   
-
     // @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or
     // hasRole('KREDIETBEOORDELAAR')")
     @GetMapping("")
@@ -52,13 +50,39 @@ public class KBOcontroller {
 
     @PostMapping("")
     public KBO createOnderneming(@Validated @RequestBody KBO ond) {
-       
 
         return KBOrepository.save(ond);
     }
 
-  
+    @GetMapping("/search/")
+    public List<KBO> getKBObyNaamOrVatReset() {
+        return KBOrepository.findAll();
+    }
 
-    
+    @GetMapping("/search/{value}")
+    public List<KBO> getKBObyNaamOrVat(@PathVariable(value = "value") String value) {
+
+        List<KBO> kbos = new ArrayList<>();
+        List<KBO> allKBOs = KBOrepository.findAll();
+
+        for (KBO kbo : allKBOs) {
+            if (value.matches("^(be|BE).*")) {
+
+                if (kbo.getVat().toLowerCase().contains(value.toString().toLowerCase())) {
+
+                    kbos.add(kbo);
+                }
+            } else {
+
+                if (kbo.getName().toLowerCase().contains(value.toString().toLowerCase())) {
+
+                    kbos.add(kbo);
+                }
+
+            }
+        }
+
+        return kbos;
+    }
 
 }

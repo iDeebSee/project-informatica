@@ -92,6 +92,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/roles**").permitAll()
                 .antMatchers("/sector**").permitAll()
                 .antMatchers("/sector/**").permitAll()
+                .antMatchers("/kbo*").permitAll()
+                .antMatchers("/kbo/*").permitAll()
+                .antMatchers("/kbo/search/*").permitAll()
+                .antMatchers("/kbo/search*").permitAll()
 
                 .anyRequest().authenticated();
         // .and().csrf().disable().formLogin().loginPage("/login").permitAll()

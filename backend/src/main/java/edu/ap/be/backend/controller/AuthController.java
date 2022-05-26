@@ -12,6 +12,7 @@ import edu.ap.be.backend.response.MessageResponse;
 import edu.ap.be.backend.security.jwt.JwtUtils;
 import edu.ap.be.backend.security.service.UserDetailsImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -48,29 +49,39 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Validated @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        String role = userDetails.getAuthority().toString();
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getEmail(),
-                role));
+        List<User> userList = userRepository.findAll();
+        for (User user : userList) {
+            if (user.getEmail().equals(loginRequest.getEmail())) {
+                if (user.getEnabled()) {
+                    Authentication authentication = authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
+                                    loginRequest.getPassword()));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    String jwt = jwtUtils.generateJwtToken(authentication);
+
+                    UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
+                    String role = userDetails.getAuthority().toString();
+                    if (userDetails.isEnabled()) {
+                        return ResponseEntity.ok(new JwtResponse(jwt,
+                                userDetails.getId(),
+                                userDetails.getEmail(),
+                                role));
+                    }
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
     }
-
-
-  
-
 
     @GetMapping("/loggedin")
     public Authentication getLoggedUser(Authentication authentication) {
         // authentication = SecurityContextHolder.getContext().getAuthentication();
         // if (!(authentication instanceof AnonymousAuthenticationToken)) {
 
-        //     return SecurityContextHolder.getContext().getAuthentication().toString();
+        // return SecurityContextHolder.getContext().getAuthentication().toString();
         // }
         // // return SecurityContextHolder.getContext().getAuthentication();
         // return "anonymous user";
@@ -94,15 +105,20 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())
+                || userRepository.existsByVat(signUpRequest.getVat())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse("Error: Email and or Vat is already in use!"));
         }
         // Create new user's account
 
         User user = new User(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName());
+
+        user.setEnabled(true);
+
+        user.setVat(signUpRequest.getVat());
         List<String> strRoles = new ArrayList<>();
         strRoles.add(signUpRequest.getRole());
 
@@ -163,6 +179,7 @@ public class AuthController {
             });
         }
         // user.setRole(roles);
+
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

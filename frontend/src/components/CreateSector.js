@@ -124,7 +124,7 @@ export const CreateSector = React.forwardRef((props, ref) => {
                   
               <Grid item xs={4} md={4}>
                 <TextField
-                  placeholder="nasiCode"
+                  placeholder="NACE Code"
                   onChange={(e) => setNasiCode(e.target.value)}
                   defaultValue={nasiCode}
                 />

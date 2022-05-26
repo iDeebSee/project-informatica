@@ -34,7 +34,9 @@ public class Kredietaanvraag {
     private Categorie categorie;
     @Column(name = "verantwoording")
     private String verantwoording;
+
     @Column(name = "feedback")
     private String feedback;
+
 
 }

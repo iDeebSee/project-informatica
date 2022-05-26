@@ -58,28 +58,29 @@ export default function ListSectoren() {
 
   React.useEffect(() => {
     sectorService.getAll().then((response) => {
-        console.log("data", response.data)
-        setSectoren(response.data)
+      console.log("data", response.data)
+      setSectoren(response.data)
 
-   
-})}, []);
 
-// React.useEffect(() => {
-//     sectorService.getAll().then((response) => {
+    })
+  }, []);
 
-//     })
-// }, [])
+  // React.useEffect(() => {
+  //     sectorService.getAll().then((response) => {
+
+  //     })
+  // }, [])
 
   function deleteSector(id) {
     sectorService.delete(id).then((response) => {
-        console.log("delete", response.data)
-        window.location.reload();
-      }).then(error => {
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
-      })
-    
+      console.log("delete", response.data)
+      window.location.reload();
+    }).then(error => {
+      if (error.response && error.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
+    })
+
   }
 
   return (
@@ -96,29 +97,30 @@ export default function ListSectoren() {
             </Button>
             <CreateSector ref={childCreateRef} ></CreateSector>
           </ButtonGroup>
-          </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Grid item xs={12}>
           <React.Fragment>
-            <Table size="small">
+            <Table size="small" style={{ width: "60%", margin: "auto" }}>
               <TableHead>
                 <TableRow>
                   <TableCell>naam</TableCell>
-                  <TableCell>nasiCode</TableCell>
+                  <TableCell>NACE code</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {sectoren.map((row) => (
-                  
-                  <TableRow key={row.id} style={row.isBlack ? {textColor: "red", backgroundColor:"gray"} : {backgroundColor: "white", color:"white"}}>
+
+                  <TableRow key={row.id} style={row.isBlack ? { textColor: "red", backgroundColor: "gray" } : { backgroundColor: "white", color: "white" }}>
                     <TableCell>{row.naam}</TableCell>
                     <TableCell>{row.nasiCode}</TableCell>
-                      <ButtonGroup
-                        variant="contained"
-                        aria-label="outlined primary button group"
-                      >
-                        <Button onClick={() => deleteSector(row.id)}>verwijderen </Button>
-                      </ButtonGroup>
-                    
+                    <ButtonGroup
+                      style={{ float: "right" }}
+                      variant="contained"
+                      aria-label="outlined primary button group"
+                    >
+                      <Button onClick={() => deleteSector(row.id)}>verwijderen </Button>
+                    </ButtonGroup>
+
                   </TableRow>
                 ))}
               </TableBody>
@@ -127,6 +129,6 @@ export default function ListSectoren() {
         </Grid>
       </Grid>
     </Container>
-     
+
   );
 }

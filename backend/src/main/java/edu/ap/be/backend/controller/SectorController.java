@@ -6,7 +6,6 @@ import edu.ap.be.backend.models.Sector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import edu.ap.be.backend.repository.SectorRepository;
@@ -14,8 +13,6 @@ import edu.ap.be.backend.repository.SectorRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -57,11 +54,8 @@ public class SectorController {
                         () -> new ResourceNotFoundException("Kredietaanvraag not found for this id :: " + sectorID));
 
         sector.setNaam(sectorDetails.getNaam());
-        sector.setNasiCode(sectorDetails.getNasiCode());
+        sector.setNACEcode(sectorDetails.getNACEcode());
         sector.setIsBlack(sectorDetails.getIsBlack());
-
-
-       
         
 
         final Sector updateSector = sectorRepository.save(sector);

@@ -16,8 +16,8 @@ public class Sector {
     @Column(name = "naam")
     private String naam;
     
-    @Column(name = "nasiCode")
-    private String nasiCode;
+    @Column(name = "NACEcode")
+    private String NACEcode;
     @Column(name = "isBlack")
     private Boolean isBlack;
 

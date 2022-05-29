@@ -11,6 +11,7 @@ import UserList from '../components/UserList'
 import ListSectoren from '../components/SectorenLijst';
 import ListOndernemingen from '../components/ListOndernemingen';
 import Jaarrekening from '../components/Jaarrekening';
+import Contract from '../components/Contract';
 
 import {
     BrowserRouter,
@@ -74,6 +75,7 @@ export default function Routing() {
                 <Route path={"/sectorenlist"} element={<PrivateRoute user={isLoggedIn}> <ListSectoren /> </PrivateRoute>} />
                 <Route path={"/ondernemingen"} element={<PrivateRoute user={isLoggedIn}> <ListOndernemingen /> </PrivateRoute>} />
                 <Route path={"/ondernemingen/:id"} element={<PrivateRoute user={isLoggedIn}> <Jaarrekening /> </PrivateRoute>} />
+                <Route path={"/contract/:id"} element={<PrivateRoute user={isLoggedIn}> <Contract /> </PrivateRoute>} />
 
 
                 <Route path="*" element={<p>Hier vind je niets: 404!</p>} />

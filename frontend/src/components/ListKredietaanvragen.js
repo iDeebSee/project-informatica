@@ -21,6 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import Icon from '@mui/material/Icon';
 import SearchIcon from '@mui/icons-material/Search';
 import KredietAanvraagService from '../services/kredietaanvraag-service'
+import ContractService from '../services/contract-service'
 import {
   Modal,
   Typography,
@@ -102,6 +103,19 @@ export default function ListKredietaanvragen() {
     }
   }
 
+  // React.useEffect(() => {
+
+  //   KredietAanvraagService.getByStatus("GOEDGEKEURD").then((response) => {
+  //     // response.data.forEach(element => {
+  
+  //       ContractService.create(response.data.id);
+  //      // console.log("element",element)
+        
+  //       console.log("response in KAservice voor element", response.data)
+  //     // });
+      
+  //   })
+  // }, [])
 
   React.useEffect(() => {
     if (user.role !== "ADMINISTRATOR" || user.role !== "KANTOOR" || user.role !== "KREDIETBEOORDELAAR") {
@@ -202,10 +216,26 @@ export default function ListKredietaanvragen() {
   }
 
   function goedkeuren(id) {
+    
     kredietaanvraagService.updateStatus(id, "GOEDGEKEURD").then((response) => {
       console.log(response);
       window.location.reload();
-    })
+    });
+    ContractService.create(id);
+  }
+
+  function openDetail(id){
+    // ContractService.get(id).then((response) => {
+    //   if (response.status !== 200) {
+    //       ContractService.create(id).then((response) => {
+    //       console.log("create response ", response);
+    //       }).then((response) => {
+    //       window.open("/contract/" + id, "_self")
+    //       })
+    //   }
+    // })
+    window.open("/contract/" + id, "_self")
+    
   }
 
   return (
@@ -276,7 +306,8 @@ export default function ListKredietaanvragen() {
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
                         {user.role.toString() === "KLANT" || user.role.toString() === "KANTOOR" || user.role.toString() === "KREDIETBEOORDELAAR" ?
-                          <Button onClick={() => window.open("/detail/" + row.id, "_self")}>details </Button> : <></>
+                          <Button onClick={() => openDetail(row.id)}>details </Button> : <></>
+                          //() => window.open("/contract/" + row.id, "_self")
                         }
                         {user.role.toString() === "KANTOOR" && row.status == "INBEHANDELING" ?
                           <Button onClick={() => childRef.current.handleOpen()} >bewerken </Button>

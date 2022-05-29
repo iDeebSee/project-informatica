@@ -13,6 +13,7 @@ import edu.ap.be.backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,8 @@ public class KredietAanvraagController {
         System.out.println(kredietRepository.findById(kredietID).toString());
         return ResponseEntity.ok().body(kredietaanvraag);
     }
-     @GetMapping("/status/{status}")
+    @Transactional
+    @GetMapping("/status/{status}")
     public List<Kredietaanvraag> getKredietAanvraagByStatus(@PathVariable(value = "status") String status)
             throws ResourceNotFoundException {
                 List<Kredietaanvraag> kredietaanvraag =new ArrayList<>();
@@ -121,7 +123,7 @@ public class KredietAanvraagController {
     }
     
     @PostMapping("")
-    public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) {
+    public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) throws ResourceNotFoundException {
         List<User> userList = new ArrayList<>();
         userList = userRepository.findAll();
         List<KBO> ondList = new ArrayList<>();
@@ -151,13 +153,13 @@ public class KredietAanvraagController {
                          if(ond.getNacbelCode().equals(s.getNACEcode()))
                          {
                              System.out.println(ond.getNacbelCode()==s.getNACEcode());
-                             if(s.getIsBlack()==true)
+                             if(s.getIsBlack())
                              {
                                  krediet.setStatus(Status.GEWEIGERD);
                                  krediet.setFeedback("Deze sector staat op de zwarte lijst en is niet toegestaan.");
                                  return kredietRepository.save(krediet);
                              }
-                             else if(s.getIsBlack()==false && ( s.getNaam().toLowerCase().equals("casino")|| s.getNaam().toLowerCase().equals("wapenindustrie")))
+                             else if(!s.getIsBlack() && ( s.getNaam().toLowerCase().equals("casino")|| s.getNaam().toLowerCase().equals("wapenindustrie")))
                              {
                                 krediet.setStatus(Status.INBEHANDELING);
                                 System.out.println("1ste");
@@ -167,27 +169,29 @@ public class KredietAanvraagController {
 
 
                              }
-                             else if (s.getIsBlack()==false && (krediet.getLening()>=3000000))
+                             else if (!s.getIsBlack() && (krediet.getLening()>=3000000))
                              {
                                 krediet.setStatus(Status.VERDACHT);
                                 krediet.setFeedback("Deze aanvraag is verdacht en moet nagekeken worden.");
 
                                 return kredietRepository.save(krediet);
                              }
-                             else if(s.getIsBlack()==false && s.getNaam().toLowerCase()=="tandarts"|| s.getNaam().toLowerCase()=="dokter"|| s.getNaam().toLowerCase()=="notaris")
+                             else if(!s.getIsBlack() && s.getNaam().toLowerCase().equals("tandarts") || s.getNaam().toLowerCase().equals("dokter") || s.getNaam().toLowerCase().equals("notaris"))
                              {
                                 krediet.setStatus(Status.GOEDGEKEURD);
                                 krediet.setFeedback("Deze aanvraag is goedgekeurd.");
 
+
                                 return kredietRepository.save(krediet);
                              }
-                             else if(s.getIsBlack()==false && (solvabiliteit(krediet.getEigenVermogen(), krediet.getLening()))>25 &&
+                             else if(!s.getIsBlack() && (solvabiliteit(krediet.getEigenVermogen(), krediet.getLening()))>25 &&
                               rendabiliteit(ond.getResultAfterTax(), krediet.getEigenVermogen()) >=5 && liquiditeit(ond.getEquity(), ond.getAssets(), 
                               ond.getStock(), ond.getShortTermDebt())>=1)
                              {
                                 krediet.setStatus(Status.GOEDGEKEURD);
                                 krediet.setFeedback("Deze aanvraag is goedgekeurd.");
                                 System.out.println("2ste");
+
 
                                 return kredietRepository.save(krediet);
 
@@ -221,6 +225,10 @@ public class KredietAanvraagController {
         kredietaanvraag.setLooptijd(kredietDetails.getLooptijd());
         kredietaanvraag.setNaam(kredietDetails.getNaam());
         kredietaanvraag.setStatus(kredietaanvraag.getStatus());
+        if (kredietaanvraag.getStatus().equals(Status.GOEDGEKEURD)){
+            ContractController contractController = new ContractController();
+            contractController.createContract(kredietaanvraag.getId());
+        }
         kredietaanvraag.setCategorie(kredietaanvraag.getCategorie());
 
         final Kredietaanvraag updatedKredietAanvraag = kredietRepository.save(kredietaanvraag);

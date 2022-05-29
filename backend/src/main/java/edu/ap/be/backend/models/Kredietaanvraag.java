@@ -26,7 +26,7 @@ public class Kredietaanvraag {
     private int looptijd;
     @Lob
     @Column(name = "file", nullable = true)
-    private File file;
+    private byte[] file;
     @Column(name = "status")
     private Status status;
     @Column(name = "userID", nullable = false)

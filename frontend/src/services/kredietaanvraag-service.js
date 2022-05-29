@@ -37,12 +37,12 @@ class KredietAanvraagService {
         formdata.append('eigenVermogen', eigenvermogen);
         formdata.append('categorie', categorie)
 
-        if (file != undefined) {
-            file.array.forEach(file => {
-                formdata.append('files', file);
+        // if (file != undefined) {
+        //     file.array.forEach(file => {
+        //         formdata.append('files', file);
 
-            });
-        }
+        //     });
+        // }
 
         const config =
         {

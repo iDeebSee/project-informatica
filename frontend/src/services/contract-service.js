@@ -14,7 +14,7 @@ class ContractService {
     }
 
     create(id){
-        return httpsCommon.create(`${baseUrl}/${id}`);
+        return httpsCommon.post(`${baseUrl}/${id}`);
     }
 
     // delete(id) {

@@ -13,17 +13,13 @@ import edu.ap.be.backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import ch.qos.logback.core.joran.conditional.ElseAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -152,9 +148,9 @@ public class KredietAanvraagController {
                          System.out.println(s);
 
 
-                         if(ond.getNacbelCode().equals(s.getNasiCode()))
+                         if(ond.getNacbelCode().equals(s.getNACEcode()))
                          {
-                             System.out.println(ond.getNacbelCode()==s.getNasiCode());
+                             System.out.println(ond.getNacbelCode()==s.getNACEcode());
                              if(s.getIsBlack()==true)
                              {
                                  krediet.setStatus(Status.GEWEIGERD);

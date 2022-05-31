@@ -8,10 +8,8 @@ public enum Categorie {
     ROLLENDMATERIEEL("rollend materieel"),
     KLEINMATERIEEL("klein materieel(vb gsm)"),
     KANTOOR("kantoor"),
-    INDUSTRIEELEGEBOUWEN("industriele gebouwen"),
+    INDUSTRIELEGEBOUWEN("industriele gebouwen"),
     MEUBILAIRENMACHINES("meubilair en machines");
-    
-
 
     
     private String text;

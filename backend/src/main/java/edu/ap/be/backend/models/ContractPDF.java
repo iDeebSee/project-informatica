@@ -7,7 +7,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.tomcat.util.codec.binary.Base64;
 
-import javax.persistence.Convert;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -108,7 +107,7 @@ public class ContractPDF {
             if (categorie.equals(Categorie.KANTOOR) || categorie.equals(Categorie.GEBOUWEN)){
                 interest = 3;
 
-            }else if (categorie.equals(Categorie.INDUSTRIEELEGEBOUWEN)){
+            }else if (categorie.equals(Categorie.INDUSTRIELEGEBOUWEN)){
                 interest = 5;
             }else if (categorie.equals(Categorie.MEUBILAIRENMACHINES)){
                 interest = 10;

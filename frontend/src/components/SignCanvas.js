@@ -30,10 +30,10 @@ export default class SignCanvas extends Component {
     };
     userID = AuthService.getCurrentUser().id
 
-    canvasToImage = () => {
+    // canvasToImage = () => {
         
-        localStorage.setItem("signImage" + this.userID + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1), this.saveableCanvas.canvasContainer.children[1].toDataURL())
-    }
+    //     localStorage.setItem("signImage" + this.userID + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1), this.saveableCanvas.canvasContainer.children[1].toDataURL())
+    // }
 
     SaveHandtekening(id, handtekening) {
 

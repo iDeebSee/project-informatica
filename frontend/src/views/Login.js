@@ -34,7 +34,7 @@ export default function Login(props) {
   const [password, setPassword] = React.useState("")
   const [message, setMessage] = React.useState("")
   const [messageType, setMessageType] = React.useState("")
-  const [error, setError] = React.useState("error")
+  const [error, setError] = React.useState("")
 
 
 
@@ -70,11 +70,13 @@ export default function Login(props) {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
           setError(401)
+          setMessageType("error");
           // setMessage("De combinatie van email en wachtwoord is fout!");
-        } else if (error.response.status == 400) {
+        } else if (error.response.status === 400) {
           setError(400)
+          setMessageType("error");
           // setMessage("Velden moeten ingevuld worden!");
         } else {
           setMessage(error.message);
@@ -85,17 +87,21 @@ export default function Login(props) {
   };
 
   React.useEffect(() => {
-    if (error == 401) {
+    if (error === 401) {
       setMessageType("error");
       setMessage("De combinatie van email en wachtwoord is fout!");
 
-    } else if (error == 400) {
+    } else if (error === 400) {
       setMessageType("error");
       setMessage("Velden moeten ingevuld worden!");
-    } else if (error == "" || error == null) {
+    } else if ((error >= 200 && error <= 300)) {
       setMessageType("success");
       setMessage("U bent successvol aangemeld!")
     }
+    // } else if (error === "" || error == null) {
+    //   setMessageType("");
+
+    // }
     else {
       setMessageType("error")
       setMessage("Iets ging mis, probeer opnieuw!")
@@ -160,14 +166,7 @@ export default function Login(props) {
               Aanmelden
             </Button>
 
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Wachtwoord vergeten?
-                </Link>
-              </Grid>
-
-            </Grid>
+            
           </Box>
         </Box>
       </Container>

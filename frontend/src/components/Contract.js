@@ -6,11 +6,14 @@ import PDFViewer from 'pdf-viewer-reactjs'
 import { useParams } from 'react-router-dom';
 import { jsPDF } from "jspdf";
 import Button from "@mui/material/Button";
+import Input from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import SignCanvas from './SignCanvas';
+import AuthService from '../services/auth-service'
+import FormControl from '@mui/material/FormControl';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,18 +30,13 @@ export default function Contract(props) {
     const [liquiditeit, setLiquiditeit] = React.useState([]);
     const [solvabiliteit, setSolvabiliteit] = React.useState([]);
     const [rendabiliteit, setRendabiliteit] = React.useState([]);
+    const [bestand, setBestand] = React.useState();
     let blob = null;
     let url = null;
     const { id } = useParams();
 
-    React.useEffect(() => {
+    const currentUser = AuthService.getCurrentUser();
 
-        // ContractService.create(id).then((response) => {
-        //     console.log("create response ", response);
-        //     window.location.reload();
-        // })
-
-    }, [])
 
     React.useEffect(() => {
         KredietAanvraagService.get(id).then((response) => {
@@ -77,15 +75,10 @@ export default function Contract(props) {
         for (let i = 0; i < byteString.length; i++) {
             int8Array[i] = byteString.charCodeAt(i);
         }
-        // try {
-        //     var file = new File([int8Array], {type:"application/pdf"});
-        // } catch(e) {
-        //     // when File constructor is not supported
-        //     file = new Blob([int8Array], {type:"application/pdf"});
-        // }
+
         const blob = new Blob([int8Array], { type: 'application/pdf' });
         return blob;
-        //return file;
+
     }
 
     function openPDF() {
@@ -94,10 +87,23 @@ export default function Contract(props) {
         window.open(url, '_blank');
     }
 
+    function uploadFile() {
+        console.log(bestand);
+        if (bestand != null) {
+            ContractService.uploadFile(id, bestand).then((response) => {
+                console.log(response)
+            });
+            //window.location.reload();
+        } else {
+            console.log("geen bestand")
+        }
+
+    }
+
 
     return (
 
-        <Box sx={{ flexGrow: 1 }}>
+        <Box >
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Item><h1>{krediet.feedback}</h1></Item>
@@ -112,13 +118,43 @@ export default function Contract(props) {
                 <Grid item xs={4}>
                     <Item style={{ fontWeight: "bold" }}>Solvabiliteit: {solvabiliteit}</Item>
                 </Grid>
-                <Grid item xs={12}>
-                    <SignCanvas id={krediet.id}></SignCanvas>
+
+                <Grid item xs={12} >
+                    <Item style={{ margin: "auto", width: "fit-content" }}>
+                        {currentUser.role === "KLANT" && krediet.status === "GOEDGEKEURD" ? <SignCanvas id={krediet.id}></SignCanvas> : <></>}
+                    </Item>
+
                 </Grid>
+                <Grid item xs={1} style={{ marginTop: "30px" }}>
+
+                    {krediet.status === "GOEDGEKEURD" ? <Paper style={{ textAlign: "center", marginLeft: "10px" }}><Button onClick={openPDF}>Druk af</Button> </Paper> : <></>}
+
+                </Grid>
+                {/* <Grid item xs={2} style={{ marginTop: "30px" }}>
+                    {currentUser.role === "KLANT" && krediet.status === "GOEDGEKEURD" ?
+                        <Paper style={{ textAlign: "center" }}>
+                            <FormControl></FormControl>
+                            <input
+                                style={{ display: "none" }}
+                                id="contained-button-file"
+                                type="file"
+                                onChange={(e) => setBestand(e.target.files[0])}
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button component="span">
+                                    Kies bestand
+                                </Button>
+                            </label>
+                            <Button type="submit" onClick={uploadFile}>
+                                Upload
+                            </Button>
+                        </Paper> : <></>}
+                </Grid> */}
+
             </Grid>
-            {krediet.status === "GOEDGEKEURD" ?
-                <Button onClick={openPDF}>Druk af</Button> : <></>}
-        </Box>
+
+
+        </Box >
 
 
     )

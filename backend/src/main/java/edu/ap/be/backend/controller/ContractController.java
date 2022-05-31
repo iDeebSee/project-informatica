@@ -1,5 +1,6 @@
 package edu.ap.be.backend.controller;
 
+import com.itextpdf.text.Image;
 import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.models.*;
 import edu.ap.be.backend.repository.ContractRepository;
@@ -13,7 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -44,6 +49,29 @@ public class ContractController {
         Contract contract = contractRepository.findContractBykredietID(id)
                 .orElseThrow(() -> new ResourceNotFoundException("contract not found for this id :: " + id));
         return ResponseEntity.ok().body(contract);
+    }
+
+    @Transactional
+    @PutMapping("upload/{id}")
+        public ResponseEntity<Contract> uploadFile(@PathVariable(value = "id") long id,
+        @Validated @ModelAttribute Contract file) throws ResourceNotFoundException, IOException {
+
+
+
+        System.out.println("bestand: "+ Arrays.toString(file.getBestand()));
+        Contract contract = contractRepository.findContractBykredietID(id)
+                .orElseThrow(() -> new ResourceNotFoundException("contract not found for this id :: " + id));
+
+
+
+        String encodedString = new String(Base64.encodeBase64(file.getBestand()));
+
+        byte [] bestand=encodedString.getBytes();
+
+        contract.setBestand(bestand);
+        contract.setGehandtekend(true);
+        final Contract updatedContract = contractRepository.save(contract);
+        return ResponseEntity.ok(updatedContract);
     }
 
     @Transactional

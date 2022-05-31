@@ -8,6 +8,7 @@ import AuthService from "../services/auth-service"
 import sectorService from '../services/sector-service';
 import KBOService from '../services/KBO-service';
 import AddIcon from "@material-ui/icons/Add";
+import { Alert } from "./Alert"
 
 
 import {
@@ -42,6 +43,8 @@ const style = {
 
 export const Popup = React.forwardRef((props, ref) => {
 
+  const alertRef = React.useRef();
+
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
   const [termijn, setTermijn] = React.useState(0)
@@ -51,22 +54,23 @@ export const Popup = React.forwardRef((props, ref) => {
   const [categorie, setCategorie] = React.useState("")
   const [verantwoording, setVerantwoording] = React.useState("")
   const [file, setFile] = React.useState()
+  const [message, setMessage] = React.useState("")
 
   const [userID, setUserID] = React.useState()
   const loggedUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = React.useState(true)
-  
-
-  
 
 
 
 
-  
-  
 
-  
+
+
+
+
+
+
 
 
   const handleChange = (event) => {
@@ -90,40 +94,40 @@ export const Popup = React.forwardRef((props, ref) => {
 
   }
 
-  React.useEffect(() =>{
-      if(loggedUser.role != "KANTOOR"){
-        console.log("dit is de id" + loggedUser.id)
-        setUserID(loggedUser.id)
-      }
+  React.useEffect(() => {
+    if (loggedUser.role != "KANTOOR") {
+      console.log("dit is de id" + loggedUser.id)
+      setUserID(loggedUser.id)
+    }
   }, [])
 
-  
+
 
   function handleSubmit(e) {
-    
+
     e.preventDefault();
-      KredietAanvraagService.create(
-        userID,
-        totaalbedrag,
-        termijn,
-        file,
-        naam,
-        verantwoording,
-        zelfGefinancierd,
-        categorie
-  
-      ).then(response => {
-        if(response.status == 200){
-          window.location.reload();
-        }
-       
-        
-      })
-    }
-    
-    
-    
-  
+    KredietAanvraagService.create(
+      userID,
+      totaalbedrag,
+      termijn,
+      file,
+      naam,
+      verantwoording,
+      zelfGefinancierd,
+      categorie
+
+    ).then(() => {
+      window.location.reload();
+    }, error => {
+      console.log("repsonse: ", error.message)
+      //window.alert(error.message)
+      setMessage("Geen gebruiker gevonden met de gegeven userID!");
+    }, [])
+  }
+
+
+
+
 
   const marks = [
     {
@@ -158,20 +162,20 @@ export const Popup = React.forwardRef((props, ref) => {
             autoComplete="off"
           >
             <Grid container spacing={2} style={{ width: "95%" }}>
-              {loggedUser.role == "KANTOOR"?
-                  <Grid item xs={12} md={3}>
+              {loggedUser.role == "KANTOOR" ?
+                <Grid item xs={12} md={3}>
                   <TextField
                     id="userID"
                     required="true"
                     label="userID "
-                    
+
                     variant="outlined"
                     style={{ width: "100%" }}
                     onChange={(e) => setUserID(e.target.value)}
                     value={userID}
                   />
                 </Grid>
-                  : <></>}
+                : <></>}
               <Grid item xs={12} md={3}>
                 <TextField
                   id="naam"
@@ -248,22 +252,22 @@ export const Popup = React.forwardRef((props, ref) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={3}>
-              <div className="container">
-                <div className="row">
+                <div className="container">
+                  <div className="row">
                     <form>
-                       
-                        <div className="form-group">
-                            <input type="file" 
-                            // value={file}
-                            multiple
-                            onChange={(e) => setFile(e.target.files)}
 
-                              />
-                        </div>
-                    
+                      <div className="form-group">
+                        <input type="file"
+                          // value={file}
+                          multiple
+                          onChange={(e) => setFile(e.target.files)}
+
+                        />
+                      </div>
+
                     </form>
+                  </div>
                 </div>
-            </div>
               </Grid>
               <Grid item xs={12} md={12} style={{ marginTop: "5%" }}>
                 <Slider
@@ -321,10 +325,9 @@ export const Popup = React.forwardRef((props, ref) => {
                 />
               </Grid>
               <Grid item xs={12} md={12}>
-                <Button variant="contained" type="submit">verstuur </Button>
+                <Button variant="contained" type="submit" onClick={() => alertRef.current.handleClick()}>verstuur </Button>
 
-
-
+                <Alert ref={alertRef} type="error" message={message}></Alert>
               </Grid>
             </Grid>
           </Box>

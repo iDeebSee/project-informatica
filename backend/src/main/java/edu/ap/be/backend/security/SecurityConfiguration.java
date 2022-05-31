@@ -88,6 +88,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/kredietaanvragen/**").permitAll()
                 .antMatchers("/kredietaanvragen/user*").permitAll()
                 .antMatchers("/kredietaanvragen/user/*").permitAll()
+                .antMatchers("/kredietaanvragen/ratios*").permitAll()
+                .antMatchers("/kredietaanvragen/ratios/*").permitAll()
                 .antMatchers("/roles/**").permitAll()
                 .antMatchers("/roles**").permitAll()
                 .antMatchers("/sector**").permitAll()

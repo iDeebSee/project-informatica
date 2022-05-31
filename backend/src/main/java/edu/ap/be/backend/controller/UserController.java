@@ -76,7 +76,7 @@ public class UserController {
         user.setFirstName(userDetails.getFirstName());
         
 
-        if (!(userDetails.getVat().equals("") || userDetails.getVat().equals(null))) {
+        if (!(userDetails.getVat().equals("") || userDetails.getVat() == null)) {
             user.setVat(userDetails.getVat());
         }
         

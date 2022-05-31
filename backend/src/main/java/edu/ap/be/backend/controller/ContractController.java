@@ -6,15 +6,17 @@ import edu.ap.be.backend.repository.ContractRepository;
 import edu.ap.be.backend.repository.KBOrepository;
 import edu.ap.be.backend.repository.KredietaanvraagRepository;
 import edu.ap.be.backend.repository.UserRepository;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -44,8 +46,41 @@ public class ContractController {
         return ResponseEntity.ok().body(contract);
     }
 
+    @Transactional
+    @PutMapping("/{id}")
+    public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") long id,
+                                                   @Validated @RequestBody @NotNull Contract contractInput) throws ResourceNotFoundException {
+        Contract contract = contractRepository.findContractBykredietID(id)
+                .orElseThrow(() -> new ResourceNotFoundException("contract not found for this id :: " + id));
+
+        Kredietaanvraag krediet = kredietRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("krediet not found for this id :: " + id));
+
+        User user = userRepository.findById(krediet.getUserID())
+                .orElseThrow(() -> new ResourceNotFoundException("user not found for this id :: " + krediet.getUserID()));
+
+
+        KBO onderneming = kboRepository.findKBOByvat(user.getVat())
+                .orElseThrow(() -> new ResourceNotFoundException("onderneming not found for this id :: " + user.getVat()));
+
+
+        ContractPDF contractPDF = new ContractPDF();
+        String aanmaakDatum = DateFormatter.format(contract.getAanmaakDatum());
+
+        byte[] file = contractPDF.contractToPdf(krediet.getId(), onderneming.getName(),user.getFirstName()+" "+user.getLastName(), krediet.getNaam(), krediet.getVerantwoording(), krediet.getLening(), krediet.getLooptijd(), krediet.getCategorie(), aanmaakDatum, contractInput.getHandtekening(), true);
+
+        contract.setBestand(file);
+
+        contract.setGehandtekend(true);
+        contract.setHandtekening(contractInput.getHandtekening());
+        final Contract updatedContract = contractRepository.save(contract);
+        return ResponseEntity.ok(updatedContract);
+    }
+
+
+    @Transactional
     @PostMapping("/{id}")
-    public Contract createContract(@Validated @PathVariable(value = "id") long id) throws ResourceNotFoundException {
+    public Object createContract(@Validated @PathVariable(value = "id") long id) throws ResourceNotFoundException {
 
         if (contractRepository.findContractBykredietID(id).isPresent()){
             return contractRepository.findContractBykredietID(id)
@@ -59,7 +94,7 @@ public class ContractController {
             }
         }
 
-        Kredietaanvraag krediet = kredietRepository.findById(id)
+       Kredietaanvraag krediet = kredietRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("krediet not found for this id :: " + id));
 
         User user = userRepository.findById(krediet.getUserID())
@@ -72,16 +107,28 @@ public class ContractController {
 
         String aanmaakDatum = DateFormatter.format(LocalDate.now());
 
-        byte[] contractInPDF = contractPDF.contractToPdf(krediet.getId(), onderneming.getName(),user.getFirstName()+" "+user.getLastName(), krediet.getNaam(), krediet.getVerantwoording(), krediet.getLening(), krediet.getLooptijd(), krediet.getCategorie(), aanmaakDatum);
+
+        byte[] contractInPDF = contractPDF.contractToPdf(krediet.getId(), onderneming.getName(),user.getFirstName()+" "+user.getLastName(), krediet.getNaam(), krediet.getVerantwoording(), krediet.getLening(), krediet.getLooptijd(), krediet.getCategorie(), aanmaakDatum, null, false);
+
+        if (!krediet.getStatus().equals(Status.GOEDGEKEURD)){
+            return "No contract can be made";
+        }
+
         Contract contract  = new Contract();
         contract.setBestand(contractInPDF);
-        contract.setGehandtekend(false);
+        if (contract.isGehandtekend()){
+            contract.setGehandtekend(true);
+        }else{
+            contract.setGehandtekend(false);
+        }
+        if (contract.getHandtekening() != null){
+            contract.setHandtekening(contract.getHandtekening());
+        }
+
         contract.setKredietID(krediet.getId());
         contract.setAanmaakDatum(LocalDate.now());
         return contractRepository.save(contract);
 
-        // Contract contract = contractRepository.findContractBykredietaanvraag(id)
-        // .orElseThrow(() -> new ResourceNotFoundException("contract not found for this id :: " + id));
 
     }
 }

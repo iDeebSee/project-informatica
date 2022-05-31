@@ -5,71 +5,41 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.tomcat.util.codec.binary.Base64;
 
+import javax.persistence.Convert;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 
-
-//switch case voor categorie met rente dingen
 
 public class ContractPDF {
     int interest = 0;
 
+    public Image image64ToImage(byte[] image) throws IOException, BadElementException {
 
-    private double aflossingsBestandsdeel(double nominaleWaarde, int termijn){
-        return (nominaleWaarde / termijn);
+        String encodedString = new String(Base64.encodeBase64(image));
+        Image pic = Image.getInstance(Base64.decodeBase64(encodedString));
+
+        pic.scaleAbsolute(100, 100);
+        return pic;
     }
 
-//    private double uitstaandeSchuld(double nominaleWaarde, Double aflossingsbestandsdeel, int termijn){
-//        final double afloss = aflossingsBestandsdeel(nominaleWaarde, termijn);
-//        final int _termijn = termijn;
-//        do{
-//            double nw = nominaleWaarde - aflossingsbestandsdeel;
-//            System.out.println("-------------nominale waarde: "+nominaleWaarde+" - aflosbest deel: " + aflossingsbestandsdeel);
-//            return uitstaandeSchuld(nw, afloss, _termijn);
-//        }
-//        while(nominaleWaarde > 0 || aflossingsbestandsdeel > 0);
-//    }
-
-    private double epicRecursiveFunctionThatReturnsPrijsZetting(double nominaleWaarde, int termijn, int interest){
-        final double aflossingsBestandsdeel = aflossingsBestandsdeel(nominaleWaarde, termijn);
-        double uitstaandeSchuld = nominaleWaarde - aflossingsBestandsdeel;
-        double renteBestandsdeel = uitstaandeSchuld/interest;
-        double betaling = aflossingsBestandsdeel+renteBestandsdeel;
-
-
-        return 0;
-    }
-
-    public byte[] contractToPdf(long kredietID,String bedrijf, String userName, String contractName, String subject, double lening, int looptijd, Categorie categorie, String aanmaakDatum) {
-       // Document document = new Document();
-       //System.out.println("NWNWNWNWNNWNWNW______------------NWNWNWNWNWNNWNWNWNWNWN: "+uitstaandeSchuld(lening, aflossingsBestandsdeel(lening, looptijd), looptijd));
+    public byte[] contractToPdf(long kredietID,String bedrijf, String userName, String contractName, String subject, double lening, int looptijd, Categorie categorie, String aanmaakDatum, byte[] byteHandtekening, boolean gehandtekend) {
        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            // PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("HelloWorld.pdf"));
-            // document.open();
 
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, baos);
-            //PDPage page = new PDPage();
-            //document.addPage(page);
 
-            //PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            
-
-            // contentStream.setFont(PDType1Font.COURIER, 16);
-            // contentStream.beginText();
-            // contentStream.showText(contractName);
-            // contentStream.setFont(PDType1Font.COURIER, 12);
             document.open();
             document.addTitle(contractName);
             document.addSubject(subject);
             document.add(new Chunk(String.format("Contract %s \n", contractName), FontFactory.getFont(FontFactory.COURIER_BOLD, 20, Font.BOLD)));
+            document.add(new Paragraph("\nKredietaanvraag-id: "+ kredietID));
 
 
-
-            document.add(new Paragraph(String.format("\nTussen ondergetekenden: \n\t 1. %s [%s] \n Hierna genaamd de lener; \n En :\n\t 2. ALPHA\n Hierna genaamd de uitlener; \n\n", userName, bedrijf)));
+            document.add(new Paragraph(String.format("\nTussen ondergetekenden: \n\t 1. %s (%s) \n Hierna genaamd de lener; \n En :\n\t 2. ALPHA\n Hierna genaamd de uitlener; \n\n",bedrijf, userName)));
             
             document.add(new Paragraph("Is overeengekomen hetgeen volgt:\n"));
             document.add(new Paragraph(String.format(("\n1. De lener verklaart schuldig te zijn wegens gelden heden als lening ontvangen, tegen kwijting, de som van %.2f EUR aan de uitlener, die aanvaardt. \n"), lening)));
@@ -86,12 +56,10 @@ public class ContractPDF {
                     "In geval van overlijden van de lener vooraleer de schuld is terugbetaald, " +
                     "zal er hoofdelijkheid en ondeelbaarheid zijn onder alle erfgenamen tot terugbetaling van het kapitaal en de intresten; " +
                     "de kosten van de door art. 877 BW voorgeschreven betekening komen ten laste van de erfgenamen. \n"));
-            
 
-            // contentStream.setFont(PDType1Font.COURIER, 14);
 
             document.add(new Paragraph("\nAflossingstabel: \n\n"));
-            //contentStream.setFont(PDType1Font.COURIER, 12);
+
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100); //Width 100%
             table.setSpacingBefore(10f); //Space before table
@@ -137,14 +105,9 @@ public class ContractPDF {
             table.addCell(cell5);
 
 
-
-            double maandelijksAfschrijving;
-            final int aantalMaanden = (looptijd * 12);
-
-
             if (categorie.equals(Categorie.KANTOOR) || categorie.equals(Categorie.GEBOUWEN)){
                 interest = 3;
-                //maandelijksAfschrijving = (interest / 12);
+
             }else if (categorie.equals(Categorie.INDUSTRIEELEGEBOUWEN)){
                 interest = 5;
             }else if (categorie.equals(Categorie.MEUBILAIRENMACHINES)){
@@ -156,9 +119,7 @@ public class ContractPDF {
                 interest = 33;
             }
 
-
             System.out.println(categorie + " - "+ interest);
-
 
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(2);
@@ -175,37 +136,27 @@ public class ContractPDF {
             }
 
             document.add(table);
-
-
-
-
             document.add(new Paragraph(String.format("\n\nOpgesteld en overeengekomen op %s, in 1 exemplaren, waarvan elke partij verklaart één exemplaar ontvangen te hebben.\n\nGetekend, \n\n", aanmaakDatum)));
-            
-//            String imageUrl = "localhost:8080/contract/handtekening/"+kredietID;
-//            Image handtekening = null;
-//            try {
-//                handtekening = Image.getInstance(new URL(imageUrl));
-//            } catch (MalformedURLException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//            document.add(handtekening);
+
+
+            if (byteHandtekening != null) {
+                    document.add(image64ToImage(byteHandtekening));
+            }
+            if (gehandtekend) {
+                document.add(new Paragraph(String.format(" %s (%s)", bedrijf, userName)));
+                document.add(new Paragraph(String.format(" %s", aanmaakDatum)));
+            }
+
 
                 document.close();
-                // contentStream.endText();
-                // contentStream.close();
                 pdfWriter.flush();
 
-                byte[] pdfAsBytes = baos.toByteArray();
-                return pdfAsBytes;
+            return baos.toByteArray();
             
-            } catch (DocumentException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            return null;
+        return null;
     }
 
 }

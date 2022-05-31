@@ -20,9 +20,12 @@ public class Contract {
     private boolean gehandtekend = false;
 
     @Lob
-//    @Type(type = "org.hibernate.type.BlobType")
     @Column(name = "bestand")
     private byte[] bestand;
+
+    @Lob
+    @Column(name = "handtekening")
+    private byte[] handtekening;
 
     @Column(name = "kredietID")
     private long kredietID;

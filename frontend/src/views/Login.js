@@ -166,14 +166,7 @@ export default function Login(props) {
               Aanmelden
             </Button>
 
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Wachtwoord vergeten?
-                </Link>
-              </Grid>
-
-            </Grid>
+            
           </Box>
         </Box>
       </Container>

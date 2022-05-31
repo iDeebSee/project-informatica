@@ -79,7 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
-                .antMatchers("/test/**").permitAll()
+                .antMatchers("/test/**").authenticated()
                 .antMatchers("/users**").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
@@ -100,6 +100,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/kbo/search*").permitAll()
                 .antMatchers("/contract*").permitAll()
                 .antMatchers("/contract/*").permitAll()
+                .antMatchers("/contract/upload/*").permitAll()
+                .antMatchers("/contract/upload*").permitAll()
 
                 .anyRequest().authenticated();
         // .and().csrf().disable().formLogin().loginPage("/login").permitAll()

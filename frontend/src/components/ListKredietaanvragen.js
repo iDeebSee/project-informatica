@@ -107,13 +107,13 @@ export default function ListKredietaanvragen() {
 
   //   KredietAanvraagService.getByStatus("GOEDGEKEURD").then((response) => {
   //     // response.data.forEach(element => {
-  
+
   //       ContractService.create(response.data.id);
   //      // console.log("element",element)
-        
+
   //       console.log("response in KAservice voor element", response.data)
   //     // });
-      
+
   //   })
   // }, [])
 
@@ -216,7 +216,7 @@ export default function ListKredietaanvragen() {
   }
 
   function goedkeuren(id) {
-    
+
     kredietaanvraagService.updateStatus(id, "GOEDGEKEURD").then((response) => {
       console.log(response);
       window.location.reload();
@@ -224,7 +224,7 @@ export default function ListKredietaanvragen() {
     ContractService.create(id);
   }
 
-  function openDetail(id){
+  function openDetail(id) {
     // ContractService.get(id).then((response) => {
     //   if (response.status !== 200) {
     //       ContractService.create(id).then((response) => {
@@ -238,9 +238,9 @@ export default function ListKredietaanvragen() {
       console.log("create response ", response);
       //window.location.reload();
       window.open("/contract/" + id, "_self")
-  })
+    })
     //window.open("/contract/" + id, "_self")
-    
+
   }
 
   return (
@@ -254,7 +254,7 @@ export default function ListKredietaanvragen() {
 
             <InputBase
               sx={{ ml: 1, flex: 1 }}
-              placeholder="Zoek kredieten"
+              placeholder="Zoek kredieten op naam of id"
               inputProps={{ 'aria-label': 'Zoek kredieten' }}
               onChange={e => handleChange(e.target.value)}
             />

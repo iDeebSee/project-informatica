@@ -127,7 +127,9 @@ public class KredietAanvraagController {
             if (kred.getNaam().toLowerCase().contains(name.toString().toLowerCase())) {
                 System.out.println(kred.toString());
                 kredieten.add(kred);
-            } 
+            } else if(String.valueOf(kred.getId()).contains(name)){
+                kredieten.add(kred);
+            }
         }
 
         return kredieten;

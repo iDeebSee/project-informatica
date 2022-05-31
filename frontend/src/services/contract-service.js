@@ -18,8 +18,23 @@ class ContractService {
     }
 
     update(id, handtekening) {
-        console.log("service",id, handtekening);
+
         return axios.put(`${baseUrl}/${id}`, { handtekening });
+    }
+
+    uploadFile(id, bestand) {
+
+        const config =
+        {
+            headers:
+                { "Content-Type": "multipart/form-data" }
+
+        }
+
+        const formData = new FormData();
+        formData.append('bestand', bestand);
+        console.log("id en bestand: ", id, bestand);
+        return axios.put(`${baseUrl}/upload/${id}`, formData, config);
     }
 
     // delete(id) {

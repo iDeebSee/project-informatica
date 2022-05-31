@@ -149,13 +149,19 @@ public class KredietAanvraagController {
     }
     
     @PostMapping("")
-    public Kredietaanvraag createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) throws ResourceNotFoundException {
+    public Object createKredietAanvraag(@Validated @ModelAttribute Kredietaanvraag krediet) throws ResourceNotFoundException {
         List<User> userList = new ArrayList<>();
         userList = userRepository.findAll();
         List<KBO> ondList = new ArrayList<>();
          ondList=kboRepository.findAll();
          List<Sector> sectorlist = new ArrayList<>();
          sectorlist= sectorRepository.findAll();
+
+         User _user = userRepository.findById(krediet.getUserID()).orElseThrow(() -> new ResourceNotFoundException("Gebruiker niet gevonden met ID: " + krediet.getUserID()));
+
+         if (!userList.contains( _user)){
+             return ResponseEntity.badRequest().body("Gebruiker niet gevonden!");
+         }
          
 
         for (User user : userList) {

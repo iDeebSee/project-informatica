@@ -8,6 +8,7 @@ import AuthService from "../services/auth-service"
 import sectorService from '../services/sector-service';
 import KBOService from '../services/KBO-service';
 import AddIcon from "@material-ui/icons/Add";
+import {Alert} from "./Alert"
 
 
 import {
@@ -324,7 +325,7 @@ export const Popup = React.forwardRef((props, ref) => {
                 <Button variant="contained" type="submit">verstuur </Button>
 
 
-
+                  <Alert message="alert"></Alert>
               </Grid>
             </Grid>
           </Box>

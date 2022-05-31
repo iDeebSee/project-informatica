@@ -31,6 +31,8 @@ export default function Contract(props) {
     let url = null;
     const { id } = useParams();
 
+    const currentUser = localStorage.getItem("user");
+
     React.useEffect(() => {
 
         // ContractService.create(id).then((response) => {
@@ -77,15 +79,10 @@ export default function Contract(props) {
         for (let i = 0; i < byteString.length; i++) {
             int8Array[i] = byteString.charCodeAt(i);
         }
-        // try {
-        //     var file = new File([int8Array], {type:"application/pdf"});
-        // } catch(e) {
-        //     // when File constructor is not supported
-        //     file = new Blob([int8Array], {type:"application/pdf"});
-        // }
+
         const blob = new Blob([int8Array], { type: 'application/pdf' });
         return blob;
-        //return file;
+
     }
 
     function openPDF() {
@@ -113,7 +110,8 @@ export default function Contract(props) {
                     <Item style={{ fontWeight: "bold" }}>Solvabiliteit: {solvabiliteit}</Item>
                 </Grid>
                 <Grid item xs={12}>
-                    <SignCanvas id={krediet.id}></SignCanvas>
+                    { currentUser.role === "KLANT"? 
+                    <SignCanvas id={krediet.id}></SignCanvas> : <></>}
                 </Grid>
             </Grid>
             {krediet.status === "GOEDGEKEURD" ?

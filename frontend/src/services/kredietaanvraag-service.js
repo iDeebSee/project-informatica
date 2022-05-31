@@ -24,6 +24,10 @@ class KredietAanvraagService {
         return httpsCommon.get(`${baseUrl}/status/${status}`);
     }
 
+    getRatios(id){
+        return httpsCommon.get(`${baseUrl}/ratios/${id}`);
+    }
+
 
     create(userID, lening, termijn, file, naam, verantwoording, eigenvermogen, categorie) {
 

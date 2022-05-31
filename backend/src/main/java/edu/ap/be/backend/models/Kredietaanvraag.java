@@ -38,7 +38,5 @@ public class Kredietaanvraag {
     @Column(name = "feedback")
     private String feedback;
 
-    @Column(name="contract")
-    private Long contractID;
 
 }

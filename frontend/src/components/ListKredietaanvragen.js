@@ -234,7 +234,12 @@ export default function ListKredietaanvragen() {
     //       })
     //   }
     // })
-    window.open("/contract/" + id, "_self")
+    ContractService.create(id).then((response) => {
+      console.log("create response ", response);
+      //window.location.reload();
+      window.open("/contract/" + id, "_self")
+  })
+    //window.open("/contract/" + id, "_self")
     
   }
 

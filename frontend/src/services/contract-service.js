@@ -13,15 +13,20 @@ class ContractService {
         return httpsCommon.get(`${baseUrl}/${id}`);
     }
 
-    create(id){
+    create(id) {
         return httpsCommon.post(`${baseUrl}/${id}`);
+    }
+
+    update(id, handtekening) {
+        console.log("service",id, handtekening);
+        return axios.put(`${baseUrl}/${id}`, { handtekening });
     }
 
     // delete(id) {
     //     return httpsCommon.delete(`${baseUrl}/${id}`, { headers: authHeader() });
     // }
 
-   
+
 
 }
 export default new ContractService();

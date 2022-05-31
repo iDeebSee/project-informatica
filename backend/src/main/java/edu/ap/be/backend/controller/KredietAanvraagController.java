@@ -39,26 +39,52 @@ public class KredietAanvraagController {
     private SectorRepository sectorRepository;
     public double solvabiliteit(Double zelfgefinancieerd,Double totaal) {
 
-            
+            if(totaal <= 0.0 ){
+                totaal = 1.0;
+            }
     
         return ((zelfgefinancieerd/totaal)*100);
          
      }
      public double rendabiliteit(int resultaatNaTax ,Double gemgeinvesteerdeigenVermogenl) {
 
-            
+        if(gemgeinvesteerdeigenVermogenl <= 0.0 ){
+            gemgeinvesteerdeigenVermogenl = 1.0;
+        }
     
         return ((resultaatNaTax/gemgeinvesteerdeigenVermogenl)*100);
          
      }
      public double liquiditeit(int equity,int assets,int stock,int vreemdVermogen) {
 
-            
+        if(vreemdVermogen <= 0 ){
+            vreemdVermogen = 1;
+        }
     
         return ((equity+assets+stock)/vreemdVermogen);
          
      }
      
+
+    @GetMapping("/ratios/{id}")
+    public HashMap<String,Double> getRatios(@PathVariable(value = "id") long id) throws ResourceNotFoundException{
+        
+        Kredietaanvraag krediet =  kredietRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Krediet not found for this id :: " + id));
+
+        User user = userRepository.findById(krediet.getUserID())
+        .orElseThrow(() -> new ResourceNotFoundException("user not found for this id :: " + krediet.getUserID()));
+
+        KBO onderneming = kboRepository.findKBOByvat(user.getVat())
+        .orElseThrow(() -> new ResourceNotFoundException("Onderneming not found for this id :: " + user.getVat()));
+
+        HashMap<String,Double> ratioList = new HashMap<String,Double>();
+        
+        ratioList.put("solvabiliteit", solvabiliteit(krediet.getEigenVermogen(), krediet.getLening()));
+        ratioList.put("rendabiliteit",rendabiliteit(onderneming.getResultAfterTax(), krediet.getEigenVermogen()));
+        ratioList.put("liquiditeit",liquiditeit(onderneming.getEquity(), onderneming.getAssets(), onderneming.getStock(), onderneming.getShortTermDebt()));
+        return ratioList;
+    }
 
     @GetMapping("")
     public List<Kredietaanvraag> getAllKredietaanvragen() {

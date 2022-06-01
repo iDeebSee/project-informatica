@@ -6,15 +6,15 @@ const baseUrl = 'http://localhost:8080/contract';
 
 class ContractService {
     getAll() {
-        return httpsCommon.get(`${baseUrl}`, { headers: authHeader() });
+        return httpsCommon.get(`${baseUrl}`);
     }
 
     get(id) {
-        return httpsCommon.get(`${baseUrl}/${id}`, { headers: authHeader() });
+        return httpsCommon.get(`${baseUrl}/${id}`);
     }
 
     create(id) {
-        return httpsCommon.post(`${baseUrl}/${id}`, { headers: authHeader() });
+        return httpsCommon.post(`${baseUrl}/${id}`);
     }
 
     update(id, handtekening) {
@@ -22,20 +22,20 @@ class ContractService {
         return axios.put(`${baseUrl}/${id}`, { handtekening }, { headers: authHeader() });
     }
 
-    uploadFile(id, bestand) {
+    // uploadFile(id, bestand) {
 
-        const config =
-        {
-            headers:
-                { "Content-Type": "multipart/form-data", authHeader }
+    //     const config =
+    //     {
+    //         headers:
+    //             { "Content-Type": "multipart/form-data", authHeader }
 
-        }
+    //     }
 
-        const formData = new FormData();
-        formData.append('bestand', bestand);
-        console.log("id en bestand: ", id, bestand);
-        return axios.put(`${baseUrl}/upload/${id}`, formData, config);
-    }
+    //     const formData = new FormData();
+    //     formData.append('bestand', bestand);
+    //     console.log("id en bestand: ", id, bestand);
+    //     return axios.put(`${baseUrl}/upload/${id}`, formData, config);
+    // }
 
     // delete(id) {
     //     return httpsCommon.delete(`${baseUrl}/${id}`, { headers: authHeader() });

@@ -1,10 +1,11 @@
-package edu.ap.be.backend.models;
+package edu.ap.be.backend.helpers;
 
 import com.itextpdf.text.*;
 
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import edu.ap.be.backend.models.Categorie;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -24,7 +25,7 @@ public class ContractPDF {
         return pic;
     }
 
-    public byte[] contractToPdf(long kredietID,String bedrijf, String userName, String contractName, String subject, double lening, int looptijd, Categorie categorie, String aanmaakDatum, byte[] byteHandtekening, boolean gehandtekend) {
+    public byte[] contractToPdf(long kredietID, String bedrijf, String userName, String contractName, String subject, double lening, int looptijd, Categorie categorie, String aanmaakDatum, byte[] byteHandtekening, boolean gehandtekend) {
        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
 

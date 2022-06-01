@@ -112,22 +112,4 @@ public class UserController {
         return response;
     }
 
-    // @PutMapping("/status/{id}")
-    // public ResponseEntity<User> updateUserActiveStatus(@PathVariable(value =
-    // "id") long userID,
-    // @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
-    // User user = userRepository.findById(userID)
-    // .orElseThrow(() -> new ResourceNotFoundException("User not found for this id
-    // :: " + userID));
-
-    // if (user.getEnabled()) {
-    // user.setEnabled(false);
-    // } else {
-    // user.setEnabled(true);
-
-    // }
-    // final User updatedUser = userRepository.save(user);
-    // return ResponseEntity.ok(updatedUser);
-
-    // }
 }

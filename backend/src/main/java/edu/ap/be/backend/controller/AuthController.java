@@ -78,30 +78,10 @@ public class AuthController {
 
     @GetMapping("/loggedin")
     public Authentication getLoggedUser(Authentication authentication) {
-        // authentication = SecurityContextHolder.getContext().getAuthentication();
-        // if (!(authentication instanceof AnonymousAuthenticationToken)) {
-
-        // return SecurityContextHolder.getContext().getAuthentication().toString();
-        // }
-        // // return SecurityContextHolder.getContext().getAuthentication();
-        // return "anonymous user";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth;
     }
 
-    // public Authentication method(@CurrentSecurityContext SecurityContext context)
-    // {
-    // return context.getAuthentication();
-    // }
-
-    // @GetMapping("/loggedin")
-    // public Optional<User> viewUserAccountForm(
-    // @AuthenticationPrincipal UserDetailsImp userDetails) {
-    // String userEmail = userDetails.getEmail();
-    // Optional<User> user = userRepository.findUserByEmail(userEmail);
-    // System.out.println(user.toString());
-    // return user;
-    // }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Validated @RequestBody SignupRequest signUpRequest) {

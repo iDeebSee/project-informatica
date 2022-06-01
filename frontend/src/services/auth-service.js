@@ -31,7 +31,7 @@ class AuthService {
             lastName,
             role,
             vat
-        });
+        }, { headers: authHeader() });
     }
     getCurrentUser() {
 

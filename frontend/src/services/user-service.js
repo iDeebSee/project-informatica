@@ -3,7 +3,8 @@ import authHeader from './auth-header';
 const API_URL = 'http://localhost:8080/users';
 class UserService {
     getAll() {
-        return axios.get(API_URL);
+        return axios.get(API_URL, { headers: authHeader() });
+
     }
     getUser(id) {
         return axios.get(API_URL + "/" + `${id}`, { headers: authHeader() });
@@ -46,13 +47,13 @@ class UserService {
                 enabled,
                 role,
                 vat
-            });
+            }, { headers: authHeader() });
     }
     create(email, naam, voornaam, role) {
 
 
 
-        return axios.post(`${API_URL}`, { email, naam, voornaam, role }
+        return axios.post(`${API_URL}`, { email, naam, voornaam, role }, { headers: authHeader() }
         );
 
 

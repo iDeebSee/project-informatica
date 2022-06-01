@@ -5,11 +5,11 @@ const baseUrl = 'http://localhost:8080/sector';
 
 class SectorService {
     getAll() {
-        return httpsCommon.get(`${baseUrl}`);
+        return httpsCommon.get(`${baseUrl}`, { headers: authHeader() });
     }
 
     get(id) {
-        return axios.get(`${baseUrl}/${id}`);
+        return axios.get(`${baseUrl}/${id}`, { headers: authHeader() });
     }
 
 
@@ -21,7 +21,7 @@ class SectorService {
         const config =
         {
             headers:
-                { "Content-Type": "application/json" }
+                { "Content-Type": "application/json", authHeader }
 
         }
         return axios.post(`${baseUrl}`, {naam,nasiCode,isBlack}, config

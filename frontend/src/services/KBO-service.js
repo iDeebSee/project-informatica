@@ -6,13 +6,13 @@ const baseUrl = 'http://localhost:8080/kbo';
 
 class KBOservice {
     getAll() {
-        return axios.get(`${baseUrl}`);
+        return axios.get(`${baseUrl}`, { headers: authHeader() });
     }
 
     getByVat(vat) {
 
 
-        return axios.get(`${baseUrl}/${vat}`);
+        return axios.get(`${baseUrl}/${vat}`, { headers: authHeader() });
 
     }
     searchByNameOrVat(value) {

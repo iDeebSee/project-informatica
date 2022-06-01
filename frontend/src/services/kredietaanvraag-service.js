@@ -51,7 +51,7 @@ class KredietAanvraagService {
         const config =
         {
             headers:
-                { "Content-Type": "multipart/form-data" }
+                { "Content-Type": "multipart/form-data", authHeader }
 
         }
         return httpsCommon.post(`${baseUrl}`, formdata, config

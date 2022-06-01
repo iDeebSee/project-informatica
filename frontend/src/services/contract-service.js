@@ -6,20 +6,20 @@ const baseUrl = 'http://localhost:8080/contract';
 
 class ContractService {
     getAll() {
-        return httpsCommon.get(`${baseUrl}`);
+        return httpsCommon.get(`${baseUrl}`, { headers: authHeader() });
     }
 
     get(id) {
-        return httpsCommon.get(`${baseUrl}/${id}`);
+        return httpsCommon.get(`${baseUrl}/${id}`, { headers: authHeader() });
     }
 
     create(id) {
-        return httpsCommon.post(`${baseUrl}/${id}`);
+        return httpsCommon.post(`${baseUrl}/${id}`, { headers: authHeader() });
     }
 
     update(id, handtekening) {
 
-        return axios.put(`${baseUrl}/${id}`, { handtekening });
+        return axios.put(`${baseUrl}/${id}`, { handtekening }, { headers: authHeader() });
     }
 
     uploadFile(id, bestand) {
@@ -27,7 +27,7 @@ class ContractService {
         const config =
         {
             headers:
-                { "Content-Type": "multipart/form-data" }
+                { "Content-Type": "multipart/form-data", authHeader }
 
         }
 

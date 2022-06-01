@@ -53,8 +53,7 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
-    @PostMapping("")
+
     public User createUser(@Validated @RequestBody User user) {
         if (user.getEnabled() == null) {
             user.setEnabled(true);
@@ -63,8 +62,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR') or hasRole('KLANT')")
-    @PutMapping("/{id}")
+
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") long userID,
             @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userID)
@@ -102,8 +100,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or hasRole('KREDIETBEOORDELAAR')")
-    @DeleteMapping("/{id}")
+
     public Map<String, Boolean> deleteUser(@PathVariable(value = "id") long userID)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userID)

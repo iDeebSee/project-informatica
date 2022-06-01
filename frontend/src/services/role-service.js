@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:8080/roles';
 
 class RoleService {
     getAll() {
-        return httpsCommon.get(API_URL);
+        return httpsCommon.get(API_URL, { headers: authHeader() });
     }
     getRoleByUser(id) {
         return axios.get(API_URL + "/" + `${id}`, { headers: authHeader() });
@@ -17,7 +17,7 @@ class RoleService {
             {
                 rol                
 
-           });
+           }, { headers: authHeader() });
     }
 
 }

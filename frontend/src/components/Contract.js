@@ -35,6 +35,12 @@ export default function Contract(props) {
     let url = null;
     const { id } = useParams();
 
+    React.useEffect(() => {
+        AuthService.getLoggedUser().then((response) => {
+          console.log("logged in user from backend: ", response.data.principal)
+        });
+      })
+
     const currentUser = AuthService.getCurrentUser();
 
 

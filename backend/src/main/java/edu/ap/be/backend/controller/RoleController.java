@@ -2,11 +2,8 @@ package edu.ap.be.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import edu.ap.be.backend.repository.RoleRepository;
 import edu.ap.be.backend.repository.UserRepository;
@@ -38,6 +35,10 @@ public class RoleController {
 
         // System.out.println(role.toString());
         return ResponseEntity.ok().body(role);
+    }
+
+    public Role createRole(@Validated @RequestBody Role role) {
+        return roleRepository.save(role);
     }
 
 }

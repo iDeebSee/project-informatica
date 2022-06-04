@@ -3,6 +3,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import RoleService from '../services/role-service';
 import EventBus from "../common/eventBus"
+import { Alert } from "./Alert"
 
 import {
   Modal,
@@ -44,10 +45,11 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
   const [wachtwoord, setWachtwoord] = React.useState("");
   const [voornaam, setVoornaam] = React.useState("");
   const [vat, setVat] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
 
 
- 
+  const alertRef = React.useRef();
 
 
 
@@ -65,14 +67,14 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
     }
   }));
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
 
-    roleService.getAll().then(res=>{
-        setRoles(res.data)
-        console.log(res.data)
+    roleService.getAll().then(res => {
+      setRoles(res.data)
+      console.log(res.data)
     })
 
-  },[])
+  }, [])
 
   function valuetext(value) {
     if (value == 1) return `${value} maand`;
@@ -83,17 +85,23 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(email,wachtwoord,voornaam,naam,role)
+    console.log(email, wachtwoord, voornaam, naam, role)
 
-    authService.register(email,wachtwoord,voornaam,naam,role,vat).then(response => {
-        console.log(response.data)
-         window.location.reload();
-      }).then(error => {
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
-      })
-    
+    authService.register(email, wachtwoord, voornaam, naam, role, vat).then(response => {
+      console.log("voor de if", response.data)
+      window.location.reload();
+      if (!response.ok) {
+        console.log("resp data", response.data);
+      }
+    }).then(res => {
+      if (res.response && res.response.status === 401) {
+        EventBus.dispatch("logout");
+      }
+    }).catch((err) => {
+      setErrorMessage(err.response.data.message)
+      //alert(err.response.data.message)
+    })
+
   }
 
   const marks = [
@@ -138,25 +146,25 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setVoornaam(e.target.value)}
                   value={voornaam}
-                 
+
                 />
               </Grid>
 
-              
-                  <Grid item xs={12} md={3}>
-                  <TextField
-                    id="vat"
-                    required="true"
-                    label="vat "
-                    
-                    variant="outlined"
-                    style={{ width: "100%" }}
-                    onChange={(e) => setVat(e.target.value)}
-                    value={vat}
-                  />
-                </Grid>
-            
-              
+
+              <Grid item xs={12} md={3}>
+                <TextField
+                  id="vat"
+                  required="true"
+                  label="vat "
+
+                  variant="outlined"
+                  style={{ width: "100%" }}
+                  onChange={(e) => setVat(e.target.value)}
+                  value={vat}
+                />
+              </Grid>
+
+
               <Grid item xs={12} md={3}>
                 <TextField
                   id="achternaam"
@@ -178,7 +186,7 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                 
+
                 />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -190,7 +198,7 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
                   style={{ width: "100%" }}
                   onChange={(e) => setWachtwoord(e.target.value)}
                   value={wachtwoord}
-                 
+
                 />
               </Grid>
               <Grid item xs={12} md={3} style={{ maxWidth: "100%" }}>
@@ -206,25 +214,25 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
                     label="Rol"
                     onChange={handleChange}
                   >
-                      { roles.map((rol)=>(
-                          <MenuItem value={rol.role}>
-                          {rol.role}
-                        </MenuItem>
+                    {roles.map((rol) => (
+                      <MenuItem value={rol.role}>
+                        {rol.role}
+                      </MenuItem>
 
-                      ))}
-                    
-                    
-                    
+                    ))}
+
+
+
                   </Select>
                 </FormControl>
               </Grid>
 
-                
-              
+
+
               <Grid item xs={12} md={12}>
-                <Button variant="contained" type="submit">verstuur </Button>
+                <Button variant="contained" type="submit" onClick={() => alertRef.current.handleClick()}>verstuur </Button>
 
-
+                <Alert ref={alertRef} type="error" message={errorMessage}></Alert>
               </Grid>
             </Grid>
           </Box>
@@ -232,5 +240,6 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
       </Box>
     </Modal>
 
-  )});
+  )
+});
 

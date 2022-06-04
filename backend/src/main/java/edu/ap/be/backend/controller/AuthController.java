@@ -89,7 +89,7 @@ public class AuthController {
                 || userRepository.existsByVat(signUpRequest.getVat())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email and or Vat is already in use!"));
+                    .body(new MessageResponse("Error: Email of vat wordt al gebruikt!"));
         }
         // Create new user's account
 

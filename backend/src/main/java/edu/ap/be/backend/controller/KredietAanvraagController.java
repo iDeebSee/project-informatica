@@ -17,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -61,7 +58,7 @@ public class KredietAanvraagController {
             vreemdVermogen = 1;
         }
     
-        return ((equity+assets+stock)/vreemdVermogen);
+        return ((float)(equity+assets+stock)/vreemdVermogen);
          
      }
      
@@ -142,7 +139,7 @@ public class KredietAanvraagController {
         List<Kredietaanvraag> kredieten = new ArrayList<>();
         List<Kredietaanvraag> allKredietList = kredietRepository.findAll();
         for (Kredietaanvraag kred : allKredietList) {
-            if (kred.getUserID() == id) {
+            if (Objects.equals(kred.getUserID(), id)) {
                 kredieten.add(kred);
             }
         }
@@ -210,7 +207,7 @@ public class KredietAanvraagController {
 
                                 return kredietRepository.save(krediet);
                              }
-                             else if(!s.getIsBlack() && s.getNaam().toLowerCase().equals("tandarts") || s.getNaam().toLowerCase().equals("dokter") || s.getNaam().toLowerCase().equals("notaris"))
+                             else if(!s.getIsBlack() && s.getNaam().equalsIgnoreCase("tandarts") || s.getNaam().equalsIgnoreCase("dokter") || s.getNaam().equalsIgnoreCase("notaris"))
                              {
                                 krediet.setStatus(Status.GOEDGEKEURD);
                                 krediet.setFeedback("Deze aanvraag is goedgekeurd.");

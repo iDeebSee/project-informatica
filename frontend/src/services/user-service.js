@@ -47,7 +47,7 @@ class UserService {
                 enabled,
                 role,
                 vat
-            }, { headers: authHeader() });
+            });
     }
     create(email, naam, voornaam, role) {
 

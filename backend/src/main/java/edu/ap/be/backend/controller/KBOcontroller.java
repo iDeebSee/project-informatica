@@ -34,8 +34,6 @@ public class KBOcontroller {
     @Autowired
     private KBOrepository KBOrepository;
 
-    // @PreAuthorize("hasRole('ADMININISTRATOR') or hasRole('KANTOOR') or
-    // hasRole('KREDIETBEOORDELAAR')")
     @GetMapping("")
     public List<KBO> getAllOndernemingen() {
         return KBOrepository.findAll();

@@ -51,7 +51,7 @@ public class KBO {
     @Column(name = "stock")
     private int stock;
     @Column(name = "fixedAssets")
-    private String fixedAssets;
+    private int fixedAssets;
     @Column(name = "shortTermDebt")
     private int shortTermDebt;
 

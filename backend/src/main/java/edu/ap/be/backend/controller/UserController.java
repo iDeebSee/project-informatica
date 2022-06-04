@@ -54,6 +54,7 @@ public class UserController {
     }
 
 
+    @PostMapping("")
     public User createUser(@Validated @RequestBody User user) {
         if (user.getEnabled() == null) {
             user.setEnabled(true);
@@ -62,7 +63,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") long userID,
             @Validated @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userID)

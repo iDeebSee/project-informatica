@@ -36,14 +36,15 @@ class AuthControllerTest {
 
         //user aanmaken
         User user = new User();
-        user.setFirstName("tester");
-        user.setLastName("wordtGetest");
-        user.setEmail("test@test.test");
-        user.setPassword("Test123");
+        user.setFirstName("Mock");
+        user.setLastName("Data");
+        user.setEmail("mock@data.test");
+        user.setPassword("test123");
+        user.setId(177L);
         Role adminRole = roleRepository.findByRole(RoleType.ADMINISTRATOR)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         user.setRole(adminRole);
-        user.setRole(adminRole);
+
         user.setVat("BE123.456.789");
         user.setEnabled(true);
         User actual = userRepository.save(user);

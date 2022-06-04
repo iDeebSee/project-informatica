@@ -36,7 +36,7 @@ class KredietAanvraagControllerTest {
     @LocalServerPort
     int randomServerPort;
 
-    @Mock
+    @Autowired
     KredietaanvraagRepository kredietaanvraagRepository;
 
     @Mock
@@ -48,26 +48,6 @@ class KredietAanvraagControllerTest {
     @InjectMocks
     KredietAanvraagController kredietAanvraagController;
 
-
-
-    @BeforeEach
-    void aanmakenVanUser(){
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("John@Doe.test");
-        user.setPassword("test123");
-        user.setVat("TST123.456.789");
-
-        Role klantRole = roleRepository.findByRole(RoleType.KLANT)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        user.setRole(klantRole);
-        user.setEnabled(true);
-
-        userRepository.save(user);
-
-    }
 
     @Test
     @DisplayName("Aanmaken van een kredietaanvraag")
@@ -91,26 +71,47 @@ class KredietAanvraagControllerTest {
 
         assertNotEquals(null, kredietaanvraag);
 
-
-
-
-
         ResponseEntity<String> result = restTemplate.postForEntity(uri, kredietaanvraag, String.class);
 //        assertEquals(200, result.getStatusCodeValue());
         assertNotEquals(null, result );
     }
 
     @Test
-    void getKredietAanvraagByuserID() {
-//        Kredietaanvraag kredietaanvraag = kredietaanvraagRepository.getById();
-//        assertTrue(kboList.size() >= 0);
+    @DisplayName("Verkrijg alle kredieten")
+    void getAllKredietAanvragen(){
+        List<Kredietaanvraag> kredietaanvraagList = new ArrayList<>(kredietaanvraagRepository.findAll());
+        assertTrue(kredietaanvraagList.size() > 0);
+    }
+
+    @Test
+    @DisplayName("Kredietaanvraag verkrijgen aan de hand van ID")
+    void getKredietAanvraagByID() throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Kredietaanvraag kredietaanvraag = kredietaanvraagRepository.findById(199L).get();
+
+        final String baseUrl = "http://127.0.0.1:"+randomServerPort+"/kredietaanvragen/";
+        URI uri = new URI(baseUrl);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, kredietaanvraag, String.class);
+        assertEquals(200, result.getStatusCodeValue());
 
     }
 
 
 
     @Test
-    void updateKredietAanvraag() {
+    void updateKredietAanvraag() throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Kredietaanvraag kredietaanvraag = kredietaanvraagRepository.findById(199L).get();
+        kredietaanvraag.setNaam("Geupdate Mock");
+
+        final String baseUrl = "http://127.0.0.1:"+randomServerPort+"/kredietaanvragen";
+        URI uri = new URI(baseUrl);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, kredietaanvraag, String.class);
+        assertEquals(200, result.getStatusCodeValue());
     }
 
     @Test

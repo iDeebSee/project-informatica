@@ -143,7 +143,7 @@ export default function UserList() {
 
                         <Button onClick={() => childrefEdit.current.handleOpen(row)} >bewerken </Button>
                         <PopupUserEditen ref={childrefEdit} ></PopupUserEditen>
-                        <Button onClick={() => deleteKA(row.id)}>verwijderen </Button>
+                        
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

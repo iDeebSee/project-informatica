@@ -27,7 +27,7 @@ public class KBO {
 
     @Column(name = "name")
     private String name;
-    @Column(name = "vat")
+    @Column(name = "vat", unique = true)
     private String vat;
     @Column(name = "nacbelCode")
     private String nacbelCode;

@@ -112,7 +112,7 @@ export default function ListSectoren() {
 
                   <TableRow key={row.id} style={row.isBlack ? { textColor: "red", backgroundColor: "gray" } : { backgroundColor: "white", color: "white" }}>
                     <TableCell>{row.naam}</TableCell>
-                    <TableCell>{row.nasiCode}</TableCell>
+                    <TableCell>{row.nacecode}</TableCell>
                     <ButtonGroup
                       style={{ float: "right" }}
                       variant="contained"

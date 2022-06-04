@@ -32,16 +32,20 @@ export const Alert = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <AlertBox onClose={handleClose} severity={type} sx={{ width: '100%' }}>
-          {props.message}
-        </AlertBox>
-      </Snackbar>
-      {/* <Alert severity="error">This is an error message!</Alert>
+   
+     
+        <Stack spacing={2} sx={{ width: '100%' }}> 
+       
+          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+            <AlertBox onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+              {props.message}
+            </AlertBox>
+          </Snackbar> 
+          {/* <Alert severity="error">This is an error message!</Alert>
       <Alert severity="warning">This is a warning message!</Alert>
       <Alert severity="info">This is an information message!</Alert>
       <Alert severity="success">This is a success message!</Alert> */}
-    </Stack>
+        </Stack>
+    
   );
 });

@@ -136,7 +136,7 @@ public class ContractPDF {
             }
 
             document.add(table);
-            document.add(new Paragraph(String.format("\n\nOpgesteld en overeengekomen op %s, in 1 exemplaren, waarvan elke partij verklaart één exemplaar ontvangen te hebben.\n\nGetekend, \n\n", aanmaakDatum)));
+            document.add(new Paragraph(String.format("\n\nOpgesteld en overeengekomen op %s, in 2 exemplaren, waarvan elke partij verklaart één exemplaar ontvangen te hebben.\n\nGetekend, \n\n", aanmaakDatum)));
 
 
             if (byteHandtekening != null) {

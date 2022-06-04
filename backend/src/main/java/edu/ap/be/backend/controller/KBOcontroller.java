@@ -64,15 +64,15 @@ public class KBOcontroller {
         List<KBO> allKBOs = KBOrepository.findAll();
 
         for (KBO kbo : allKBOs) {
-            if (value.matches("^(be|BE).*")) {
+            if (value.matches("^(be\\d.*|BE\\d.*)")) {
 
-                if (kbo.getVat().toLowerCase().contains(value.toString().toLowerCase())) {
+                if (kbo.getVat().toLowerCase().contains(value.toLowerCase())) {
 
                     kbos.add(kbo);
                 }
             } else {
 
-                if (kbo.getName().toLowerCase().contains(value.toString().toLowerCase())) {
+                if (kbo.getName().toLowerCase().contains(value.toLowerCase())) {
 
                     kbos.add(kbo);
                 }

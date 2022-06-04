@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import KredietAanvraagService from "../services/kredietaanvraag-service"
 import EventBus from "../common/eventBus"
 import AuthService from "../services/auth-service"
+import UserService from "../services/user-service"
 import sectorService from '../services/sector-service';
 import KBOService from '../services/KBO-service';
 import AddIcon from "@material-ui/icons/Add";
@@ -60,6 +61,10 @@ export const Popup = React.forwardRef((props, ref) => {
   const loggedUser = AuthService.getCurrentUser();
 
   const [disable, setDisable] = React.useState(true)
+  const [errorMessage, setErrorMessage] = React.useState();
+  const [isKlikbaar, setIsKlikbaar] = React.useState(true);
+
+  const [userList, setUserList] = React.useState([])
 
 
 
@@ -76,6 +81,7 @@ export const Popup = React.forwardRef((props, ref) => {
   const handleChange = (event) => {
     setCategorie(event.target.value)
     setDisable(false)
+    setIsKlikbaar(false)
 
   };
 
@@ -102,27 +108,49 @@ export const Popup = React.forwardRef((props, ref) => {
   }, [])
 
 
+  React.useEffect(() => {
+    UserService.getAll().then((response) => {
+      setUserList(response.data)
+    })
+  }, [])
+
 
   function handleSubmit(e) {
-
+    setErrorMessage("")
     e.preventDefault();
-    KredietAanvraagService.create(
-      userID,
-      totaalbedrag,
-      termijn,
-      file,
-      naam,
-      verantwoording,
-      zelfGefinancierd,
-      categorie
+    
+    if (userID === "" || userID == null) {
+      setErrorMessage("Gelieve een gebruikers id in te voeren!")
+    }
+    else if (categorie == null || categorie == "") {
+      setErrorMessage("Gelieve een categorie te kiezen.")
 
-    ).then(() => {
-      window.location.reload();
-    }, error => {
-      console.log("repsonse: ", error.message)
-      //window.alert(error.message)
-      setMessage("Geen gebruiker gevonden met de gegeven userID!");
-    }, [])
+    }
+    else if (zelfGefinancierd >= totaalbedrag) {
+      setErrorMessage("Het totaalbedrag kan niet kleiner dan wat u zelf financiert!.")
+
+
+    } else {
+      KredietAanvraagService.create(
+        userID,
+        totaalbedrag,
+        termijn,
+        file,
+        naam,
+        verantwoording,
+        zelfGefinancierd,
+        categorie
+
+      ).then((response) => {
+        console.log("response", response)
+        window.location.reload();
+
+      }).catch(err => {
+        console.log(err.response.data.message)
+        setErrorMessage(err.response.data.message)
+      })
+    }
+
   }
 
 
@@ -325,9 +353,10 @@ export const Popup = React.forwardRef((props, ref) => {
                 />
               </Grid>
               <Grid item xs={12} md={12}>
-                <Button variant="contained" type="submit" onClick={() => alertRef.current.handleClick()}>verstuur </Button>
+                <Button disabled={isKlikbaar} variant="contained" type="submit" onClick={() => alertRef.current.handleClick()}>verstuur </Button>
+                {/* onClick={() => alertRef.current.handleClick()} */}
 
-                <Alert ref={alertRef} type="error" message={message}></Alert>
+                <Alert ref={alertRef} type="error" message={errorMessage}></Alert>
               </Grid>
             </Grid>
           </Box>

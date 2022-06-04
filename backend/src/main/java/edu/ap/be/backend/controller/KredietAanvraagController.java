@@ -169,8 +169,6 @@ public class KredietAanvraagController {
               
              for (KBO ond: ondList)
              {
-                 System.out.println("boolean"+ond.getVat().equals(user.getVat()) );
-                 System.out.println("hehe "+ond.getVat()+ " "+ user.getVat());
 
 
                  if(ond.getVat().equals(user.getVat()))
@@ -183,14 +181,14 @@ public class KredietAanvraagController {
 
                          if(ond.getNacbelCode().equals(s.getNACEcode()))
                          {
-                             System.out.println(ond.getNacbelCode()==s.getNACEcode());
+                             System.out.println(Objects.equals(ond.getNacbelCode(), s.getNACEcode()));
                              if(s.getIsBlack())
                              {
                                  krediet.setStatus(Status.GEWEIGERD);
                                  krediet.setFeedback("Deze sector staat op de zwarte lijst en is niet toegestaan.");
                                  return kredietRepository.save(krediet);
                              }
-                             else if(!s.getIsBlack() && ( s.getNaam().toLowerCase().equals("casino")|| s.getNaam().toLowerCase().equals("wapenindustrie")))
+                             else if(!s.getIsBlack() && ( s.getNaam().equalsIgnoreCase("casino")|| s.getNaam().equalsIgnoreCase("wapenindustrie")))
                              {
                                 krediet.setStatus(Status.INBEHANDELING);
                                 System.out.println("1ste");

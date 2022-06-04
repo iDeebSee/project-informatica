@@ -37,9 +37,9 @@ export default function Contract(props) {
 
     React.useEffect(() => {
         AuthService.getLoggedUser().then((response) => {
-          console.log("logged in user from backend: ", response.data.principal)
+            console.log("logged in user from backend: ", response.data.principal)
         });
-      })
+    })
 
     const currentUser = AuthService.getCurrentUser();
 
@@ -47,6 +47,7 @@ export default function Contract(props) {
     React.useEffect(() => {
         KredietAanvraagService.get(id).then((response) => {
             setKrediet(response.data);
+
         })
     }, [])
 
@@ -54,6 +55,7 @@ export default function Contract(props) {
 
         ContractService.get(id).then((response) => {
             setContract(response.data);
+            console.log("contract", response.data);
         })
     }, [])
 
@@ -126,36 +128,17 @@ export default function Contract(props) {
                 </Grid>
 
                 <Grid item xs={12} >
-                    <Item style={{ margin: "auto", width: "fit-content" }}>
-                        {currentUser.role === "KLANT" && krediet.status === "GOEDGEKEURD" ? <SignCanvas id={krediet.id}></SignCanvas> : <></>}
-                    </Item>
-
+                    {currentUser.role === "KLANT" && krediet.status === "GOEDGEKEURD" && contract.gehandtekend === false ?
+                        <Item style={{ margin: "auto", width: "fit-content" }}>
+                            <SignCanvas id={krediet.id}></SignCanvas>
+                        </Item>
+                        : <></>}
                 </Grid>
                 <Grid item xs={1} style={{ marginTop: "30px" }}>
 
                     {krediet.status === "GOEDGEKEURD" ? <Paper style={{ textAlign: "center", marginLeft: "10px" }}><Button onClick={openPDF}>Druk af</Button> </Paper> : <></>}
 
                 </Grid>
-                {/* <Grid item xs={2} style={{ marginTop: "30px" }}>
-                    {currentUser.role === "KLANT" && krediet.status === "GOEDGEKEURD" ?
-                        <Paper style={{ textAlign: "center" }}>
-                            <FormControl></FormControl>
-                            <input
-                                style={{ display: "none" }}
-                                id="contained-button-file"
-                                type="file"
-                                onChange={(e) => setBestand(e.target.files[0])}
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button component="span">
-                                    Kies bestand
-                                </Button>
-                            </label>
-                            <Button type="submit" onClick={uploadFile}>
-                                Upload
-                            </Button>
-                        </Paper> : <></>}
-                </Grid> */}
 
             </Grid>
 

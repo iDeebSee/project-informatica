@@ -80,17 +80,17 @@ export default function UserList() {
   }, [])
 
 
-  function deleteKA(id) {
-    userService.delete(id).then((response) => {
-      console.log("delete", response.data)
-      window.location.reload();
-    }).then(error => {
-      if (error.response && error.response.status === 401) {
-        EventBus.dispatch("logout");
-      }
-    })
+  // function deleteKA(id) {
+  //   userService.delete(id).then((response) => {
+  //     console.log("delete", response.data)
+  //     window.location.reload();
+  //   }).then(error => {
+  //     if (error.response && error.response.status === 401) {
+  //       EventBus.dispatch("logout");
+  //     }
+  //   })
 
-  }
+  // }
 
 
 
@@ -143,7 +143,7 @@ export default function UserList() {
 
                         <Button onClick={() => childrefEdit.current.handleOpen(row)} >bewerken </Button>
                         <PopupUserEditen ref={childrefEdit} ></PopupUserEditen>
-                        
+
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

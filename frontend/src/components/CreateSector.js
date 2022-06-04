@@ -45,7 +45,7 @@ export const CreateSector = React.forwardRef((props, ref) => {
   
   const [naam, setNaam] = React.useState("")
  // const [isWhite, setIsWhite] = React.useState("")
-  const [nasiCode, setNasiCode] = React.useState("")
+  const [naceCode, setNasiCode] = React.useState("")
   const [checked, setChecked] = React.useState(false);
   
  
@@ -68,8 +68,8 @@ export const CreateSector = React.forwardRef((props, ref) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    sectorService.create(naam,nasiCode,checked).then(response => {
-      console.log("wat je stuurt", naam, nasiCode, checked);
+    sectorService.create(naam,naceCode,checked).then(response => {
+      console.log("wat je stuurt", naam, naceCode, checked);
         console.log(response.data)
         window.location.reload(); 
       }).then(error => {
@@ -126,7 +126,7 @@ export const CreateSector = React.forwardRef((props, ref) => {
                 <TextField
                   placeholder="NACE Code"
                   onChange={(e) => setNasiCode(e.target.value)}
-                  defaultValue={nasiCode}
+                  defaultValue={naceCode}
                 />
              </Grid>
              <Grid item xs={4} md={4}>

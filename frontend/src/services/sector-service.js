@@ -13,23 +13,26 @@ class SectorService {
     }
 
 
-    create(naam,nasiCode,isBlack) {
+    create(naam, nacecode, isBlack) {
 
-        
+        const user = JSON.parse(localStorage.getItem('user'));
 
-        
+
         const config =
         {
-            headers:
-                { "Content-Type": "application/json", authHeader }
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + user.accessToken
+            }
+
 
         }
-        return axios.post(`${baseUrl}`, {naam,nasiCode,isBlack}, config
-        );
-}
+        return axios.post(`${baseUrl}`, { naam, nacecode, isBlack }, config);
+    }
 
-delete(id) {
-    return axios.delete(`${baseUrl}/${id}`, { headers: authHeader() });
-}
+    delete(id) {
+
+        return axios.delete(`${baseUrl}/${id}`, { headers: authHeader() });
+    }
 }
 export default new SectorService();

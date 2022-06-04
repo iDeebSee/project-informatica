@@ -227,10 +227,7 @@ export const PopupUserEditen = React.forwardRef((props, ref) => {
 
                 />
               </Grid>
-              <Grid item xs={12} md={3}>
 
-                <Button variant="contained" type="submit">reset wachtwoord </Button>
-              </Grid>
               <Grid item xs={12} md={3} style={{ maxWidth: "100%" }}>
                 <FormControl  >
                   <InputLabel id="demo-simple-select-label">

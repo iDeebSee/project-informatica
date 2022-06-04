@@ -66,25 +66,6 @@ export default function ListKredietaanvragen() {
 
 
 
-
-  // function downloadFiles(file){
-  //   console.log("zebi"+file)
-
-  //   const fileDownloadUrl = URL.createObjectURL(file); // Step 4
-  //   console.log("zebi"+fileDownloadUrl)
-  //   this.setState ({fileDownloadUrl: fileDownloadUrl}, // Step 5
-  //     () => {
-  //       this.dofileDownload.click();                   // Step 6
-  //       URL.revokeObjectURL(fileDownloadUrl);          // Step 7
-  //       this.setState({fileDownloadUrl: ""})
-
-  //   })
-
-  // }
-
-
-
-
   let user = AuthService.getCurrentUser();
 
   React.useEffect(() => {
@@ -103,22 +84,9 @@ export default function ListKredietaanvragen() {
     }
   }
 
-  // React.useEffect(() => {
-
-  //   KredietAanvraagService.getByStatus("GOEDGEKEURD").then((response) => {
-  //     // response.data.forEach(element => {
-
-  //       ContractService.create(response.data.id);
-  //      // console.log("element",element)
-
-  //       console.log("response in KAservice voor element", response.data)
-  //     // });
-
-  //   })
-  // }, [])
 
   React.useEffect(() => {
-    if (user.role !== "ADMINISTRATOR" || user.role !== "KANTOOR" || user.role !== "KREDIETBEOORDELAAR") {
+    if (user.role === "KLANT") {
       kredietaanvraagService.getByUserID(user.id).then((response) => {
         console.log("data", response.data)
         setKredieten(response.data)
@@ -136,7 +104,7 @@ export default function ListKredietaanvragen() {
 
   React.useEffect(() => {
 
-    if (user.role === "ADMINISTRATOR" || user.role === "KANTOOR") {
+    if (user.role === "KANTOOR") {
 
       kredietaanvraagService.getAll().then((response) => {
         console.log("data", response.data)
@@ -152,24 +120,27 @@ export default function ListKredietaanvragen() {
   }, [])
 
   React.useEffect(() => {
-    if (user.role == "KREDIETBEOORDELAAR") {
-      kredietaanvraagService.getByStatus("INBEHANDELING").then((response) => {
+    if (user.role === "KREDIETBEOORDELAAR") {
+      kredietaanvraagService.getByStatus("INBEHANDELING")
+      .then((response) => {
         console.log("status", response.data)
         setKredieten(response.data)
-
-      }).then(error => {
+    
+      }).catch(error => {
         if (error.response && error.response.status === 401) {
           EventBus.dispatch("logout");
         }
       })
     }
-
+    return () => {
+      setKredieten([]); // This worked for me
+    };
 
   }, [])
 
   React.useEffect(() => {
 
-    if (user.role == "COMPLIANCE") {
+    if (user.role === "COMPLIANCE") {
 
       kredietaanvraagService.getByStatus("VERDACHT").then((response) => {
         console.log("status", response.data)
@@ -180,21 +151,10 @@ export default function ListKredietaanvragen() {
           EventBus.dispatch("logout");
         }
       })
+
     }
 
-
   }, [])
-
-
-
-  // React.useEffect(() => {
-
-  //   console.log("child kredieten", searchRef.current.getKredieten())
-  //   //setKredieten(searchRef.current.childKredieten)
-
-  // }, [])
-
-
 
 
   function deleteKA(id) {
@@ -225,21 +185,13 @@ export default function ListKredietaanvragen() {
   }
 
   function openDetail(id) {
-    // ContractService.get(id).then((response) => {
-    //   if (response.status !== 200) {
-    //       ContractService.create(id).then((response) => {
-    //       console.log("create response ", response);
-    //       }).then((response) => {
-    //       window.open("/contract/" + id, "_self")
-    //       })
-    //   }
-    // })
+
     ContractService.create(id).then((response) => {
       console.log("create response ", response);
       //window.location.reload();
       window.open("/contract/" + id, "_self")
+
     })
-    //window.open("/contract/" + id, "_self")
 
   }
 
@@ -302,7 +254,7 @@ export default function ListKredietaanvragen() {
                     <TableCell>€ {row.eigenVermogen}</TableCell>
                     <TableCell>€ {row.lening}</TableCell>
                     <TableCell>{row.looptijd}</TableCell>
-                    <TableCell>{row.status == "INBEHANDELING" ? "in behandeling" : row.status}</TableCell>
+                    <TableCell style={row.status === "INBEHANDELING" ? { color: "orange" } : row.status === "GEWEIGERD" || row.status === "VERDACHT" ? { color: "red" } : { color: "greenyellow" }}><p> {row.status === "INBEHANDELING" ? "IN BEHANDELING" : row.status}</p></TableCell>
 
                     <TableCell align="right">
                       <ButtonGroup
@@ -310,7 +262,7 @@ export default function ListKredietaanvragen() {
                         aria-label="outlined primary button group"
                       >
                         {/* we moeten vanuit hier de detailAanvraagpagina openen, zit momenteel in een modal  */}
-                        {user.role.toString() === "KLANT" || user.role.toString() === "KANTOOR" || user.role.toString() === "KREDIETBEOORDELAAR" ?
+                        {user.role.toString() === "KLANT" || user.role.toString() === "KANTOOR" || user.role.toString() === "KREDIETBEOORDELAAR" || user.role.toString() === "COMPLIANCE" ?
                           <Button onClick={() => openDetail(row.id)}>details </Button> : <></>
                           //() => window.open("/contract/" + row.id, "_self")
                         }

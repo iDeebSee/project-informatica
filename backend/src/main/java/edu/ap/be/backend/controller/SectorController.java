@@ -4,6 +4,7 @@ import edu.ap.be.backend.exceptions.ResourceNotFoundException;
 import edu.ap.be.backend.models.Sector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import edu.ap.be.backend.repository.SectorRepository;
@@ -56,6 +57,7 @@ public class SectorController {
         return ResponseEntity.ok(updateSector);
     }
 
+    @PreAuthorize("hasRole('COMDIRECTIE')")
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteSector(@PathVariable(value = "id") long sectorID)
             throws ResourceNotFoundException {

@@ -154,7 +154,7 @@ export const PopupUserAanmaken = React.forwardRef((props, ref) => {
               <Grid item xs={12} md={3}>
                 <TextField
                   id="vat"
-                  required="true"
+
                   label="vat "
 
                   variant="outlined"

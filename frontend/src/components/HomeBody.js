@@ -18,6 +18,9 @@ export default function HomeBody() {
       console.log("logged in user from backend: ", response.data.principal)
     });
   })
+
+
+
   return (
 
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -26,56 +29,41 @@ export default function HomeBody() {
 
 
           {currUser.role.toString() === "KLANT" || currUser.role.toString() === "KANTOOR" || currUser.role.toString() === "KREDIETBEOORDELAAR" || currUser.role.toString() === "COMPLIANCE" ?
-            <Link to="/list">
-              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${KredietaanvraagImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> KredietAanvragen</Paper>
+            <Link style={{ top: 10, position: 'relative', left: 20, textDecoration: "none", fontWeight: "bold", textAlign: "center", fontFamily: "roboto, verdana", fontSize: "20pt" }} to="/list" >
+              <Paper class="paperHome" style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, lineHeight: "130px", backgroundImage: "linear-gradient(#8080805c, white, #8080800a)", boxShadow: "#80808061 1px 1px 20px" }} variant="outlined" square> Kredietaanvragen</Paper>
             </Link>
             : <></>}
 
 
           {currUser.role.toString() === "ADMINISTRATOR" ?
-            <Link to="/UserList">
-              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${UsersImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square> users</Paper>
+            <Link style={{ top: 10, position: 'relative', left: 20, textDecoration: "none", fontWeight: "bold", textAlign: "center", fontFamily: "roboto, verdana", fontSize: "20pt" }} to="/UserList">
+              <Paper class="paperHome" style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, lineHeight: "130px", backgroundImage: "linear-gradient(#8080805c, white, #8080800a)", boxShadow: "#80808061 1px 1px 20px" }} variant="outlined" square> Gebruikers</Paper>
 
             </Link> : <></>}
 
+            {currUser.role.toString() === "COMDIRECTIE" ?
+        
+
+            <Link style={{ top: 10, position: 'relative', left: 20, textDecoration: "none", fontWeight: "bold", textAlign: "center", fontFamily: "roboto, verdana", fontSize: "20pt" }} to="/sectorenlist">
+              <Paper class="paperHome" style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, lineHeight: "130px", backgroundImage: "linear-gradient(#8080805c, white, #8080800a)", boxShadow: "#80808061 1px 1px 20px" }} variant="outlined" square > sectoren</Paper>
+            </Link>
+
+        : <></>}
 
         </Item>
       </Grid>
-      {currUser.role.toString() === "COMDIRECTIE" ?
-        <Grid item xs={3}>
-          <Item>
-
-            <Link to="/sectorenlist">
-              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, backgroundImage: `url(${SectorImage})`, backgroundPosition: "center", backgroundSize: "cover", fontWeigh: "bold", textAlign: "center", fontFamily: "roboto, verdana" }} variant="outlined" square > sectoren</Paper>
-            </Link>
-
-            <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
-
-          </Item>
-
-        </Grid>
-        : <></>}
+      
       {currUser.role.toString() === "KREDIETBEOORDELAAR" ?
         <Grid item xs={3}>
           <Item>
-            <Link to="/ondernemingen">
-              <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square >Ondernemingen</Paper>
+            <Link style={{ top: 10, position: 'relative', left: 20, textDecoration: "none", fontWeight: "bold", textAlign: "center", fontFamily: "roboto, verdana", fontSize: "20pt" }} to="/ondernemingen">
+              <Paper class="paperHome" style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300, lineHeight: "130px", backgroundImage: "linear-gradient(#8080805c, white, #8080800a)", boxShadow: "#80808061 1px 1px 20px" }} variant="outlined" square >Ondernemingen</Paper>
             </Link>
             {/* <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square /> */}
 
           </Item>
         </Grid>
         : <></>}
-
-      <Grid item xs={3}>
-        <Item>
-
-          <Paper style={{ top: 10, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
-          <Paper style={{ top: 20, height: 150, position: 'relative', left: 20, width: 300 }} variant="outlined" square />
-
-        </Item>
-
-      </Grid>
     </Grid>
   );
 };

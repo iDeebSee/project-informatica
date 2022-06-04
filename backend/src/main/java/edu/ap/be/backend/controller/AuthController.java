@@ -99,7 +99,8 @@ public class AuthController {
         user.setEnabled(true);
 
         if (signUpRequest.getVat().equals("") || signUpRequest.getVat() == null || signUpRequest.getVat().equals(" ")){
-            user.setVat("Geen_Vat_Voor_Medewerkers-"+user.getId());
+            Random rand = new Random();
+            user.setVat("Geen_Vat_Voor_Medewerkers-"+(UUID.randomUUID().toString()+rand.nextInt(Integer.MAX_VALUE)));
         }else{
             user.setVat(signUpRequest.getVat());
         }

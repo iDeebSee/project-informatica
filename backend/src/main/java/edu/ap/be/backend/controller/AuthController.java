@@ -98,7 +98,12 @@ public class AuthController {
 
         user.setEnabled(true);
 
-        user.setVat(signUpRequest.getVat());
+        if (signUpRequest.getVat().equals("") || signUpRequest.getVat() == null || signUpRequest.getVat().equals(" ")){
+            user.setVat("Geen_Vat_Voor_Medewerkers-"+user.getId());
+        }else{
+            user.setVat(signUpRequest.getVat());
+        }
+
         List<String> strRoles = new ArrayList<>();
         strRoles.add(signUpRequest.getRole());
 

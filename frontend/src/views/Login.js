@@ -150,10 +150,7 @@ export default function Login(props) {
               autoComplete="current-password"
               onChange={e => setPassword(e.target.value)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Onthoud mij"
-            />
+
 
             <Alert ref={alertRef} type={messageType} message={message}></Alert>
             <Button
@@ -166,7 +163,7 @@ export default function Login(props) {
               Aanmelden
             </Button>
 
-            
+
           </Box>
         </Box>
       </Container>

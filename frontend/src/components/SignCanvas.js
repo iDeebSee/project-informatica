@@ -7,8 +7,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import AuthService from "../services/auth-service"
 import ContractService from "../services/contract-service"
-import html2canvas from 'html2canvas';
-import Contract from "./Contract";
+
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,10 +29,6 @@ export default class SignCanvas extends Component {
     };
     userID = AuthService.getCurrentUser().id
 
-    // canvasToImage = () => {
-        
-    //     localStorage.setItem("signImage" + this.userID + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1), this.saveableCanvas.canvasContainer.children[1].toDataURL())
-    // }
 
     SaveHandtekening(id, handtekening) {
 
@@ -48,10 +43,7 @@ export default class SignCanvas extends Component {
 
 
     render() {
-        
-        let sign = ("savedDrawing" + "_uID:" + this.userID).toString();
-        let signContract = ("savedDrawing" + "_uID:" + this.userID + "_KA:" + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)).toString();
-        
+         
         return (
             <div>
                 <Stack direction="row" spacing={2}>

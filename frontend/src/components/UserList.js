@@ -80,19 +80,6 @@ export default function UserList() {
   }, [])
 
 
-  // function deleteKA(id) {
-  //   userService.delete(id).then((response) => {
-  //     console.log("delete", response.data)
-  //     window.location.reload();
-  //   }).then(error => {
-  //     if (error.response && error.response.status === 401) {
-  //       EventBus.dispatch("logout");
-  //     }
-  //   })
-
-  // }
-
-
 
   return (
     <Container maxWidth="lg" style={{ position: "relative", marginTop: 20 }}>

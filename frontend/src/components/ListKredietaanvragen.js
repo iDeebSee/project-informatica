@@ -126,7 +126,7 @@ export default function ListKredietaanvragen() {
         console.log("status", response.data)
         setKredieten(response.data)
     
-      }).catch(error => {
+      }).then(error => {
         if (error.response && error.response.status === 401) {
           EventBus.dispatch("logout");
         }

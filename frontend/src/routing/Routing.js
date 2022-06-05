@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Home from '../views/Home';
 import Kredietaanvragen from '../klantViews/KredietAanvragen';
-import Detailaanvraag from '../klantViews/DetailAanvraag';
 import Login from '../views/Login';
 import AuthService from '../services/auth-service'
 import PrivateRoute from './PrivateRoute'
@@ -69,7 +68,6 @@ export default function Routing() {
             <Routes>
                 <Route exact path="/" element={<PrivateRoute user={isLoggedIn}> <Home /> </PrivateRoute>} />
                 <Route path={"/list"} element={<PrivateRoute user={isLoggedIn}> <Kredietaanvragen /> </PrivateRoute>} />
-                <Route path={"/detail/:id"} element={<PrivateRoute user={isLoggedIn}> <Detailaanvraag /> </PrivateRoute>} />
                 <Route path={"/profile"} element={<PrivateRoute user={isLoggedIn}> <Profile /> </PrivateRoute>} />
                 <Route path={"/userlist"} element={<PrivateRoute user={isLoggedIn}> <UserList /> </PrivateRoute>} />
                 <Route path={"/sectorenlist"} element={<PrivateRoute user={isLoggedIn}> <ListSectoren /> </PrivateRoute>} />
@@ -80,8 +78,6 @@ export default function Routing() {
 
                 <Route path="*" element={<p>Hier vind je niets: 404!</p>} />
                 {isLoggedIn === true ? <Route path={"/login"} element={<Home />} /> : <Route path={"/login"} element={<Login />} />}
-                {/* <Route path={"/login"} element={<Login />} /> */}
-                {/* <AuthVerify logOut={logOut} /> */}
             </Routes>
         </BrowserRouter>
     )

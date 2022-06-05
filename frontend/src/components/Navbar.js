@@ -66,7 +66,7 @@ export default function Navbar() {
               component="div"
               sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
             >
-              ALPHA
+              OMEGA
             </Typography>
           </Link>
 
@@ -77,7 +77,7 @@ export default function Navbar() {
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
             <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
-              ALPHA
+              OMEGA
             </Link>
           </Typography>
 

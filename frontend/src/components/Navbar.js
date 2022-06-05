@@ -125,7 +125,7 @@ export default function Navbar() {
               <MenuItem onClick={handleCloseUserMenu}>
                 <Link to='/profile' style={{ textDecoration: 'none', color: 'black' }}>
                   <Typography textAlign="center">
-                    Profile
+                    Profiel
                   </Typography>
                 </Link>
               </MenuItem>
@@ -133,7 +133,7 @@ export default function Navbar() {
               <MenuItem onClick={() => logout()}>
 
                 <Typography textAlign="center">
-                  Logout
+                  Uitloggen
                 </Typography>
 
               </MenuItem>

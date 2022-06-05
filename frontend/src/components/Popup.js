@@ -127,7 +127,7 @@ export const Popup = React.forwardRef((props, ref) => {
 
     }
     else if (zelfGefinancierd >= totaalbedrag) {
-      setErrorMessage("Het totaalbedrag kan niet kleiner dan wat u zelf financiert!.")
+      setErrorMessage("Het totaalbedrag kan niet kleiner zijn dan wat u zelf financiert!.")
 
 
     } else {

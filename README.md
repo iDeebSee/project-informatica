@@ -4,6 +4,6 @@ This web application handles credit requests, generates pdf's of the credit requ
 
 
 ## Tech Stack
-Frontend: React (JavaScript)
-Backend: Spring Boot (Java)
-Database: PostgreSQL (SQL)
+Frontend: React (JavaScript) 
+Backend: Spring Boot (Java) 
+Database: PostgreSQL (SQL) 
